@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" modified="2023-10-24T18:34:36.157Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="bctemy-vMdYDMWFUld3k" version="22.0.7" type="device">
+  <diagram name="Stránka-1" id="ZmEeAT-vy_m8HkbJ93oo">
+    <mxGraphModel dx="2302" dy="542" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-1" value="Jako uživatel chci aplikaci pro správu dokumentů, abych mohl snadněji třídit dokumenty." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-720" y="80" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-2" value="Jako uživatel chci moci nahrát dokument do aplikace, aby s ním mohla aplikace pracovat." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-470" y="80" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-3" value="Jako uživatel chci, aby mi aplikace vybraný soubor porovnala s ostatními soubory v mnou vybrané složce a jejích podsložkách a řekla, zda již existuje podobný soubor, abych nemusel procházet složku manuálně a hledat podobné soubory pro zařazení souboru." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-220" y="80" width="230" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-4" value="Jako uživatel chci manuálně zvolit položky, které se v dokumentu, který ještě nelze zařadit podle podobnosti, nachází, aby bylo následné čtení podobných souborů prováděno automaticky na základě mnou provedeného prvotního manuálního rozpoznání." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="80" width="230" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-5" value="Jako uživatel chci, aby aplikace rozpoznala podobné dokumenty a zařadila je do jedné složky, abych je měl na jednom místě." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-6" value="Jako uživatel chci, aby aplikace vyčetla text z již rozpoznaného dokumentu a jeho položky mi vypsala do formuláře, abych si údaje mohl editovat, či exportovat." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="80" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-7" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;DoR:&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;DoD:&lt;br&gt;&lt;br&gt;AC:&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="-720" y="270" width="230" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-8" value="&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;DoR:&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;&lt;span style=&quot;border-color: var(--border-color); background-color: initial;&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;/span&gt;&lt;/div&gt;DoD:&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;AC:" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="-470" y="270" width="230" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-9" value="&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;DoR:&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;&lt;span style=&quot;border-color: var(--border-color); background-color: initial;&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;/span&gt;&lt;/div&gt;DoD:&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;AC:" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="-220" y="270" width="230" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-10" value="&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;DoR:&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;&lt;span style=&quot;border-color: var(--border-color); background-color: initial;&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;/span&gt;&lt;/div&gt;DoD:&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;AC:" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="30" y="270" width="230" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-11" value="&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;DoR:&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;&lt;span style=&quot;border-color: var(--border-color); background-color: initial;&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;/span&gt;&lt;/div&gt;DoD:&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;AC:" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="280" y="270" width="230" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-12" value="&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;DoR:&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;&lt;span style=&quot;border-color: var(--border-color); background-color: initial;&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;/span&gt;&lt;/div&gt;DoD:&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;AC:" style="rounded=1;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="530" y="270" width="230" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="eCVUBNEAupV6bUbY5cpm-1" target="eCVUBNEAupV6bUbY5cpm-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-460" y="350" as="sourcePoint" />
+            <mxPoint x="-410" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="eCVUBNEAupV6bUbY5cpm-2" target="eCVUBNEAupV6bUbY5cpm-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-595" y="150" as="sourcePoint" />
+            <mxPoint x="-595" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-15" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="eCVUBNEAupV6bUbY5cpm-3" target="eCVUBNEAupV6bUbY5cpm-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-345" y="150" as="sourcePoint" />
+            <mxPoint x="-345" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-16" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="eCVUBNEAupV6bUbY5cpm-4" target="eCVUBNEAupV6bUbY5cpm-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-95" y="200" as="sourcePoint" />
+            <mxPoint x="-95" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-17" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="eCVUBNEAupV6bUbY5cpm-5" target="eCVUBNEAupV6bUbY5cpm-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="155" y="200" as="sourcePoint" />
+            <mxPoint x="155" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eCVUBNEAupV6bUbY5cpm-18" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="eCVUBNEAupV6bUbY5cpm-6" target="eCVUBNEAupV6bUbY5cpm-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="405" y="150" as="sourcePoint" />
+            <mxPoint x="405" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
