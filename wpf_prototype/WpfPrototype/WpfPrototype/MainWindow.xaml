@@ -6,10 +6,16 @@
         xmlns:local="clr-namespace:WpfPrototype"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button x:Name="btn1" Content="Button" HorizontalAlignment="Left" Height="52" Margin="215,217,0,0" VerticalAlignment="Top" Width="245" Click="Button_Click"/>
-        <TextBox x:Name="txtBox1" HorizontalAlignment="Left" Margin="159,106,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="lbl1" Content="Label" HorizontalAlignment="Left" Margin="434,102,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.652,0.162"/>
+    <StackPanel Orientation="Horizontal">
+        <Button x:Name="btn1" Content="Button" HorizontalAlignment="Left" Height="52" VerticalAlignment="Top" Width="245" Click="Button_Click"/>
+        <TextBox x:Name="txtBox1" HorizontalAlignment="Left" TextWrapping="Wrap" 
+                 VerticalAlignment="Top" Width="120"
+                 Text="{Binding MyProperty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 />
+        <Label x:Name="lbl1" HorizontalAlignment="Left"
+               VerticalAlignment="Top" RenderTransformOrigin="1.652,0.162"
+               Content="{Binding MyProperty}"
+               />
 
-    </Grid>
+    </StackPanel>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,14 +21,33 @@ namespace WpfPrototype
     /// </summary>
     public partial class MainWindow : Window
     {
+        public class MyDataContext : INotifyPropertyChanged
+        {
+            private int _MyProperty;
+            public int MyProperty { get => this._MyProperty; set
+                {
+                    this._MyProperty = value;
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MyProperty)));
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+        }
+
+        public MyDataContext Context { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+            this.Context = new MyDataContext();
+            this.Context.MyProperty = 8;
+            this.DataContext = this.Context;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            lbl1.Content = txtBox1.Text;
+            //this.Context.MyProperty = int.Parse(txtBox1.Text);
+            //lbl1.Content = txtBox1.Text;
         }
     }
 }
