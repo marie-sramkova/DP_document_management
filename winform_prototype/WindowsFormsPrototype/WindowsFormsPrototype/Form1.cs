@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WindowsFormsPrototype
 {
@@ -17,6 +19,13 @@ namespace WindowsFormsPrototype
         {
             InitializeComponent();
             SetButtonOpenIcon();
+
+            //setting of listview - to new method
+            listView1.View = View.List;
+            listView1.Items.Add("filename1.docx");
+            listView1.Items.Add("filename22.docx");
+
+
         }
 
         private void buttonOpen_Click(object sender, EventArgs e)
@@ -40,7 +49,7 @@ namespace WindowsFormsPrototype
         private void SetButtonOpenIcon()
         {
             // Assign an image to the button.
-            buttonOpen.Image = Image.FromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\icons\\icons8-browser-windows-64.png");
+            buttonOpen.Image = System.Drawing.Image.FromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\icons\\icons8-browser-windows-64.png");
             // Align the image and text on the button.
             buttonOpen.ImageAlign = ContentAlignment.MiddleRight;
             buttonOpen.TextAlign = ContentAlignment.MiddleLeft;

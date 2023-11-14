@@ -8,3 +8,4 @@ D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\win
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\winform_prototype\WindowsFormsPrototype\WindowsFormsPrototype\obj\Debug\WindowsFormsPrototype.csproj.CoreCompileInputs.cache
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\winform_prototype\WindowsFormsPrototype\WindowsFormsPrototype\obj\Debug\WindowsFormsPrototype.exe
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\winform_prototype\WindowsFormsPrototype\WindowsFormsPrototype\obj\Debug\WindowsFormsPrototype.pdb
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\winform_prototype\WindowsFormsPrototype\WindowsFormsPrototype\obj\Debug\WindowsFormsPrototype.Form2.resources

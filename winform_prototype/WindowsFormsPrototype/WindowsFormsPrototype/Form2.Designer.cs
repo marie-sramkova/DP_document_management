@@ -49,6 +49,8 @@
             this.signatureLabel = new System.Windows.Forms.Label();
             this.pictureBoxSignature = new System.Windows.Forms.PictureBox();
             this.buttonSetSignature = new System.Windows.Forms.Button();
+            this.buttonBack = new System.Windows.Forms.Button();
+            this.buttonEditPhoto = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSignature)).BeginInit();
             this.SuspendLayout();
@@ -56,7 +58,7 @@
             // fileName
             // 
             this.fileName.AutoSize = true;
-            this.fileName.Location = new System.Drawing.Point(267, 17);
+            this.fileName.Location = new System.Drawing.Point(451, 17);
             this.fileName.Name = "fileName";
             this.fileName.Size = new System.Drawing.Size(66, 16);
             this.fileName.TabIndex = 0;
@@ -64,18 +66,18 @@
             // 
             // buttonLeft
             // 
-            this.buttonLeft.Location = new System.Drawing.Point(12, 12);
+            this.buttonLeft.Location = new System.Drawing.Point(282, 12);
             this.buttonLeft.Name = "buttonLeft";
-            this.buttonLeft.Size = new System.Drawing.Size(157, 26);
+            this.buttonLeft.Size = new System.Drawing.Size(82, 26);
             this.buttonLeft.TabIndex = 1;
             this.buttonLeft.Text = "<<";
             this.buttonLeft.UseVisualStyleBackColor = true;
             // 
             // buttonRight
             // 
-            this.buttonRight.Location = new System.Drawing.Point(485, 11);
+            this.buttonRight.Location = new System.Drawing.Point(595, 12);
             this.buttonRight.Name = "buttonRight";
-            this.buttonRight.Size = new System.Drawing.Size(159, 26);
+            this.buttonRight.Size = new System.Drawing.Size(82, 26);
             this.buttonRight.TabIndex = 2;
             this.buttonRight.Text = ">>";
             this.buttonRight.UseVisualStyleBackColor = true;
@@ -109,7 +111,7 @@
             // typeOfDocumentLabel
             // 
             this.typeOfDocumentLabel.AutoSize = true;
-            this.typeOfDocumentLabel.Location = new System.Drawing.Point(12, 72);
+            this.typeOfDocumentLabel.Location = new System.Drawing.Point(13, 57);
             this.typeOfDocumentLabel.Name = "typeOfDocumentLabel";
             this.typeOfDocumentLabel.Size = new System.Drawing.Size(118, 16);
             this.typeOfDocumentLabel.TabIndex = 6;
@@ -117,7 +119,7 @@
             // 
             // textBoxTypeOfDocument
             // 
-            this.textBoxTypeOfDocument.Location = new System.Drawing.Point(136, 72);
+            this.textBoxTypeOfDocument.Location = new System.Drawing.Point(137, 57);
             this.textBoxTypeOfDocument.Name = "textBoxTypeOfDocument";
             this.textBoxTypeOfDocument.Size = new System.Drawing.Size(140, 22);
             this.textBoxTypeOfDocument.TabIndex = 7;
@@ -125,7 +127,7 @@
             // companyLabel
             // 
             this.companyLabel.AutoSize = true;
-            this.companyLabel.Location = new System.Drawing.Point(12, 109);
+            this.companyLabel.Location = new System.Drawing.Point(13, 94);
             this.companyLabel.Name = "companyLabel";
             this.companyLabel.Size = new System.Drawing.Size(68, 16);
             this.companyLabel.TabIndex = 8;
@@ -133,14 +135,14 @@
             // 
             // textBoxCompany
             // 
-            this.textBoxCompany.Location = new System.Drawing.Point(136, 109);
+            this.textBoxCompany.Location = new System.Drawing.Point(137, 94);
             this.textBoxCompany.Name = "textBoxCompany";
             this.textBoxCompany.Size = new System.Drawing.Size(100, 22);
             this.textBoxCompany.TabIndex = 9;
             // 
             // buttonChangeCompany
             // 
-            this.buttonChangeCompany.Location = new System.Drawing.Point(242, 109);
+            this.buttonChangeCompany.Location = new System.Drawing.Point(243, 94);
             this.buttonChangeCompany.Name = "buttonChangeCompany";
             this.buttonChangeCompany.Size = new System.Drawing.Size(33, 21);
             this.buttonChangeCompany.TabIndex = 10;
@@ -150,7 +152,7 @@
             // addressLabel
             // 
             this.addressLabel.AutoSize = true;
-            this.addressLabel.Location = new System.Drawing.Point(12, 146);
+            this.addressLabel.Location = new System.Drawing.Point(13, 131);
             this.addressLabel.Name = "addressLabel";
             this.addressLabel.Size = new System.Drawing.Size(61, 16);
             this.addressLabel.TabIndex = 11;
@@ -158,7 +160,7 @@
             // 
             // textBoxAddress
             // 
-            this.textBoxAddress.Location = new System.Drawing.Point(136, 146);
+            this.textBoxAddress.Location = new System.Drawing.Point(137, 131);
             this.textBoxAddress.Multiline = true;
             this.textBoxAddress.Name = "textBoxAddress";
             this.textBoxAddress.Size = new System.Drawing.Size(100, 60);
@@ -166,7 +168,7 @@
             // 
             // buttonChangeAddress
             // 
-            this.buttonChangeAddress.Location = new System.Drawing.Point(242, 147);
+            this.buttonChangeAddress.Location = new System.Drawing.Point(243, 132);
             this.buttonChangeAddress.Name = "buttonChangeAddress";
             this.buttonChangeAddress.Size = new System.Drawing.Size(33, 21);
             this.buttonChangeAddress.TabIndex = 13;
@@ -185,7 +187,7 @@
             // itemsLabel
             // 
             this.itemsLabel.AutoSize = true;
-            this.itemsLabel.Location = new System.Drawing.Point(12, 212);
+            this.itemsLabel.Location = new System.Drawing.Point(13, 197);
             this.itemsLabel.Name = "itemsLabel";
             this.itemsLabel.Size = new System.Drawing.Size(42, 16);
             this.itemsLabel.TabIndex = 15;
@@ -193,7 +195,7 @@
             // 
             // textBoxItems
             // 
-            this.textBoxItems.Location = new System.Drawing.Point(136, 212);
+            this.textBoxItems.Location = new System.Drawing.Point(137, 197);
             this.textBoxItems.Multiline = true;
             this.textBoxItems.Name = "textBoxItems";
             this.textBoxItems.Size = new System.Drawing.Size(100, 68);
@@ -201,7 +203,7 @@
             // 
             // buttonChangeItems
             // 
-            this.buttonChangeItems.Location = new System.Drawing.Point(243, 213);
+            this.buttonChangeItems.Location = new System.Drawing.Point(244, 198);
             this.buttonChangeItems.Name = "buttonChangeItems";
             this.buttonChangeItems.Size = new System.Drawing.Size(33, 21);
             this.buttonChangeItems.TabIndex = 17;
@@ -211,7 +213,7 @@
             // signatureLabel
             // 
             this.signatureLabel.AutoSize = true;
-            this.signatureLabel.Location = new System.Drawing.Point(12, 291);
+            this.signatureLabel.Location = new System.Drawing.Point(13, 276);
             this.signatureLabel.Name = "signatureLabel";
             this.signatureLabel.Size = new System.Drawing.Size(67, 16);
             this.signatureLabel.TabIndex = 18;
@@ -219,7 +221,7 @@
             // 
             // pictureBoxSignature
             // 
-            this.pictureBoxSignature.Location = new System.Drawing.Point(136, 286);
+            this.pictureBoxSignature.Location = new System.Drawing.Point(137, 271);
             this.pictureBoxSignature.Name = "pictureBoxSignature";
             this.pictureBoxSignature.Size = new System.Drawing.Size(100, 50);
             this.pictureBoxSignature.TabIndex = 19;
@@ -227,18 +229,38 @@
             // 
             // buttonSetSignature
             // 
-            this.buttonSetSignature.Location = new System.Drawing.Point(242, 286);
+            this.buttonSetSignature.Location = new System.Drawing.Point(243, 271);
             this.buttonSetSignature.Name = "buttonSetSignature";
             this.buttonSetSignature.Size = new System.Drawing.Size(33, 21);
             this.buttonSetSignature.TabIndex = 20;
             this.buttonSetSignature.Text = "set";
             this.buttonSetSignature.UseVisualStyleBackColor = true;
             // 
+            // buttonBack
+            // 
+            this.buttonBack.Location = new System.Drawing.Point(15, 17);
+            this.buttonBack.Name = "buttonBack";
+            this.buttonBack.Size = new System.Drawing.Size(82, 26);
+            this.buttonBack.TabIndex = 21;
+            this.buttonBack.Text = "<- Back";
+            this.buttonBack.UseVisualStyleBackColor = true;
+            // 
+            // buttonEditPhoto
+            // 
+            this.buttonEditPhoto.Location = new System.Drawing.Point(746, 56);
+            this.buttonEditPhoto.Name = "buttonEditPhoto";
+            this.buttonEditPhoto.Size = new System.Drawing.Size(42, 23);
+            this.buttonEditPhoto.TabIndex = 22;
+            this.buttonEditPhoto.Text = "Edit";
+            this.buttonEditPhoto.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonEditPhoto);
+            this.Controls.Add(this.buttonBack);
             this.Controls.Add(this.buttonSetSignature);
             this.Controls.Add(this.pictureBoxSignature);
             this.Controls.Add(this.signatureLabel);
@@ -292,5 +314,7 @@
         private System.Windows.Forms.Label signatureLabel;
         private System.Windows.Forms.PictureBox pictureBoxSignature;
         private System.Windows.Forms.Button buttonSetSignature;
+        private System.Windows.Forms.Button buttonBack;
+        private System.Windows.Forms.Button buttonEditPhoto;
     }
 }
