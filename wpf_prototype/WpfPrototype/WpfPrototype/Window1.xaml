@@ -1,0 +1,166 @@
+﻿<Window x:Class="WpfPrototype.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfPrototype"
+        mc:Ignorable="d"
+        Title="Window1" Height="450" Width="800">
+    <Border Padding="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="7*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="84*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="7*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="37*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="30*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="buttonBack" Grid.Column="0">
+                    <TextBlock>&lt;- Back</TextBlock>
+                </Button>
+                <Button x:Name="buttonLeft" Grid.Column="4">
+                    <TextBlock>&lt;&lt;</TextBlock>
+                </Button>
+                <Label Name="labelSelectedFile" Content="filename.docx" Grid.Column="6"></Label>
+                <Button x:Name="buttonRight" Grid.Column="8">
+                    <TextBlock>&gt;&gt;</TextBlock>
+                </Button>
+                <Button x:Name="buttonDropFile" Content="Drop file" Grid.Column="10"></Button>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="49*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="49*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="5*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="5*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="38*"></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="60*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Name="lblDocumentType" Content="Document type:" Grid.Column="0"></Label>
+                        <TextBox x:Name="textBoxDocumentType" Grid.Column="2"></TextBox>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="18*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Name="lblCompany" Content="Company:" Grid.Column="0"></Label>
+                        <TextBox x:Name="textBoxCompany" Grid.Column="2"></TextBox>
+                        <Button x:Name="buttonSetCompany" Content="Set" Grid.Column="4"></Button>
+                    </Grid>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="18*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Name="lblAddress" Content="Address:" Grid.Column="0"></Label>
+                        <TextBox x:Name="textBoxAddress" Grid.Column="2"></TextBox>
+                        <Grid Grid.Column="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50*"></RowDefinition>
+                                <RowDefinition Height="50*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Button x:Name="buttonSetAddress" Content="Set" Grid.Row="0"></Button>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="18*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Name="lblItems" Content="Items:" Grid.Column="0"></Label>
+                        <TextBox x:Name="textBoxItems" Grid.Column="2"></TextBox>
+                        <Grid Grid.Column="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50*"></RowDefinition>
+                                <RowDefinition Height="50*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Button x:Name="buttonSetItems" Content="Set" Grid.Row="0"></Button>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="40*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="18*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Name="lblSignature" Content="Signature:" Grid.Column="0"></Label>
+                        <Image x:Name="imageSignature" Grid.Column="2"></Image>
+                        <Grid Grid.Column="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50*"></RowDefinition>
+                                <RowDefinition Height="50*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Button x:Name="buttonSetSignature" Content="Set" Grid.Row="0"></Button>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="buttonSave" Content="Save"></Button>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Column="2">
+                    <Image></Image>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ListView x:Name="listView1"></ListView>
+            </Grid>
+            <Grid Grid.Row="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="79*"></ColumnDefinition>
+                    <ColumnDefinition Width="20*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="buttonProcess" Content="Process" Grid.Column="1"></Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

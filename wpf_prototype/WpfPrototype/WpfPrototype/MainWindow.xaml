@@ -6,16 +6,54 @@
         xmlns:local="clr-namespace:WpfPrototype"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel Orientation="Horizontal">
-        <Button x:Name="btn1" Content="Button" HorizontalAlignment="Left" Height="52" VerticalAlignment="Top" Width="245" Click="Button_Click"/>
-        <TextBox x:Name="txtBox1" HorizontalAlignment="Left" TextWrapping="Wrap" 
-                 VerticalAlignment="Top" Width="120"
-                 Text="{Binding MyProperty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 />
-        <Label x:Name="lbl1" HorizontalAlignment="Left"
-               VerticalAlignment="Top" RenderTransformOrigin="1.652,0.162"
-               Content="{Binding MyProperty}"
-               />
-
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="7*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="7*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="74*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="7*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"></ColumnDefinition>
+                <ColumnDefinition Width="60*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Name="labelSelectFolder" Content="Select folder:" Grid.Column="0"></Label>
+            <TextBox x:Name="textBoxFolderPath" Grid.Column="1"></TextBox>
+            <Button x:Name="buttonOpen" Content="Open" Grid.Column="3"></Button>
+            <Button x:Name="buttonOk" Content="Ok" Grid.Column="5"></Button>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Name="labelNewFiles" Content="New files:"></Label>
+        </Grid>
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="98*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="listView1" Grid.Column="1"></ListView>
+        </Grid>
+        <Grid Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="79*"></ColumnDefinition>
+                <ColumnDefinition Width="20*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="buttonProcess" Content="Process" Grid.Column="1"></Button>
+        </Grid>
+    </Grid>
 </Window>
