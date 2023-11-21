@@ -30,8 +30,8 @@
             </Grid.ColumnDefinitions>
             <Label Name="labelSelectFolder" Content="Select folder:" Grid.Column="0"></Label>
             <TextBox x:Name="textBoxFolderPath" Grid.Column="1"></TextBox>
-            <Button x:Name="buttonOpen" Content="Open" Grid.Column="3"></Button>
-            <Button x:Name="buttonOk" Content="Ok" Grid.Column="5"></Button>
+            <Button x:Name="buttonOpen" Content="Open" Grid.Column="3"/>
+            <Button x:Name="buttonOk" Content="Ok" Grid.Column="5" Click="buttonOk_Click"></Button>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
