@@ -29,7 +29,7 @@
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="7*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="buttonBack" Grid.Column="0">
+                <Button x:Name="buttonBack"  Click="buttonBack_Click" Grid.Column="0">
                     <TextBlock>&lt;- Back</TextBlock>
                 </Button>
                 <Button x:Name="buttonLeft" Grid.Column="4">
@@ -144,7 +144,7 @@
                     </Grid>
                 </Grid>
                 <Grid Grid.Column="2">
-                    <Image></Image>
+                    <Image x:Name="imgAnalyzedDocument"></Image>
                 </Grid>
             </Grid>
             <Grid Grid.Row="4">
@@ -159,7 +159,7 @@
                     <ColumnDefinition Width="20*"></ColumnDefinition>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="buttonProcess" Content="Process" Grid.Column="1"></Button>
+                <Button x:Name="buttonProcess" Content="Process" Grid.Column="1" Click="buttonProcess_Click"></Button>
             </Grid>
         </Grid>
     </Border>
