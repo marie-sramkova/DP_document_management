@@ -23,31 +23,38 @@ namespace WpfPrototype
     public partial class MainWindow : Window
     {
 
+        bool expanded = false;
+
 
         public MainWindow()
         {
             InitializeComponent();
+            
 
         }
 
-        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        private void buttonFilter_Click(object sender, RoutedEventArgs e)
         {
-            var path = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\tessdata";
-            using (var engine = new TesseractEngine(path, "ces", EngineMode.Default))
+            if (expanded == false)
             {
-                using (var img = Pix.LoadFromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\image.png"))
-                {
-                    // engine.SetVariable("tessedit_char_whitelist", "0123456789");
-                    using (var page = engine.Process(img))
-                    {
-                        var text = page.GetText();
-                        // var text = page.GetText().Replace("\n", "");
-                        Console.Write(text);
-                        textBoxFolderPath.Text = text;
-                        // text variable contains a string with all words found
-                    }
-                }
+                expanded = true;
+                collapsedForm.Height = new GridLength(17, GridUnitType.Star);
+                blankAfterCollapsedForm.Height = new GridLength(69, GridUnitType.Star);
+                listView.Height = new GridLength(0, GridUnitType.Star);
             }
+            else {
+                expanded = false;
+                collapsedForm.Height = new GridLength(0, GridUnitType.Star);
+                blankAfterCollapsedForm.Height = new GridLength(0, GridUnitType.Star);
+                listView.Height = new GridLength(86, GridUnitType.Star);
+            }
+            
+        }
+
+        private void buttonAnalyzeNewDocuments_Click(object sender, RoutedEventArgs e)
+        {
+            Window1 window1 = new Window1();
+            window1.Show();
         }
     }
 }

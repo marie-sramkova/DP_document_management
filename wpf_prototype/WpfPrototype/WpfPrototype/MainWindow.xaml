@@ -9,6 +9,127 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="0*" x:Name="collapsedForm"></RowDefinition>
+            <RowDefinition Height="86*" x:Name="listView"></RowDefinition>
+            <RowDefinition Height="0*" x:Name="blankAfterCollapsedForm"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="94*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="buttonFilter" Grid.Column="1" Click="buttonFilter_Click">
+                <Image Source="data\filter.png" x:Name="imgFilter"></Image>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="32*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="32*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="10*"></ColumnDefinition>
+                        <ColumnDefinition Width="10*"></ColumnDefinition>
+                        <ColumnDefinition Width="78*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                        <Span BaselineAlignment="Baseline" Name="labelSelectFolder">Search:</Span>
+                    </TextBlock>
+                    <TextBox x:Name="textBoxFolderPath" Grid.Column="3"></TextBox>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="10*"></ColumnDefinition>
+                        <ColumnDefinition Width="10*"></ColumnDefinition>
+                        <ColumnDefinition Width="78*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                    <Span BaselineAlignment="Baseline" Name="labelSelectFolder2">Search:</Span>
+                    </TextBlock>
+                    <TextBox x:Name="textBoxFolderPath2" Grid.Column="3"></TextBox>
+                </Grid>
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"></ColumnDefinition>
+                        <ColumnDefinition Width="40*"></ColumnDefinition>
+                        <ColumnDefinition Width="30*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="buttonApplyFilters" Content="Apply filters" Grid.Column="1"></Button>
+                </Grid>
+            </Grid>
+    
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="98*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="listView1" Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False">
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+                <ListViewItem Content="Typ dokumentu"></ListViewItem>
+                <ListViewItem Content="--dokumenty"></ListViewItem>
+            </ListView>
+        </Grid>
+        <Grid Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*"></ColumnDefinition>
+                <ColumnDefinition Width="40*"></ColumnDefinition>
+                <ColumnDefinition Width="30*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="buttonAnalyzeNewDocuments" Content="Analyze new documents" Grid.Column="1" Click="buttonAnalyzeNewDocuments_Click"/>
+        </Grid>
+    </Grid>
+    <!--<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="7*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="7*"></RowDefinition>
@@ -55,5 +176,5 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="buttonProcess" Content="Process" Grid.Column="1"></Button>
         </Grid>
-    </Grid>
+    </Grid>-->
 </Window>

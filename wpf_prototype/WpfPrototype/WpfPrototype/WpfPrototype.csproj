@@ -104,6 +104,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="data\temaP22085.pdf" />
     <None Include="tessdata\ces.traineddata" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -115,7 +116,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="image.png" />
+    <Resource Include="data\image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\filter.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Tesseract.5.2.0\build\Tesseract.targets" Condition="Exists('..\packages\Tesseract.5.2.0\build\Tesseract.targets')" />

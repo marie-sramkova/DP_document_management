@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Tesseract;
 
 namespace WpfPrototype
 {
@@ -22,6 +23,32 @@ namespace WpfPrototype
         public Window1()
         {
             InitializeComponent();
+            imgAnalyzedDocument.Source = new BitmapImage(new Uri(@"data/image.png", UriKind.RelativeOrAbsolute)); ;
+        }
+
+        private void buttonProcess_Click(object sender, RoutedEventArgs e)
+        {
+                var path = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\tessdata";
+                using (var engine = new TesseractEngine(path, "ces", EngineMode.Default))
+                {
+                    using (var img = Pix.LoadFromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\image.png"))
+                    {
+                        // engine.SetVariable("tessedit_char_whitelist", "0123456789");
+                        using (var page = engine.Process(img))
+                        {
+                            var text = page.GetText();
+                            // var text = page.GetText().Replace("\n", "");
+                            Console.Write(text);
+                            textBoxDocumentType.Text = text;
+                            // text variable contains a string with all words found
+                        }
+                    }
+            }
+        }
+
+        private void buttonBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
         }
     }
 }
