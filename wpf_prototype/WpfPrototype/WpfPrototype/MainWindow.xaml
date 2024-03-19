@@ -12,8 +12,10 @@
             <RowDefinition Height="5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="0*" x:Name="collapsedForm"></RowDefinition>
-            <RowDefinition Height="86*" x:Name="listView"></RowDefinition>
+            <RowDefinition Height="80*" x:Name="listView"></RowDefinition>
             <RowDefinition Height="0*" x:Name="blankAfterCollapsedForm"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
@@ -124,7 +126,15 @@
                 <ColumnDefinition Width="40*"></ColumnDefinition>
                 <ColumnDefinition Width="30*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button x:Name="buttonAnalyzeNewDocuments" Content="Analyze new documents" Grid.Column="1" Click="buttonAnalyzeNewDocuments_Click"/>
+            <Button x:Name="buttonAnalyzeNewDocuments" Grid.Column="1" Click="buttonAnalyzeNewDocuments_Click"/>
+        </Grid>
+        <Grid Grid.Row="9">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*"></ColumnDefinition>
+                <ColumnDefinition Width="40*"></ColumnDefinition>
+                <ColumnDefinition Width="30*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="buttonSettings" Content="Settings" Grid.Column="1" Click="buttonSettings_Click"/>
         </Grid>
     </Grid>
     <!--<Grid>

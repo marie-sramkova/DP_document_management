@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-11-06T12:06:52.955Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="7LSeZa-oDwqKLS_fOiug" version="22.0.8" type="device">
+<mxfile host="app.diagrams.net" modified="2024-03-11T08:46:40.495Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="oyR-LIyOysWyA1ruScgU" version="23.1.1" type="device">
   <diagram name="Stránka-1" id="ZmEeAT-vy_m8HkbJ93oo">
-    <mxGraphModel dx="3694" dy="1204" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2117" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -18,6 +18,21 @@
         </mxCell>
         <mxCell id="eCVUBNEAupV6bUbY5cpm-6" value="Jako uživatel chci, aby aplikace vyčetla text z již rozpoznaného dokumentu a jeho položky mi vypsala do formuláře, abych mohl rozpoznání upravit." style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="280" y="80" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Ge7kvNJYoYoRyKZNoIx1-6" value="Jako uživatel chci aplikaci pro správu dokumentů, abych mohl snadněji klasifikovat, do jaké skupiny dokumentů dokument patří." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-720" y="280" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Ge7kvNJYoYoRyKZNoIx1-7" value="Jako uživatel chci vybrat složku, aby ji mohla aplikace analyzovat a ukázat, zda jsou v ní nové nezpracované soubory." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-470" y="280" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Ge7kvNJYoYoRyKZNoIx1-8" value="Jako uživatel chci, aby mi aplikace nové soubory porovnala se starými soubory ve složkách a řekla, do které skupiny souborů patří, abych nemusel procházet složky manuálně a hledat podobné soubory pro zařazení souboru." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-220" y="280" width="230" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Ge7kvNJYoYoRyKZNoIx1-9" value="Jako uživatel chci manuálně zvolit položky, které se v dokumentu nachází, aby byla následná klasifikace nových souborů prováděno automaticky na základě mnou provedeného prvotního manuálního rozpoznání." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="280" width="230" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Ge7kvNJYoYoRyKZNoIx1-10" value="Jako uživatel chci, aby aplikace vyčetla text z již rozpoznaného dokumentu a jeho položky mi vypsala do formuláře, abych mohl rozpoznání upravit." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="280" width="230" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
