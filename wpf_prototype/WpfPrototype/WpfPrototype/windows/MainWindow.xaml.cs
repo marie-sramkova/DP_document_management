@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using Tesseract;
 using WpfPrototype.additionalLogic.entities;
 
-namespace WpfPrototype
+namespace WpfPrototype.windows
 {
     /// <summary>
     /// Interakční logika pro MainWindow.xaml
@@ -48,8 +48,8 @@ namespace WpfPrototype
                         }
                     }
                 }
-                
-                
+
+
             }
             if (documentsCount != 0)
             {
