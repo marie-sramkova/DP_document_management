@@ -16,8 +16,12 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="TallComponents.PDFRasterizer4" Version="4.0.35" />
     <PackageReference Include="Tesseract" Version="5.2.0" />
     <PackageReference Include="Tesseract.Drawing" Version="5.2.0" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="windows\" />
   </ItemGroup>
 </Project>
