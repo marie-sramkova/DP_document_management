@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Tesseract;
 
-namespace WpfPrototype
+namespace WpfPrototype.windows
 {
     /// <summary>
     /// Interakční logika pro Window1.xaml
@@ -28,25 +28,25 @@ namespace WpfPrototype
 
         private void ButtonProcess_Click(object sender, RoutedEventArgs e)
         {
-                var path = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\tessdata";
-                using (var engine = new TesseractEngine(path, "ces", EngineMode.Default))
+            var path = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\tessdata";
+            using (var engine = new TesseractEngine(path, "ces", EngineMode.Default))
+            {
+                using (var img = Pix.LoadFromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\image.png"))
                 {
-                    using (var img = Pix.LoadFromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\image.png"))
+                    // engine.SetVariable("tessedit_char_whitelist", "0123456789");
+                    using (var page = engine.Process(img))
                     {
-                        // engine.SetVariable("tessedit_char_whitelist", "0123456789");
-                        using (var page = engine.Process(img))
-                        {
-                            var text = page.GetText();
-                            Console.Write(text);
-                            //textBoxDocumentType.Text = text;
-                        }
+                        var text = page.GetText();
+                        Console.Write(text);
+                        //textBoxDocumentType.Text = text;
                     }
+                }
             }
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
+            Hide();
         }
     }
 }
