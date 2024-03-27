@@ -12,13 +12,9 @@ D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Debug\net8.0-windows\Tesseract.dll
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Debug\net8.0-windows\Tesseract.Drawing.dll
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\WpfPrototype.csproj.AssemblyReference.cache
-D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\MainWindow.g.cs
-D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\Window1.g.cs
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\App.g.cs
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\WpfPrototype_MarkupCompile.cache
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\WpfPrototype_MarkupCompile.lref
-D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\MainWindow.baml
-D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\Window1.baml
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\WpfPrototype.g.resources
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\WpfPrototype.Properties.Resources.resources
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\WpfPrototype.csproj.GenerateResource.cache
@@ -31,3 +27,8 @@ D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\WpfPrototype.pdb
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\WpfPrototype.genruntimeconfig.cache
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\ref\WpfPrototype.dll
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\windows\MainWindow.g.cs
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\windows\Window1.g.cs
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\windows\MainWindow.baml
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\windows\Window1.baml

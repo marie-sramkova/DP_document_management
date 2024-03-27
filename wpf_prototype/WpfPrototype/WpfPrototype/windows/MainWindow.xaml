@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfPrototype"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid> 
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
@@ -26,7 +26,7 @@
                 <ColumnDefinition Width="5*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button x:Name="buttonFilter" Grid.Column="1" Click="buttonFilter_Click">
+            <Button x:Name="buttonFilter" Grid.Column="1" Click="ButtonFilter_Click">
                 <Image Source="data\filter.png" x:Name="imgFilter"></Image>
             </Button>
         </Grid>
@@ -126,7 +126,7 @@
                 <ColumnDefinition Width="40*"></ColumnDefinition>
                 <ColumnDefinition Width="30*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button x:Name="buttonAnalyzeNewDocuments" Grid.Column="1" Click="buttonAnalyzeNewDocuments_Click"/>
+            <Button x:Name="buttonAnalyzeNewDocuments" Grid.Column="1" Click="ButtonAnalyzeNewDocuments_Click"/>
         </Grid>
         <Grid Grid.Row="9">
             <Grid.ColumnDefinitions>
@@ -134,7 +134,7 @@
                 <ColumnDefinition Width="40*"></ColumnDefinition>
                 <ColumnDefinition Width="30*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button x:Name="buttonSettings" Content="Settings" Grid.Column="1" Click="buttonSettings_Click"/>
+            <Button x:Name="buttonSettings" Content="Settings" Grid.Column="1" Click="ButtonSettings_Click"/>
         </Grid>
     </Grid>
     <!--<Grid>

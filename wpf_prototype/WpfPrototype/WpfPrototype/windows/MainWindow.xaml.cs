@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Tesseract;
+using WpfPrototype.additionalLogic.entities;
 
 namespace WpfPrototype
 {
@@ -31,18 +32,26 @@ namespace WpfPrototype
         {
             InitializeComponent();
             int documentsCount = 0;
-            Console.WriteLine("directory path: "+UserSettings.directoryPath);
+            Console.WriteLine("directory path: " + UserSettings.directoryPath);
             if (UserSettings.directoryPath != null)
             {
-                int count2 = Directory.GetFiles(UserSettings.directoryPath, "*", SearchOption.AllDirectories).Length;
-                Console.WriteLine("count2" + count2);
-                if (count2 > 1) 
+                List<string> newFiles = Directory.GetFiles(UserSettings.directoryPath, "*", SearchOption.AllDirectories).ToList();
+                documentsCount = newFiles.Count - 1;
+                if (FileEditor.Instance.SettingsEntity != null)
                 {
-                    //todo: search if these files are new (from settings)
-                    documentsCount = count2 - 1;
+                    List<DocFile> docFiles = FileEditor.Instance.SettingsEntity.DocFiles;
+                    foreach (DocFile file in docFiles)
+                    {
+                        if (newFiles.Contains(file.FilePath))
+                        {
+                            documentsCount = documentsCount - 1;
+                        }
+                    }
                 }
+                
+                
             }
-            if (documentsCount != 0) 
+            if (documentsCount != 0)
             {
                 buttonAnalyzeNewDocuments.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffa3a3");
                 buttonAnalyzeNewDocuments.FontWeight = FontWeights.Bold;
@@ -51,7 +60,7 @@ namespace WpfPrototype
 
         }
 
-        private void buttonFilter_Click(object sender, RoutedEventArgs e)
+        private void ButtonFilter_Click(object sender, RoutedEventArgs e)
         {
             if (expanded == false)
             {
@@ -60,22 +69,23 @@ namespace WpfPrototype
                 blankAfterCollapsedForm.Height = new GridLength(63, GridUnitType.Star);
                 listView.Height = new GridLength(0, GridUnitType.Star);
             }
-            else {
+            else
+            {
                 expanded = false;
                 collapsedForm.Height = new GridLength(0, GridUnitType.Star);
                 blankAfterCollapsedForm.Height = new GridLength(0, GridUnitType.Star);
                 listView.Height = new GridLength(80, GridUnitType.Star);
             }
-            
+
         }
 
-        private void buttonAnalyzeNewDocuments_Click(object sender, RoutedEventArgs e)
+        private void ButtonAnalyzeNewDocuments_Click(object sender, RoutedEventArgs e)
         {
             Window1 window1 = new Window1();
             window1.Show();
         }
 
-        private void buttonSettings_Click(object sender, RoutedEventArgs e)
+        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
             //open new window with settings
         }
