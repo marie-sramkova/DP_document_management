@@ -7,6 +7,12 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="windows\**" />
+    <EmbeddedResource Remove="windows\**" />
+    <None Remove="windows\**" />
+    <Page Remove="windows\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="data\image.png" />
   </ItemGroup>
   <ItemGroup>
@@ -20,8 +26,5 @@
     <PackageReference Include="Tesseract" Version="5.2.0" />
     <PackageReference Include="Tesseract.Drawing" Version="5.2.0" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="windows\" />
   </ItemGroup>
 </Project>

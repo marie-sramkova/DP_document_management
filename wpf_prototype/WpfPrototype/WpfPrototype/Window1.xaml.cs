@@ -28,13 +28,63 @@ namespace WpfPrototype
         {
             InitializeComponent();
 
+            CreateTemplateButtons();
+
+            buttonSave.Visibility = Visibility.Hidden;
+
+
+
+            //todo: read files from settings file and save iteratively
             ConvertPdfToPng("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\temaP22085.pdf", "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
 
             //imgAnalyzedDocument.Source = new BitmapImage(new Uri("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png", UriKind.RelativeOrAbsolute));
-            //imgAnalyzedDocument.Source = new BitmapImage(new Uri("/data/out.tif", UriKind.RelativeOrAbsolute));
-            //Debug.WriteLine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName);
-            imgAnalyzedDocument.Source = new BitmapImage(new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName+"/data/out.png", UriKind.RelativeOrAbsolute));
-            //Debug.WriteLine(new Uri(@"data/out.png", UriKind.RelativeOrAbsolute));
+            //imgAnalyzedDocument.Source = new BitmapImage(new Uri(@"data/out.png", UriKind.RelativeOrAbsolute));
+            imgAnalyzedDocument.Source = new BitmapImage(new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png", UriKind.RelativeOrAbsolute));
+        }
+
+        private void CreateTemplateButtons()
+        {
+            panel.Height = new GridLength(91, GridUnitType.Star);
+            listView.Height = new GridLength(0, GridUnitType.Star);
+
+
+            //todo: iteration by templates
+            for (int i = 0; i < 5; i++)
+            {
+                Button buttonTemplate = new Button();
+                buttonTemplate.Content = "Template name";
+                buttonTemplate.Width = 250;
+                buttonTemplate.Click += (s, e) =>
+                {
+                    //save template and continue with analyzing document by choosen template
+                };
+                templateStackPanel.Children.Add(buttonTemplate);
+                templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
+                //todo: change labels to spaces!!!!!
+                templateStackPanel.Children.Add(new Label());
+            }
+
+            Button buttonNewTemplate = new Button();
+            buttonNewTemplate.Content = "Create new template";
+            buttonNewTemplate.Width = 250;
+            buttonNewTemplate.Click += (s, e) =>
+            {
+                ButtonNewTemplate_Click(s, e);
+            };
+            templateStackPanel.Children.Add(buttonNewTemplate);
+            templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
+
+
+
+
+            //Button buttonNewTemplate = new Button();
+            //buttonNewTemplate.Content = "Create new template";
+            //buttonNewTemplate.Click += (s, e) =>
+            //{
+            //    ButtonNewTemplate_Click(s, e);
+            //};
+            //listViewTemplatesAndAttributes.Items.Add(buttonNewTemplate);
+            //listViewTemplatesAndAttributes.HorizontalContentAlignment = HorizontalAlignment.Center;
         }
 
         private static void ConvertPdfToPng(String inputPdfPath, String outputPngPath)
@@ -52,7 +102,6 @@ namespace WpfPrototype
                 fileIn.Close();
             }
             //conversion to tiff - need to edit outputTiffPath
-            //
             //using (FileStream fileIn = new FileStream(inputPdfPath, FileMode.Open, FileAccess.Read))
             //{
             //    Document document = new Document(fileIn);
@@ -92,6 +141,20 @@ namespace WpfPrototype
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
             Hide();
+        }
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        private void ButtonNewTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            if (FileEditor.Instance.CheckIfSettingsFileIsEmpty())
+            {
+                //todo: create template
+
+                buttonSave.Content = "Save";
+            }
         }
     }
 }
