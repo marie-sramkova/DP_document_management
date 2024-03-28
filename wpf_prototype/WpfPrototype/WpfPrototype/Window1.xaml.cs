@@ -28,11 +28,13 @@ namespace WpfPrototype
         {
             InitializeComponent();
 
-            ConvertPdfToPng("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\Potvrzení lékaře CZ.pdf", "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
+            ConvertPdfToPng("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\temaP22085.pdf", "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
 
-            imgAnalyzedDocument.Source = new BitmapImage(new Uri("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png", UriKind.RelativeOrAbsolute));
+            //imgAnalyzedDocument.Source = new BitmapImage(new Uri("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png", UriKind.RelativeOrAbsolute));
             //imgAnalyzedDocument.Source = new BitmapImage(new Uri("/data/out.tif", UriKind.RelativeOrAbsolute));
-            //imgAnalyzedDocument.Source = new BitmapImage(new Uri("/data/image.png", UriKind.RelativeOrAbsolute));
+            //Debug.WriteLine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName);
+            imgAnalyzedDocument.Source = new BitmapImage(new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName+"/data/out.png", UriKind.RelativeOrAbsolute));
+            //Debug.WriteLine(new Uri(@"data/out.png", UriKind.RelativeOrAbsolute));
         }
 
         private static void ConvertPdfToPng(String inputPdfPath, String outputPngPath)
@@ -43,9 +45,11 @@ namespace WpfPrototype
                 var page = pdf.Pages[0];
                 float resolution = 150f;
                 using (FileStream fileOut = new FileStream(outputPngPath, FileMode.Create, FileAccess.Write))
-                        {
+                {
                     page.SaveAsBitmap(fileOut, ImageEncoding.Png, resolution);
+                    fileOut.Close();
                 }
+                fileIn.Close();
             }
             //conversion to tiff - need to edit outputTiffPath
             //
@@ -63,6 +67,7 @@ namespace WpfPrototype
             //        document.ConvertToTiff(fileOut, options);
             //    }
             //}
+
         }
 
         private void ButtonProcess_Click(object sender, RoutedEventArgs e)
@@ -70,7 +75,7 @@ namespace WpfPrototype
             var path = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\tessdata";
             using (var engine = new TesseractEngine(path, "ces", EngineMode.Default))
             {
-                using (var img = Pix.LoadFromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.tif"))
+                using (var img = Pix.LoadFromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png"))
                 {
                     // engine.SetVariable("tessedit_char_whitelist", "0123456789");
                     using (var page = engine.Process(img))
