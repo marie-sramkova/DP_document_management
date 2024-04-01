@@ -24,32 +24,32 @@ namespace WpfPrototype
     /// </summary>
     public partial class MainWindow : Window
     {
-
         bool expanded = false;
+        List<DocFile> docFilesInSettingsFile;
+        List<string> newFiles;
 
 
         public MainWindow()
         {
+            docFilesInSettingsFile = new List<DocFile>();
+            newFiles = new List<string>();
             InitializeComponent();
             int documentsCount = 0;
-            Console.WriteLine("directory path: " + UserSettings.directoryPath);
             if (UserSettings.directoryPath != null)
             {
-                List<string> newFiles = Directory.GetFiles(UserSettings.directoryPath, "*", SearchOption.AllDirectories).ToList();
+                newFiles = Directory.GetFiles(UserSettings.directoryPath, "*", SearchOption.AllDirectories).ToList();
                 documentsCount = newFiles.Count - 1;
                 if (FileEditor.Instance.SettingsEntity != null)
                 {
-                    List<DocFile> docFiles = FileEditor.Instance.SettingsEntity.DocFiles;
-                    foreach (DocFile file in docFiles)
+                    docFilesInSettingsFile = FileEditor.Instance.SettingsEntity.DocFiles;
+                    foreach (DocFile docFileInSettingsFile in docFilesInSettingsFile)
                     {
-                        if (newFiles.Contains(file.FilePath))
+                        if (newFiles.Contains(docFileInSettingsFile.FilePath))
                         {
                             documentsCount = documentsCount - 1;
                         }
                     }
                 }
-
-
             }
             if (documentsCount != 0)
             {
@@ -57,7 +57,6 @@ namespace WpfPrototype
                 buttonAnalyzeNewDocuments.FontWeight = FontWeights.Bold;
             }
             buttonAnalyzeNewDocuments.Content = "Analyze new files (" + documentsCount + ")";
-
         }
 
         private void ButtonFilter_Click(object sender, RoutedEventArgs e)
@@ -81,8 +80,25 @@ namespace WpfPrototype
 
         private void ButtonAnalyzeNewDocuments_Click(object sender, RoutedEventArgs e)
         {
+            newFiles.Clear();
+            docFilesInSettingsFile.Clear();
+            List<string> filesToStore = new List<string>();
+            newFiles = Directory.GetFiles(UserSettings.directoryPath, "*", SearchOption.AllDirectories).ToList();
+            docFilesInSettingsFile = FileEditor.Instance.SettingsEntity.DocFiles;
+
+            foreach (string newFile in newFiles)
+            {
+                if (!docFilesInSettingsFile.Any(x => x.FilePath == newFile))
+                {
+                    filesToStore.Add(newFile);
+                }
+            }
+            FileEditor.Instance.AddNewFilesWithoutAttributes(filesToStore);
+            //todo: save new documents into settings file
+            
             Window1 window1 = new Window1();
             window1.Show();
+            Close();
         }
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)

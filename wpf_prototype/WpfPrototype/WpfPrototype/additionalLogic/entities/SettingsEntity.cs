@@ -8,13 +8,18 @@ namespace WpfPrototype.additionalLogic.entities
 {
     public class SettingsEntity
     {
-        public List<Template> Templates {  get; set; }
+        public List<Template> Templates { get; set; }
         public List<DocFile> DocFiles { get; set; }
+
+        public SettingsEntity() {}
+
 
         public void AddDoc(DocFile docFile)
         {
             DocFiles.Add(docFile);
         }
+
+
 
     }
 }
