@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -39,7 +40,16 @@ namespace WpfPrototype
 
             //imgAnalyzedDocument.Source = new BitmapImage(new Uri("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png", UriKind.RelativeOrAbsolute));
             //imgAnalyzedDocument.Source = new BitmapImage(new Uri(@"data/out.png", UriKind.RelativeOrAbsolute));
-            imgAnalyzedDocument.Source = new BitmapImage(new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png", UriKind.RelativeOrAbsolute));
+
+            Uri uri = new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png", UriKind.RelativeOrAbsolute);
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+            bitmap.UriSource = uri;
+            bitmap.EndInit();
+            imgAnalyzedDocument.Source = bitmap;
+            File.Delete(uri.AbsolutePath);
         }
 
         private void CreateTemplateButtons()
@@ -97,9 +107,7 @@ namespace WpfPrototype
                 using (FileStream fileOut = new FileStream(outputPngPath, FileMode.Create, FileAccess.Write))
                 {
                     page.SaveAsBitmap(fileOut, ImageEncoding.Png, resolution);
-                    fileOut.Close();
                 }
-                fileIn.Close();
             }
             //conversion to tiff - need to edit outputTiffPath
             //using (FileStream fileIn = new FileStream(inputPdfPath, FileMode.Open, FileAccess.Read))
@@ -140,21 +148,19 @@ namespace WpfPrototype
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            Hide();
+            imgAnalyzedDocument.Source = null;
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            Close();
         }
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            
+            //todo: save template or analyzed document
         }
         private void ButtonNewTemplate_Click(object sender, RoutedEventArgs e)
         {
-            if (FileEditor.Instance.CheckIfSettingsFileIsEmpty())
-            {
-                //todo: create template
-
-                buttonSave.Content = "Save";
-            }
+            //todo: create template
         }
     }
 }

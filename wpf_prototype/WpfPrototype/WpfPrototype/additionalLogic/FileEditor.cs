@@ -1,30 +1,27 @@
 ﻿using Newtonsoft.Json;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 using WpfPrototype.additionalLogic.entities;
 
 namespace WpfPrototype
 {
     public class FileEditor
     {
+        public SettingsEntity SettingsEntity {get; set;}
 
-        private FileEditor() {
-            String fileText = "";
-            if (!File.Exists(UserSettings.settingsFilePath))
-            {
-                File.Create(UserSettings.settingsFilePath);
-                
-            }
-            fileText = File.ReadAllText(UserSettings.settingsFilePath);
-            Console.WriteLine(fileText);
-            SettingsEntity = JsonConvert.DeserializeObject<SettingsEntity>(fileText);
+        private FileEditor()
+        {
+            CreateEmptySettingsEntity();
+            ReadFileToSettingsEntity();
         }
-
 
         private static FileEditor instance = null;
         public static FileEditor Instance
@@ -35,31 +32,75 @@ namespace WpfPrototype
                 {
                     instance = new FileEditor();
                 }
+                instance.ReadFileToSettingsEntity();
                 return instance;
             }
         }
 
-        public SettingsEntity SettingsEntity { get; }
-
-        public void AddNewFiles(List<String> files)
+        public void AddNewFilesWithoutAttributes(List<String> files)
+        {
+            ReadFileToSettingsEntity();
+            foreach (var file in files)
             {
-                foreach (var file in files)
+                if (!SettingsEntity.DocFiles.Any(x => x.FilePath == file) && !System.IO.Path.GetFileName(file).Equals("settings.txt"))
                 {
                     List<DocAttribute> docAttributes = new List<DocAttribute>();
-                    //todo: convert attributes from analyzed file to entities
                     DocFile newDoc = new DocFile(file, docAttributes);
+                    SettingsEntity.DocFiles.Add(newDoc);
                 }
-            //todo: save to file
             }
-
-        public Boolean CheckIfSettingsFileIsEmpty()
-        {
-            if (SettingsEntity == null) { 
-                return true;
-            }
-            return false;
+            WriteSettingsEntityToFile();
         }
 
+        //todo: where to convert to entity, here? which string is input?
+        public void AddNewFilesWithAttributes(List<string> files)
+        {
+            foreach (var file in files)
+            {
+                List<DocAttribute> docAttributes = new List<DocAttribute>();
+                //todo: convert attributes from analyzed file to entities
+                DocFile newDoc = new DocFile(file, docAttributes);
+            }
+            //todo: save to file
+        }
 
+        private void ReadFileToSettingsEntity()
+        {
+            String fileText = "";
+            if (!File.Exists(UserSettings.settingsFilePath))
+            {
+                File.Create(UserSettings.settingsFilePath);
+
+            }
+            //add try-catch - reading from file!!!
+            fileText = File.ReadAllText(UserSettings.settingsFilePath);
+            if (fileText.Length > 0)
+            {
+                SettingsEntity = JsonConvert.DeserializeObject<SettingsEntity>(fileText);
+            }
+            else 
+            {
+                CreateEmptySettingsEntity();
+            }
+        }
+
+        private void WriteSettingsEntityToFile()
+        {
+            String fileText = "";
+            if (!File.Exists(UserSettings.settingsFilePath))
+            {
+                File.Create(UserSettings.settingsFilePath);
+            }
+            fileText = Newtonsoft.Json.JsonConvert.SerializeObject(SettingsEntity, Formatting.Indented);
+            //add try-catch - writing to file!!!
+            File.WriteAllText(UserSettings.settingsFilePath, fileText);
+        }
+
+        private void CreateEmptySettingsEntity()
+        {
+            SettingsEntity = new SettingsEntity();
+            SettingsEntity.DocFiles = new List<DocFile>();
+            SettingsEntity.Templates = new List<Template>();
+        }
     }
 }
