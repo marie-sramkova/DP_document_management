@@ -32,11 +32,11 @@
                 <Button x:Name="buttonBack"  Click="ButtonBack_Click" Grid.Column="0">
                     <TextBlock>&lt;- Back</TextBlock>
                 </Button>
-                <Button x:Name="buttonLeft" Grid.Column="4" Click="buttonLeft_Click">
+                <Button x:Name="buttonLeft" Grid.Column="4" Click="ButtonLeft_Click">
                     <TextBlock>&lt;&lt;</TextBlock>
                 </Button>
                 <Label Name="labelSelectedFile" Content="filename.docx" Grid.Column="6"></Label>
-                <Button x:Name="buttonRight" Grid.Column="8" Click="buttonRight_Click">
+                <Button x:Name="buttonRight" Grid.Column="8" Click="ButtonRight_Click">
                     <TextBlock>&gt;&gt;</TextBlock>
                 </Button>
                 <Button x:Name="buttonDropFile" Content="Drop file" Grid.Column="10"></Button>
@@ -57,7 +57,14 @@
                     <StackPanel x:Name="templateStackPanel" Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False">
                         
                     </StackPanel>
-                    <ListView x:Name="listViewTemplatesAndAttributes" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False">
+                    <ListView x:Name="listViewTemplatesAndAttributes" Grid.Row="1"  Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
+                        
+                        <!--<ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                            </GridView>
+                        </ListView.View>-->
                     </ListView>
                     <Button x:Name="buttonSave" Content="Confirm" Grid.Row="3" Click="ButtonSave_Click"></Button>
                 </Grid>

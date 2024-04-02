@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml;
 using TallComponents.PDF.Rasterizer;
 using Tesseract;
 using WpfPrototype.additionalLogic.entities;
@@ -49,9 +50,6 @@ namespace WpfPrototype
                 buttonRight.IsEnabled = false;
             }
             buttonLeft.IsEnabled = false;
-
-            
-
 
             //todo: templates buttons
             SelectingActualAnalyzedFile();
@@ -96,47 +94,54 @@ namespace WpfPrototype
 
         private void CreateTemplateButtons()
         {
-            panel.Height = new GridLength(91, GridUnitType.Star);
-            listView.Height = new GridLength(0, GridUnitType.Star);
+            //todo: delete if panel wont be used
+            //panel.Height = new GridLength(91, GridUnitType.Star);
+            //listView.Height = new GridLength(0, GridUnitType.Star);
 
-
-            //todo: iteration by templates
-            for (int i = 0; i < 5; i++)
-            {
-                Button buttonTemplate = new Button();
-                buttonTemplate.Content = "Template name";
-                buttonTemplate.Width = 250;
-                buttonTemplate.Click += (s, e) =>
-                {
-                    //save template and continue with analyzing document by choosen template
-                };
-                templateStackPanel.Children.Add(buttonTemplate);
-                templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
-                //todo: change labels to spaces!!!!!
-                templateStackPanel.Children.Add(new Label());
-            }
-
-            Button buttonNewTemplate = new Button();
-            buttonNewTemplate.Content = "Create new template";
-            buttonNewTemplate.Width = 250;
-            buttonNewTemplate.Click += (s, e) =>
-            {
-                ButtonNewTemplate_Click(s, e);
-            };
-            templateStackPanel.Children.Add(buttonNewTemplate);
-            templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
-
-
-
+            ////todo: iteration by templates
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    Button buttonTemplate = new Button();
+            //    buttonTemplate.Content = "Template name";
+            //    buttonTemplate.Width = 250;
+            //    buttonTemplate.Click += (s, e) =>
+            //    {
+            //        //save template and continue with analyzing document by choosen template
+            //    };
+            //    templateStackPanel.Children.Add(buttonTemplate);
+            //    templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
+            //    //todo: change labels to spaces!!!!!
+            //    templateStackPanel.Children.Add(new Label());
+            //}
 
             //Button buttonNewTemplate = new Button();
             //buttonNewTemplate.Content = "Create new template";
+            //buttonNewTemplate.Width = 250;
             //buttonNewTemplate.Click += (s, e) =>
             //{
             //    ButtonNewTemplate_Click(s, e);
             //};
-            //listViewTemplatesAndAttributes.Items.Add(buttonNewTemplate);
-            //listViewTemplatesAndAttributes.HorizontalContentAlignment = HorizontalAlignment.Center;
+            //templateStackPanel.Children.Add(buttonNewTemplate);
+            //templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
+
+
+            foreach (Template template in FileEditor.Instance.SettingsEntity.Templates)
+            {
+                Label labelTemplate = new Label();
+                labelTemplate.Content = template.Name;
+
+                listViewTemplatesAndAttributes.Items.Add(labelTemplate);
+                listViewTemplatesAndAttributes.VerticalAlignment = VerticalAlignment.Center;
+            }
+
+            Button buttonNewTemplate = new Button();
+            buttonNewTemplate.Content = "Create new template";
+            buttonNewTemplate.Click += (s, e) =>
+            {
+                ButtonNewTemplate_Click(s, e);
+            };
+            listViewTemplatesAndAttributes.Items.Add(buttonNewTemplate);
+            listViewTemplatesAndAttributes.HorizontalContentAlignment = HorizontalAlignment.Center;
         }
 
         private static void ConvertPdfToPng(String inputPdfPath, String outputPngPath)
@@ -182,14 +187,46 @@ namespace WpfPrototype
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
+            
             //todo: save template or analyzed document
         }
         private void ButtonNewTemplate_Click(object sender, RoutedEventArgs e)
         {
-            //todo: create template
+            listViewTemplatesAndAttributes.Items.Clear();
+
+            //todo: new template form
+            panel.Height = new GridLength(91, GridUnitType.Star);
+            listView.Height = new GridLength(0, GridUnitType.Star);
+            templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
+            templateStackPanel.Children.Clear();
+            Label lbl = new Label();
+            lbl.Content = "Template name: ";
+            TextBox txtBox = new TextBox();
+            templateStackPanel.Children.Add(lbl);
+            templateStackPanel.Children.Add(txtBox);
+            //buttonSave.Visibility = Visibility.Visible;
+
+            Button buttonNewTemplate = new Button();
+            buttonNewTemplate.Content = "Create";
+            buttonNewTemplate.Click += (s, e) =>
+            {
+                Template template = new Template(txtBox.Text);
+                template.DocFiles.Add(new DocFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>()));
+                FileEditor.Instance.AddNewTemplate(template);
+
+                CreateAttributeListView();
+            };
+            templateStackPanel.Children.Add(buttonNewTemplate);
         }
 
-        private void buttonRight_Click(object sender, RoutedEventArgs e)
+        private void CreateAttributeListView()
+        {
+            panel.Height = new GridLength(0, GridUnitType.Star);
+            listView.Height = new GridLength(91, GridUnitType.Star);
+            //throw new NotImplementedException();
+        }
+
+        private void ButtonRight_Click(object sender, RoutedEventArgs e)
         {
             pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
             if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
@@ -200,7 +237,7 @@ namespace WpfPrototype
             {
                 buttonLeft.IsEnabled = false;
             }
-            else 
+            else
             {
                 buttonLeft.IsEnabled = true;
             }
@@ -209,7 +246,7 @@ namespace WpfPrototype
             ShowImage();
         }
 
-        private void buttonLeft_Click(object sender, RoutedEventArgs e)
+        private void ButtonLeft_Click(object sender, RoutedEventArgs e)
         {
             pointerToActualAnalyzedFile = pointerToActualAnalyzedFile - 1;
             if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
@@ -227,6 +264,21 @@ namespace WpfPrototype
             SelectingActualAnalyzedFile();
 
             ShowImage();
+        }
+
+        private void ListViewTemplatesAndAttributes_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+            string selectedTemplate = listViewTemplatesAndAttributes.SelectedValue.ToString();
+            if (selectedTemplate.StartsWith("System.Windows.Controls.Label: "))
+            {
+                selectedTemplate = selectedTemplate.Substring(31);
+                //todo: add actual file to selectedTemplate
+            }
+            else if (selectedTemplate.StartsWith("System.Windows.Controls.Button: "))
+            {
+                ButtonNewTemplate_Click(sender, e);
+            }
         }
     }
 }

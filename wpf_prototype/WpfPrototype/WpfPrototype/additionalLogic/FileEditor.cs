@@ -37,6 +37,15 @@ namespace WpfPrototype
             }
         }
 
+        public void AddNewTemplate(Template template) 
+        {
+            if (!SettingsEntity.Templates.Any(x => x.Name == template.Name))
+            {
+                SettingsEntity.Templates.Add(template);
+                WriteSettingsEntityToFile();
+            }
+        }
+
         public void AddNewFilesWithoutAttributes(List<String> files)
         {
             ReadFileToSettingsEntity();
@@ -84,7 +93,7 @@ namespace WpfPrototype
             }
         }
 
-        private void WriteSettingsEntityToFile()
+        public void WriteSettingsEntityToFile()
         {
             String fileText = "";
             if (!File.Exists(UserSettings.settingsFilePath))
