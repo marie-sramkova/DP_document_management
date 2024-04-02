@@ -19,6 +19,11 @@ namespace WpfPrototype.additionalLogic.entities
             DocFiles.Add(docFile);
         }
 
+        public void AddTemplate(Template template)
+        {
+            Templates.Add(template);
+        }
+
 
 
     }
