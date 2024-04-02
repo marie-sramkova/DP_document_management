@@ -32,11 +32,11 @@
                 <Button x:Name="buttonBack"  Click="ButtonBack_Click" Grid.Column="0">
                     <TextBlock>&lt;- Back</TextBlock>
                 </Button>
-                <Button x:Name="buttonLeft" Grid.Column="4">
+                <Button x:Name="buttonLeft" Grid.Column="4" Click="buttonLeft_Click">
                     <TextBlock>&lt;&lt;</TextBlock>
                 </Button>
                 <Label Name="labelSelectedFile" Content="filename.docx" Grid.Column="6"></Label>
-                <Button x:Name="buttonRight" Grid.Column="8">
+                <Button x:Name="buttonRight" Grid.Column="8" Click="buttonRight_Click">
                     <TextBlock>&gt;&gt;</TextBlock>
                 </Button>
                 <Button x:Name="buttonDropFile" Content="Drop file" Grid.Column="10"></Button>
