@@ -44,7 +44,7 @@ namespace WpfPrototype
                     docFilesInSettingsFile = FileEditor.Instance.SettingsEntity.DocFiles;
                     foreach (DocFile docFileInSettingsFile in docFilesInSettingsFile)
                     {
-                        if (newFiles.Contains(docFileInSettingsFile.FilePath))
+                        if (newFiles.Contains(docFileInSettingsFile.FilePath) && docFileInSettingsFile.DocAttributes.Count != 0)
                         {
                             documentsCount = documentsCount - 1;
                         }

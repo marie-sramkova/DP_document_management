@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TallComponents.PDF.Rasterizer;
 using Tesseract;
+using WpfPrototype.additionalLogic.entities;
 
 namespace WpfPrototype
 {
@@ -25,22 +26,41 @@ namespace WpfPrototype
     /// </summary>
     public partial class Window1 : Window
     {
+        private List<DocFile> analyzedFiles = new List<DocFile>();
+        private int pointerToActualAnalyzedFile = 0;
+
         public Window1()
         {
             InitializeComponent();
 
             CreateTemplateButtons();
 
+            foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
+            {
+                if (docFile.DocAttributes.Count == 0)
+                {
+                    analyzedFiles.Add(docFile);
+                }
+            }
+
             buttonSave.Visibility = Visibility.Hidden;
+            if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
+            {
+                buttonRight.IsEnabled = false;
+            }
+            buttonLeft.IsEnabled = false;
+
+            
 
 
+            //todo: templates buttons
+            SelectingActualAnalyzedFile();
 
-            //todo: read files from settings file and save iteratively
-            ConvertPdfToPng("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\temaP22085.pdf", "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
+            ShowImage();
+        }
 
-            //imgAnalyzedDocument.Source = new BitmapImage(new Uri("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png", UriKind.RelativeOrAbsolute));
-            //imgAnalyzedDocument.Source = new BitmapImage(new Uri(@"data/out.png", UriKind.RelativeOrAbsolute));
-
+        private void ShowImage()
+        {
             Uri uri = new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png", UriKind.RelativeOrAbsolute);
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -50,6 +70,28 @@ namespace WpfPrototype
             bitmap.EndInit();
             imgAnalyzedDocument.Source = bitmap;
             File.Delete(uri.AbsolutePath);
+        }
+
+        private void SelectingActualAnalyzedFile()
+        {
+
+            if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf"))
+            {
+                ConvertPdfToPng(analyzedFiles[pointerToActualAnalyzedFile].FilePath, "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
+            }
+            else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
+            {
+                File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
+            }
+            else
+            {
+                //todo: another file formats to show us png
+                if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                {
+                    pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
+                    SelectingActualAnalyzedFile();
+                }
+            }
         }
 
         private void CreateTemplateButtons()
@@ -109,22 +151,6 @@ namespace WpfPrototype
                     page.SaveAsBitmap(fileOut, ImageEncoding.Png, resolution);
                 }
             }
-            //conversion to tiff - need to edit outputTiffPath
-            //using (FileStream fileIn = new FileStream(inputPdfPath, FileMode.Open, FileAccess.Read))
-            //{
-            //    Document document = new Document(fileIn);
-
-            //    ConvertToTiffOptions options = new ConvertToTiffOptions();
-            //    options.Compression = TiffCompression.CcittG4;
-            //    options.Resolution = 150;
-            //    options.PixelFormat = TallComponents.PDF.Rasterizer.PixelFormat.Bw1Bpp;
-
-            //    using (FileStream fileOut = new FileStream(outputTiffPath , FileMode.Create, FileAccess.Write))
-            //    {
-            //        document.ConvertToTiff(fileOut, options);
-            //    }
-            //}
-
         }
 
         private void ButtonProcess_Click(object sender, RoutedEventArgs e)
@@ -161,6 +187,46 @@ namespace WpfPrototype
         private void ButtonNewTemplate_Click(object sender, RoutedEventArgs e)
         {
             //todo: create template
+        }
+
+        private void buttonRight_Click(object sender, RoutedEventArgs e)
+        {
+            pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
+            if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
+            {
+                buttonRight.IsEnabled = false;
+            }
+            if (pointerToActualAnalyzedFile == 0)
+            {
+                buttonLeft.IsEnabled = false;
+            }
+            else 
+            {
+                buttonLeft.IsEnabled = true;
+            }
+            SelectingActualAnalyzedFile();
+
+            ShowImage();
+        }
+
+        private void buttonLeft_Click(object sender, RoutedEventArgs e)
+        {
+            pointerToActualAnalyzedFile = pointerToActualAnalyzedFile - 1;
+            if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
+            {
+                buttonRight.IsEnabled = false;
+            }
+            if (pointerToActualAnalyzedFile == 0)
+            {
+                buttonLeft.IsEnabled = false;
+            }
+            else
+            {
+                buttonLeft.IsEnabled = true;
+            }
+            SelectingActualAnalyzedFile();
+
+            ShowImage();
         }
     }
 }
