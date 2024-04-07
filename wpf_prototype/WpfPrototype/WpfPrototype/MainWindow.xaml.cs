@@ -103,7 +103,7 @@ namespace WpfPrototype
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
-            //open new window with settings
+            //todo: open new window with settings
         }
     }
 }

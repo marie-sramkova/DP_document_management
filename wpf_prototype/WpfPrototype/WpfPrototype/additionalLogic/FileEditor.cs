@@ -24,6 +24,7 @@ namespace WpfPrototype
         }
 
         private static FileEditor instance = null;
+
         public static FileEditor Instance
         {
             get
@@ -44,6 +45,10 @@ namespace WpfPrototype
                 SettingsEntity.Templates.Add(template);
                 WriteSettingsEntityToFile();
             }
+            else 
+            {
+                //todo: tell user that the template already exists
+            }
         }
 
         public void AddNewFilesWithoutAttributes(List<String> files)
@@ -57,21 +62,30 @@ namespace WpfPrototype
                     DocFile newDoc = new DocFile(file, docAttributes);
                     SettingsEntity.DocFiles.Add(newDoc);
                 }
+                else if (System.IO.Path.GetFileName(file).Equals("settings.txt")) 
+                {
+                    
+                }
+                else
+                {
+                    //todo: inform that the document has been already analyzed
+                    return;
+                }
             }
             WriteSettingsEntityToFile();
         }
 
         //todo: where to convert to entity, here? which string is input?
-        public void AddNewFilesWithAttributes(List<string> files)
-        {
-            foreach (var file in files)
-            {
-                List<DocAttribute> docAttributes = new List<DocAttribute>();
-                //todo: convert attributes from analyzed file to entities
-                DocFile newDoc = new DocFile(file, docAttributes);
-            }
-            //todo: save to file
-        }
+        //public void AddNewFilesWithAttributes(List<string> files)
+        //{
+        //    foreach (var file in files)
+        //    {
+        //        List<DocAttribute> docAttributes = new List<DocAttribute>();
+        //        //todo: convert attributes from analyzed file to entities
+        //        DocFile newDoc = new DocFile(file, docAttributes);
+        //    }
+        //    //todo: save to file
+        //}
 
         private void ReadFileToSettingsEntity()
         {
@@ -110,6 +124,15 @@ namespace WpfPrototype
             SettingsEntity = new SettingsEntity();
             SettingsEntity.DocFiles = new List<DocFile>();
             SettingsEntity.Templates = new List<Template>();
+        }
+
+        public void AddFileToTemplate(string templateName, DocFile file)
+        {
+            Template savedTemplate = SettingsEntity.Templates.Find(x => x.Name == templateName);
+            if (!savedTemplate.DocFiles.Any(x => x.FilePath == file.FilePath)) { 
+                savedTemplate.DocFiles.Add(file);
+                WriteSettingsEntityToFile();
+            }
         }
     }
 }

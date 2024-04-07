@@ -51,22 +51,33 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0*" x:Name="panel"></RowDefinition>
                         <RowDefinition Height="91*" x:Name="listView"></RowDefinition>
+                        <RowDefinition Height="0*" x:Name="listView2"></RowDefinition>
                         <RowDefinition Height="1*"></RowDefinition>
                         <RowDefinition Height="8*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <StackPanel x:Name="templateStackPanel" Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False">
-                        
-                    </StackPanel>
-                    <ListView x:Name="listViewTemplatesAndAttributes" Grid.Row="1"  Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
-                        
-                        <!--<ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"/>
-                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                            </GridView>
-                        </ListView.View>-->
+                    <StackPanel x:Name="templateStackPanel" Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"></StackPanel>
+                    <ListView x:Name="listViewTemplates" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel>
+                                    <Label Content="{Binding Name}"/>
+                                </WrapPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                     </ListView>
-                    <Button x:Name="buttonSave" Content="Confirm" Grid.Row="3" Click="ButtonSave_Click"></Button>
+                    <ListView Margin="10" Name="listViewAttributes" Grid.Row="2" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel>
+                                    <Label Content="{Binding Name}" />
+                                    <Label Content="{Binding Value}"/>
+                                    <Label Content="{Binding Type}"/>
+                                    <Button Content="confirm" FontWeight="Bold"></Button>
+                                </WrapPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Button x:Name="buttonSave" Content="Confirm" Grid.Row="4" Click="ButtonSave_Click"></Button>
                 </Grid>
                 <Grid Grid.Column="2">
                     <Image x:Name="imgAnalyzedDocument"></Image>
