@@ -94,35 +94,6 @@ namespace WpfPrototype
 
         private void CreateTemplateButtons()
         {
-            //todo: delete if panel wont be used
-            //panel.Height = new GridLength(91, GridUnitType.Star);
-            //listView.Height = new GridLength(0, GridUnitType.Star);
-
-            ////todo: iteration by templates
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    Button buttonTemplate = new Button();
-            //    buttonTemplate.Content = "Template name";
-            //    buttonTemplate.Width = 250;
-            //    buttonTemplate.Click += (s, e) =>
-            //    {
-            //        //save template and continue with analyzing document by choosen template
-            //    };
-            //    templateStackPanel.Children.Add(buttonTemplate);
-            //    templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
-            //    //todo: change labels to spaces!!!!!
-            //    templateStackPanel.Children.Add(new Label());
-            //}
-
-            //Button buttonNewTemplate = new Button();
-            //buttonNewTemplate.Content = "Create new template";
-            //buttonNewTemplate.Width = 250;
-            //buttonNewTemplate.Click += (s, e) =>
-            //{
-            //    ButtonNewTemplate_Click(s, e);
-            //};
-            //templateStackPanel.Children.Add(buttonNewTemplate);
-            //templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
             buttonSave.Content = "Create new template";
 
             List<Template> templates = new List<Template>();
@@ -132,24 +103,7 @@ namespace WpfPrototype
                 templates.Add(template);
             }
 
-            listViewTemplatesAndAttributes.ItemsSource = templates;
-            //foreach (Template template in FileEditor.Instance.SettingsEntity.Templates)
-            //{
-            //    Label labelTemplate = new Label();
-            //    labelTemplate.Content = template.Name;
-
-            //    listViewTemplatesAndAttributes.Items.Add(labelTemplate);
-            //    listViewTemplatesAndAttributes.VerticalAlignment = VerticalAlignment.Center;
-            //}
-
-            //Button buttonNewTemplate = new Button();
-            //buttonNewTemplate.Content = "Create new template";
-            //buttonNewTemplate.Click += (s, e) =>
-            //{
-            //    ButtonNewTemplate_Click(s, e);
-            //};
-            //listViewTemplatesAndAttributes.Items.Add(buttonNewTemplate);
-            //listViewTemplatesAndAttributes.HorizontalContentAlignment = HorizontalAlignment.Center;
+            listViewTemplates.ItemsSource = templates;
         }
 
         private static void ConvertPdfToPng(String inputPdfPath, String outputPngPath)
@@ -195,7 +149,7 @@ namespace WpfPrototype
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            if (listViewTemplatesAndAttributes.SelectedItem == null)
+            if (listViewTemplates.SelectedItem == null)
             {
                 ButtonNewTemplate_Click(sender, e);
             }
@@ -208,7 +162,7 @@ namespace WpfPrototype
 
         private void ButtonNewTemplate_Click(object sender, RoutedEventArgs e)
         {
-            listViewTemplatesAndAttributes.ItemsSource = new List<Template>();
+            listViewTemplates.ItemsSource = new List<Template>();
             buttonSave.Visibility = Visibility.Hidden;
 
             //todo: new template form
@@ -221,6 +175,8 @@ namespace WpfPrototype
             TextBox txtBox = new TextBox();
             templateStackPanel.Children.Add(lbl);
             templateStackPanel.Children.Add(txtBox);
+            //todo: change label to space
+            templateStackPanel.Children.Add(new Label());
             //buttonSave.Visibility = Visibility.Visible;
 
             Button buttonNewTemplate = new Button();
@@ -246,7 +202,6 @@ namespace WpfPrototype
             docAttributes.Add(new DocAttribute("attr", "value", "type", 0, 0, 0, 0));
             listViewAttributes.ItemsSource = docAttributes;
 
-            //listViewTemplatesAndAttributes.Items.Clear();
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == selectedTemplateName.Name);
             if (selectedTemplate.AllDocAttributes.Count > 0)
             {
@@ -305,7 +260,7 @@ namespace WpfPrototype
         {
             buttonSave.Content = "Save";
             buttonSave.Visibility = Visibility.Visible;
-            Template selectedTemplate = (Template)listViewTemplatesAndAttributes.SelectedItems[0];
+            Template selectedTemplate = (Template)listViewTemplates.SelectedItems[0];
             FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
             //todo: show listview with attributes
             CreateAttributeListView(selectedTemplate);

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfPrototype"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid> 
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
@@ -77,7 +77,7 @@
                     <Button x:Name="buttonApplyFilters" Content="Apply filters" Grid.Column="1"></Button>
                 </Grid>
             </Grid>
-    
+
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -137,54 +137,4 @@
             <Button x:Name="buttonSettings" Content="Settings" Grid.Column="1" Click="ButtonSettings_Click"/>
         </Grid>
     </Grid>
-    <!--<Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="7*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="7*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="74*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="7*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10*"></ColumnDefinition>
-                <ColumnDefinition Width="60*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="5*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="5*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Label Name="labelSelectFolder" Content="Select folder:" Grid.Column="0"></Label>
-            <TextBox x:Name="textBoxFolderPath" Grid.Column="1"></TextBox>
-            <Button x:Name="buttonOpen" Content="Open" Grid.Column="3"/>
-            <Button x:Name="buttonOk" Content="Ok" Grid.Column="5" Click="buttonOk_Click"></Button>
-        </Grid>
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Label Name="labelNewFiles" Content="New files:"></Label>
-        </Grid>
-        <Grid Grid.Row="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="98*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <ListView x:Name="listView1" Grid.Column="1"></ListView>
-        </Grid>
-        <Grid Grid.Row="7">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="79*"></ColumnDefinition>
-                <ColumnDefinition Width="20*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="buttonProcess" Content="Process" Grid.Column="1"></Button>
-        </Grid>
-    </Grid>-->
 </Window>
