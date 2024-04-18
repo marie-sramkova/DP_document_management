@@ -43,20 +43,19 @@
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="49*"></ColumnDefinition>
+                    <ColumnDefinition Width="40*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition Width="49*"></ColumnDefinition>
+                    <ColumnDefinition Width="58*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0*" x:Name="panel"></RowDefinition>
                         <RowDefinition Height="91*" x:Name="listView"></RowDefinition>
                         <RowDefinition Height="0*" x:Name="listView2"></RowDefinition>
+                        <RowDefinition Height="0*" x:Name="panel"></RowDefinition>
                         <RowDefinition Height="1*"></RowDefinition>
                         <RowDefinition Height="8*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <StackPanel x:Name="templateStackPanel" Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"></StackPanel>
-                    <ListView x:Name="listViewTemplates" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
+                    <ListView x:Name="listViewTemplates" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -65,18 +64,21 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <ListView Margin="10" Name="listViewAttributes" Grid.Row="2" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" >
+
+                    <ListView Margin="10" Name="listViewAttributes" Grid.Row="1" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel>
-                                    <Label Content="{Binding Name}" />
-                                    <Label Content="{Binding Value}"/>
-                                    <Label Content="{Binding Type}"/>
-                                    <Button Content="confirm" FontWeight="Bold"></Button>
+                                    <Label Content="{Binding Name}" Width="100"/>
+                                    <TextBox Text="{Binding Value}" Width="100" TextWrapping="Wrap" GotFocus="TextBox_GotFocus"></TextBox>
+                                    <Label Content="{Binding Type}" Width="50"/>
+                                    <Button Content="Delete" FontWeight="Bold"></Button>
                                 </WrapPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
+
+                    <StackPanel x:Name="templateStackPanel" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"></StackPanel>
                     <Button x:Name="buttonSave" Content="Confirm" Grid.Row="4" Click="ButtonSave_Click"></Button>
                 </Grid>
                 <Grid Grid.Column="2">

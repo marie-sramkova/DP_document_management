@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfPrototype.additionalLogic.entities
 {
-    public class DocAttribute
+    public class DocAttribute : INotifyPropertyChanged
     {
 
         public String Name { get; set; }
+        //public String Name { get { return Name; } set { Name = value; OnPropertyChanged(); } }
         public String Value { get; set; }
         public String Type { get; set; }
         public int StartingXLocation { get; set; }
@@ -27,5 +29,8 @@ namespace WpfPrototype.additionalLogic.entities
             EndingXLocation = endingXLocation;
             EndingYLocation = endingYLocation;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
     }
 }

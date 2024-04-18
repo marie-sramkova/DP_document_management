@@ -33,6 +33,8 @@ namespace WpfPrototype
         public Window1()
         {
             InitializeComponent();
+            //this.WindowState = WindowState.Maximized;
+            //this.WindowStyle = WindowStyle.None;
 
             CreateTemplateButtons();
 
@@ -153,9 +155,12 @@ namespace WpfPrototype
             {
                 ButtonNewTemplate_Click(sender, e);
             }
-            else if (buttonSave.Visibility == Visibility.Hidden)
+            else 
             {
-
+                var filterResult = listViewAttributes.ItemsSource as List<DocAttribute>;
+                List<DocAttribute> docsAttrs = filterResult.Cast<DocAttribute>().ToList();
+                Debug.WriteLine(docsAttrs[0].Name + ", " + docsAttrs[0].Value + ", " + docsAttrs[0].Type + " - " + listViewAttributes.Items.Count);
+                //FileEditor.Instance.AddAttributesToFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>());
             }
             //todo: save template or analyzed document
         }
@@ -195,12 +200,14 @@ namespace WpfPrototype
 
         private void CreateAttributeListView(Template selectedTemplateName)
         {
-            listView2.Height = new GridLength(91, GridUnitType.Star);
+            listView2.Height = new GridLength(81, GridUnitType.Star);
             listView.Height = new GridLength(0, GridUnitType.Star);
+            panel.Height = new GridLength(10, GridUnitType.Star);
+            templateStackPanel.Children.Clear();
             List<DocAttribute> docAttributes = new List<DocAttribute>();
+            //todo: read attributes from template
             docAttributes.Add(new DocAttribute("attr", "value", "type", 0, 0, 0, 0));
             docAttributes.Add(new DocAttribute("attr", "value", "type", 0, 0, 0, 0));
-            listViewAttributes.ItemsSource = docAttributes;
 
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == selectedTemplateName.Name);
             if (selectedTemplate.AllDocAttributes.Count > 0)
@@ -212,8 +219,61 @@ namespace WpfPrototype
             }
             else
             {
+
                 //todo: not added attributes yet in template -> add new attribute
             }
+
+            listViewAttributes.ItemsSource = docAttributes;
+
+            Button buttonNewAttribute = new Button();
+            buttonNewAttribute.Content = "Add new attribute";
+            buttonNewAttribute.Click += (s, e) =>
+            {
+                ButtonNewAttribute_Click(selectedTemplate);
+            };
+            templateStackPanel.Children.Add(buttonNewAttribute);
+
+        }
+
+        private void ButtonNewAttribute_Click(Template template)
+        {
+            listViewTemplates.ItemsSource = new List<Template>();
+            //buttonSave.Visibility = Visibility.Hidden;
+
+            //todo: new template form
+            panel.Height = new GridLength(71, GridUnitType.Star);
+            listView.Height = new GridLength(0, GridUnitType.Star);
+            templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
+            templateStackPanel.Children.Clear();
+            Label lbl = new Label();
+            lbl.Content = "Attribute name: ";
+            TextBox txtBox = new TextBox();
+            Label lblComboBox = new Label();
+            lblComboBox.Content = "Type: ";
+            ComboBox attributeComboBox = new ComboBox();
+            attributeComboBox.Items.Add("Number");
+            attributeComboBox.Items.Add("Text");
+            attributeComboBox.Items.Add("Date");
+            attributeComboBox.Items.Add("Picture");
+            templateStackPanel.Children.Add(lbl);
+            templateStackPanel.Children.Add(txtBox);
+            templateStackPanel.Children.Add(lblComboBox);
+            templateStackPanel.Children.Add(attributeComboBox);
+            //todo: change label to space
+            templateStackPanel.Children.Add(new Label());
+            //buttonSave.Visibility = Visibility.Visible;
+
+            Button buttonNewAttribute = new Button();
+            buttonNewAttribute.Content = "Create";
+            buttonNewAttribute.Click += (s, e) =>
+            {
+                DocAttribute docAttribute = new DocAttribute(txtBox.Text, "", attributeComboBox.SelectedValue.ToString(), 0, 0, 0, 0);
+                FileEditor.Instance.AddAttributeToTemplate(template, docAttribute);
+
+                panel.Height = new GridLength(10, GridUnitType.Star);
+                CreateAttributeListView(template);
+            };
+            templateStackPanel.Children.Add(buttonNewAttribute);
         }
 
         private void ButtonRight_Click(object sender, RoutedEventArgs e)
@@ -264,6 +324,12 @@ namespace WpfPrototype
             FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
             //todo: show listview with attributes
             CreateAttributeListView(selectedTemplate);
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            DocAttribute atr = (sender as FrameworkElement).DataContext as DocAttribute;
+            Debug.WriteLine("selected attribute: " + atr.Name);
         }
     }
 }
