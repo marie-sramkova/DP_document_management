@@ -336,23 +336,28 @@ namespace WpfPrototype
 
         private void imgAnalyzedDocument_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
-            lastSelectedDocAttribute.StartingXLocation = (int)p.X;
-            lastSelectedDocAttribute.StartingYLocation = (int)p.Y;
-            //todo: show what is selected
-
+            if (lastSelectedDocAttribute != null)
+            {
+                System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
+                lastSelectedDocAttribute.StartingXLocation = (int)p.X;
+                lastSelectedDocAttribute.StartingYLocation = (int)p.Y;
+                //todo: show what is selected
+            }
         }
 
         private void imgAnalyzedDocument_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
-            lastSelectedDocAttribute.EndingXLocation= (int)p.X;
-            lastSelectedDocAttribute.EndingYLocation = (int)p.Y;
-            //todo: save that when you click on save button - NOT NOW
-            analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name);
-            FileEditor.Instance.AddAttributeToFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, lastSelectedDocAttribute);
-            //todo: read selected part of image to value (textBox)
-            //show what is selected
+            if (lastSelectedDocAttribute != null)
+            {
+                System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
+                lastSelectedDocAttribute.EndingXLocation = (int)p.X;
+                lastSelectedDocAttribute.EndingYLocation = (int)p.Y;
+                //todo: save that when you click on save button - NOT NOW
+                analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name);
+                FileEditor.Instance.AddAttributeToFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, lastSelectedDocAttribute);
+                //todo: read selected part of image to value (textBox)
+                //show what is selected
+            }
         }
     }
 }
