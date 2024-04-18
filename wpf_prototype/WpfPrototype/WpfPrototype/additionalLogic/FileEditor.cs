@@ -147,9 +147,9 @@ namespace WpfPrototype
             else
             {
                 int index = template.AllDocAttributes.FindIndex(x => x == docAttribute);
-                if (index! < 0) 
+                if (index > 0)
                 {
-                    template.AllDocAttributes[index] = docAttribute;
+                    FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == template.Name).AllDocAttributes[index] = docAttribute;
                 }
             }
         }
@@ -166,6 +166,32 @@ namespace WpfPrototype
                     {
                         AddAttributeToTemplate(template, attribute);
                     }
+
+                    //todo: calculate averageDocAttribute for template
+                    WriteSettingsEntityToFile();
+                }
+            }
+        }
+
+        public void AddAttributeToFile(string fileName, DocAttribute docAttribute)
+        {
+            Template template = SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == fileName) != null);
+            if (template != null)
+            {
+                DocFile docFile = SettingsEntity.DocFiles.Find(x => x.FilePath == fileName);
+                if (docFile != null)
+                {
+                    int index = docFile.DocAttributes.FindIndex(x => x == docAttribute);
+                    if (index > 0)
+                    {
+                        SettingsEntity.DocFiles.Find(x => x.FilePath == fileName).DocAttributes[index] = docAttribute;
+                    }
+                    else 
+                    {
+                        SettingsEntity.DocFiles.Find(x => x.FilePath == fileName).DocAttributes.Add(docAttribute);
+                    }
+
+                    AddAttributeToTemplate(template, docAttribute);
 
                     //todo: calculate averageDocAttribute for template
                     WriteSettingsEntityToFile();

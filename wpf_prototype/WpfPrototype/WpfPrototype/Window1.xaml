@@ -78,11 +78,11 @@
                         </ListView.ItemTemplate>
                     </ListView>
 
-                    <StackPanel x:Name="templateStackPanel" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"></StackPanel>
+                    <StackPanel x:Name="templateAndAttributeStackPanel" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"></StackPanel>
                     <Button x:Name="buttonSave" Content="Confirm" Grid.Row="4" Click="ButtonSave_Click"></Button>
                 </Grid>
                 <Grid Grid.Column="2">
-                    <Image x:Name="imgAnalyzedDocument"></Image>
+                    <Image x:Name="imgAnalyzedDocument" MouseDown="imgAnalyzedDocument_MouseDown" MouseUp="imgAnalyzedDocument_MouseUp"></Image>
                 </Grid>
             </Grid>
             <Grid Grid.Row="4">

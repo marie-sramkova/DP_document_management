@@ -29,6 +29,7 @@ namespace WpfPrototype
     {
         private List<DocFile> analyzedFiles = new List<DocFile>();
         private int pointerToActualAnalyzedFile = 0;
+        private DocAttribute lastSelectedDocAttribute;
 
         public Window1()
         {
@@ -173,15 +174,15 @@ namespace WpfPrototype
             //todo: new template form
             panel.Height = new GridLength(91, GridUnitType.Star);
             listView.Height = new GridLength(0, GridUnitType.Star);
-            templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
-            templateStackPanel.Children.Clear();
+            templateAndAttributeStackPanel.VerticalAlignment = VerticalAlignment.Center;
+            templateAndAttributeStackPanel.Children.Clear();
             Label lbl = new Label();
             lbl.Content = "Template name: ";
             TextBox txtBox = new TextBox();
-            templateStackPanel.Children.Add(lbl);
-            templateStackPanel.Children.Add(txtBox);
+            templateAndAttributeStackPanel.Children.Add(lbl);
+            templateAndAttributeStackPanel.Children.Add(txtBox);
             //todo: change label to space
-            templateStackPanel.Children.Add(new Label());
+            templateAndAttributeStackPanel.Children.Add(new Label());
             //buttonSave.Visibility = Visibility.Visible;
 
             Button buttonNewTemplate = new Button();
@@ -195,7 +196,7 @@ namespace WpfPrototype
                 panel.Height = new GridLength(0, GridUnitType.Star);
                 CreateAttributeListView(template);
             };
-            templateStackPanel.Children.Add(buttonNewTemplate);
+            templateAndAttributeStackPanel.Children.Add(buttonNewTemplate);
         }
 
         private void CreateAttributeListView(Template selectedTemplateName)
@@ -203,7 +204,7 @@ namespace WpfPrototype
             listView2.Height = new GridLength(81, GridUnitType.Star);
             listView.Height = new GridLength(0, GridUnitType.Star);
             panel.Height = new GridLength(10, GridUnitType.Star);
-            templateStackPanel.Children.Clear();
+            templateAndAttributeStackPanel.Children.Clear();
             List<DocAttribute> docAttributes = new List<DocAttribute>();
             //todo: read attributes from template
             docAttributes.Add(new DocAttribute("attr", "value", "type", 0, 0, 0, 0));
@@ -231,7 +232,7 @@ namespace WpfPrototype
             {
                 ButtonNewAttribute_Click(selectedTemplate);
             };
-            templateStackPanel.Children.Add(buttonNewAttribute);
+            templateAndAttributeStackPanel.Children.Add(buttonNewAttribute);
 
         }
 
@@ -241,10 +242,10 @@ namespace WpfPrototype
             //buttonSave.Visibility = Visibility.Hidden;
 
             //todo: new template form
-            panel.Height = new GridLength(71, GridUnitType.Star);
+            panel.Height = new GridLength(51, GridUnitType.Star);
             listView.Height = new GridLength(0, GridUnitType.Star);
-            templateStackPanel.VerticalAlignment = VerticalAlignment.Center;
-            templateStackPanel.Children.Clear();
+            templateAndAttributeStackPanel.VerticalAlignment = VerticalAlignment.Center;
+            templateAndAttributeStackPanel.Children.Clear();
             Label lbl = new Label();
             lbl.Content = "Attribute name: ";
             TextBox txtBox = new TextBox();
@@ -255,12 +256,12 @@ namespace WpfPrototype
             attributeComboBox.Items.Add("Text");
             attributeComboBox.Items.Add("Date");
             attributeComboBox.Items.Add("Picture");
-            templateStackPanel.Children.Add(lbl);
-            templateStackPanel.Children.Add(txtBox);
-            templateStackPanel.Children.Add(lblComboBox);
-            templateStackPanel.Children.Add(attributeComboBox);
+            templateAndAttributeStackPanel.Children.Add(lbl);
+            templateAndAttributeStackPanel.Children.Add(txtBox);
+            templateAndAttributeStackPanel.Children.Add(lblComboBox);
+            templateAndAttributeStackPanel.Children.Add(attributeComboBox);
             //todo: change label to space
-            templateStackPanel.Children.Add(new Label());
+            templateAndAttributeStackPanel.Children.Add(new Label());
             //buttonSave.Visibility = Visibility.Visible;
 
             Button buttonNewAttribute = new Button();
@@ -273,7 +274,7 @@ namespace WpfPrototype
                 panel.Height = new GridLength(10, GridUnitType.Star);
                 CreateAttributeListView(template);
             };
-            templateStackPanel.Children.Add(buttonNewAttribute);
+            templateAndAttributeStackPanel.Children.Add(buttonNewAttribute);
         }
 
         private void ButtonRight_Click(object sender, RoutedEventArgs e)
@@ -330,6 +331,28 @@ namespace WpfPrototype
         {
             DocAttribute atr = (sender as FrameworkElement).DataContext as DocAttribute;
             Debug.WriteLine("selected attribute: " + atr.Name);
+            lastSelectedDocAttribute = atr;
+        }
+
+        private void imgAnalyzedDocument_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
+            lastSelectedDocAttribute.StartingXLocation = (int)p.X;
+            lastSelectedDocAttribute.StartingYLocation = (int)p.Y;
+            //todo: show what is selected
+
+        }
+
+        private void imgAnalyzedDocument_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
+            lastSelectedDocAttribute.EndingXLocation= (int)p.X;
+            lastSelectedDocAttribute.EndingYLocation = (int)p.Y;
+            //todo: save that when you click on save button - NOT NOW
+            analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name);
+            FileEditor.Instance.AddAttributeToFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, lastSelectedDocAttribute);
+            //todo: read selected part of image to value (textBox)
+            //show what is selected
         }
     }
 }
