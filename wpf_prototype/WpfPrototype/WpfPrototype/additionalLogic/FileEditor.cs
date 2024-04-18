@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using WpfPrototype.additionalLogic.entities;
@@ -132,6 +133,43 @@ namespace WpfPrototype
             if (!savedTemplate.DocFiles.Any(x => x.FilePath == file.FilePath)) { 
                 savedTemplate.DocFiles.Add(file);
                 WriteSettingsEntityToFile();
+            }
+        }
+
+        public void AddAttributeToTemplate(Template template, DocAttribute docAttribute) 
+        {
+            if (!template.AllDocAttributes.Any(x => x.Name == docAttribute.Name))
+            {
+                template.AllDocAttributes.Add(docAttribute);
+                FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == template.Name).AllDocAttributes.Add(docAttribute);
+                WriteSettingsEntityToFile();
+            }
+            else
+            {
+                int index = template.AllDocAttributes.FindIndex(x => x == docAttribute);
+                if (index! < 0) 
+                {
+                    template.AllDocAttributes[index] = docAttribute;
+                }
+            }
+        }
+
+        public void AddAttributesToFile(string fileName, List<DocAttribute> docAttributes)
+        {
+            Template template = SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == fileName) != null);
+            if (template != null) {
+                DocFile docFile = SettingsEntity.DocFiles.Find(x => x.FilePath == fileName);
+                if (docFile != null)
+                {
+                    docFile.DocAttributes = docAttributes;
+                    foreach (DocAttribute attribute in docAttributes)
+                    {
+                        AddAttributeToTemplate(template, attribute);
+                    }
+
+                    //todo: calculate averageDocAttribute for template
+                    WriteSettingsEntityToFile();
+                }
             }
         }
     }
