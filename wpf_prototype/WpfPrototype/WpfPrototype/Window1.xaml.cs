@@ -1,9 +1,13 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,13 +16,17 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Xml;
 using TallComponents.PDF.Rasterizer;
 using Tesseract;
 using WpfPrototype.additionalLogic.entities;
+using WpfPrototype.Properties;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WpfPrototype
 {
@@ -30,6 +38,7 @@ namespace WpfPrototype
         private List<DocFile> analyzedFiles = new List<DocFile>();
         private int pointerToActualAnalyzedFile = 0;
         private DocAttribute lastSelectedDocAttribute;
+        private BitmapImage bitmap;
 
         public Window1()
         {
@@ -63,14 +72,14 @@ namespace WpfPrototype
         private void ShowImage()
         {
             Uri uri = new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png", UriKind.RelativeOrAbsolute);
-            var bitmap = new BitmapImage();
+            bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
             bitmap.UriSource = uri;
             bitmap.EndInit();
             imgAnalyzedDocument.Source = bitmap;
-            File.Delete(uri.AbsolutePath);
+            //File.Delete(uri.AbsolutePath);
         }
 
         private void SelectActualAnalyzedFile()
@@ -82,6 +91,7 @@ namespace WpfPrototype
             }
             else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
             {
+                File.Delete(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
                 File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
             }
             else
@@ -304,6 +314,10 @@ namespace WpfPrototype
             {
                 buttonRight.IsEnabled = false;
             }
+            else 
+            {
+                buttonRight.IsEnabled = true;
+            }
             if (pointerToActualAnalyzedFile == 0)
             {
                 buttonLeft.IsEnabled = false;
@@ -329,9 +343,77 @@ namespace WpfPrototype
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+
             DocAttribute atr = (sender as FrameworkElement).DataContext as DocAttribute;
             Debug.WriteLine("selected attribute: " + atr.Name);
+            CalculateAverageAttributeLocation(atr);
+            if (atr != null && atr.EndingXLocation != 0 && atr.EndingYLocation != 0 && atr.StartingXLocation != atr.EndingXLocation && atr.StartingYLocation != atr.EndingYLocation)
+            {
+                Bitmap outputImage = new Bitmap((int)bitmap.Width, (int)bitmap.Height);
+                Graphics G = Graphics.FromImage(outputImage);
+
+
+                G.DrawImage(System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png"), 0, 0);
+
+
+                for (global::System.Int32 i = atr.StartingXLocation; i < atr.EndingXLocation; i++)
+                {
+                    outputImage.SetPixel(i, atr.StartingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
+                    outputImage.SetPixel(i, atr.EndingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
+                }
+                for (global::System.Int32 i = atr.StartingYLocation; i < atr.EndingYLocation; i++)
+                {
+                    outputImage.SetPixel(atr.StartingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+                    outputImage.SetPixel(atr.EndingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+                }
+
+                using (var memory = new MemoryStream())
+                {
+                    outputImage.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
+                    memory.Position = 0;
+
+                    bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = memory;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                }
+                imgAnalyzedDocument.Source = bitmap;
+                Debug.WriteLine("changedPNG saved");
+            }
+            else 
+            {
+                ShowImage();
+            }
             lastSelectedDocAttribute = atr;
+        }
+
+        private void CalculateAverageAttributeLocation(DocAttribute atr)
+        {
+            int count = 0;
+            int sumOfStartingXLocation = 0;
+            int sumOfStartingYLocation = 0;
+            int sumOfEndingXLocation = 0;
+            int sumOfEndingYLocation = 0;
+            foreach (DocFile docFile in FileEditor.Instance.SettingsEntity.DocFiles)
+            {
+                DocAttribute  docAttr = docFile.DocAttributes.Find(x => x.Name == atr.Name);
+                if (docAttr != null && docAttr.EndingYLocation != 0 && docAttr.StartingXLocation != docAttr.EndingXLocation && docAttr.StartingYLocation != docAttr.EndingYLocation)
+                {
+                    sumOfStartingXLocation += docAttr.StartingXLocation;
+                    sumOfStartingYLocation += docAttr.StartingYLocation;
+                    sumOfEndingXLocation += docAttr.EndingXLocation;
+                    sumOfEndingYLocation += docAttr.EndingYLocation;
+                    count = count + 1;
+                }
+            }
+            if(count > 0)
+            {
+                atr.StartingXLocation = sumOfStartingXLocation / count;
+                atr.StartingYLocation = sumOfStartingYLocation / count;
+                atr.EndingXLocation = sumOfEndingXLocation / count;
+                atr.EndingYLocation = sumOfEndingYLocation / count;
+            }
         }
 
         private void imgAnalyzedDocument_MouseDown(object sender, MouseButtonEventArgs e)
