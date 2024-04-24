@@ -248,13 +248,24 @@ namespace WpfPrototype
             {
                 foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
                 {
-
-                    CalculateAverageAttributeLocation(attribute);
-                    docAttributes.Add(attribute);
-                    if (attribute != null && attribute.EndingXLocation != 0 && attribute.EndingYLocation != 0 && attribute.StartingXLocation != attribute.EndingXLocation && attribute.StartingYLocation != attribute.EndingYLocation)
-                    {
-                        AddAttributeBoundariesToBitmap(attribute);
+                    DocAttribute actualAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == attribute.Name);
+                    if (actualAttribute == null) {
+                        CalculateAverageAttributeLocation(attribute);
+                        docAttributes.Add(attribute);
+                        if (attribute != null && attribute.EndingXLocation != 0 && attribute.EndingYLocation != 0 && attribute.StartingXLocation != attribute.EndingXLocation && attribute.StartingYLocation != attribute.EndingYLocation)
+                        {
+                            AddAttributeBoundariesToBitmap(attribute);
+                        }
                     }
+                    else
+                    {
+                        docAttributes.Add(actualAttribute);
+                        if (actualAttribute != null && actualAttribute.EndingXLocation != 0 && actualAttribute.EndingYLocation != 0 && actualAttribute.StartingXLocation != actualAttribute.EndingXLocation && actualAttribute.StartingYLocation != attribute.EndingYLocation)
+                        {
+                            AddAttributeBoundariesToBitmap(actualAttribute);
+                        }
+                    }
+                    
                 }
             }
         }
@@ -367,7 +378,7 @@ namespace WpfPrototype
                 atr = sender as DocAttribute;
             }
             Debug.WriteLine("selected attribute: " + atr.Name);
-            CalculateAverageAttributeLocation(atr);
+            //CalculateAverageAttributeLocation(atr);
             if (atr != null && atr.EndingXLocation != 0 && atr.EndingYLocation != 0 && atr.StartingXLocation != atr.EndingXLocation && atr.StartingYLocation != atr.EndingYLocation)
             {
                 ShowImage();
