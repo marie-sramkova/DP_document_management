@@ -162,7 +162,7 @@ namespace WpfPrototype
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            if (listViewTemplates.SelectedItem == null)
+            if (listViewTemplates.SelectedItem == null && listViewAttributes.Items.Count == 0)
             {
                 ButtonNewTemplate_Click(sender, e);
             }
@@ -212,6 +212,8 @@ namespace WpfPrototype
 
                 panel.Height = new GridLength(0, GridUnitType.Star);
                 CreateAttributeListView(template);
+                buttonSave.Visibility = Visibility.Visible;
+                buttonSave.Content = "Save";
             };
             templateAndAttributeStackPanel.Children.Add(buttonNewTemplate);
         }
