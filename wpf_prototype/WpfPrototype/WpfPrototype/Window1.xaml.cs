@@ -168,10 +168,10 @@ namespace WpfPrototype
             }
             else 
             {
-                var filterResult = listViewAttributes.ItemsSource as List<DocAttribute>;
-                List<DocAttribute> docsAttrs = filterResult.Cast<DocAttribute>().ToList();
+                var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
+                List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
                 Debug.WriteLine(docsAttrs[0].Name + ", " + docsAttrs[0].Value + ", " + docsAttrs[0].Type + " - " + listViewAttributes.Items.Count);
-                //FileEditor.Instance.AddAttributesToFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>());
+                FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>());
             }
             //todo: save template or analyzed document
         }
@@ -216,9 +216,6 @@ namespace WpfPrototype
             panel.Height = new GridLength(10, GridUnitType.Star);
             templateAndAttributeStackPanel.Children.Clear();
             List<DocAttribute> docAttributes = new List<DocAttribute>();
-            //todo: read attributes from template
-            docAttributes.Add(new DocAttribute("attr", "value", "type", 0, 0, 0, 0));
-            docAttributes.Add(new DocAttribute("attr", "value", "type", 0, 0, 0, 0));
 
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == selectedTemplateName.Name);
             if (selectedTemplate.AllDocAttributes.Count > 0)
@@ -227,11 +224,6 @@ namespace WpfPrototype
                 {
                     docAttributes.Add(atribute);
                 }
-            }
-            else
-            {
-
-                //todo: not added attributes yet in template -> add new attribute
             }
 
             listViewAttributes.ItemsSource = docAttributes;
@@ -343,13 +335,19 @@ namespace WpfPrototype
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-
-            DocAttribute atr = (sender as FrameworkElement).DataContext as DocAttribute;
+            DocAttribute atr;
+            try
+            {
+                atr = (sender as FrameworkElement).DataContext as DocAttribute;
+            }catch (NullReferenceException ex)
+            {
+                atr = sender as DocAttribute;
+            }
             Debug.WriteLine("selected attribute: " + atr.Name);
             CalculateAverageAttributeLocation(atr);
             if (atr != null && atr.EndingXLocation != 0 && atr.EndingYLocation != 0 && atr.StartingXLocation != atr.EndingXLocation && atr.StartingYLocation != atr.EndingYLocation)
             {
-                Bitmap outputImage = new Bitmap((int)bitmap.Width, (int)bitmap.Height);
+                Bitmap outputImage = new Bitmap((int)bitmap.PixelWidth, (int)bitmap.PixelHeight);
                 Graphics G = Graphics.FromImage(outputImage);
 
 
@@ -369,7 +367,7 @@ namespace WpfPrototype
 
                 using (var memory = new MemoryStream())
                 {
-                    outputImage.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
+                    outputImage.Save(memory, System.Drawing.Imaging.ImageFormat.Jpeg);
                     memory.Position = 0;
 
                     bitmap = new BitmapImage();
@@ -423,10 +421,11 @@ namespace WpfPrototype
                 System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
                 lastSelectedDocAttribute.StartingXLocation = (int)p.X;
                 lastSelectedDocAttribute.StartingYLocation = (int)p.Y;
+
                 //todo: show what is selected
             }
         }
-
+        
         private void imgAnalyzedDocument_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (lastSelectedDocAttribute != null)
@@ -434,9 +433,34 @@ namespace WpfPrototype
                 System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
                 lastSelectedDocAttribute.EndingXLocation = (int)p.X;
                 lastSelectedDocAttribute.EndingYLocation = (int)p.Y;
+
+                double percentWidth = (double)bitmap.PixelWidth / imgAnalyzedDocument.ActualWidth;
+                double percentHeight = (double)bitmap.PixelHeight / imgAnalyzedDocument.ActualHeight;
+                lastSelectedDocAttribute.StartingXLocation = (int)(lastSelectedDocAttribute.StartingXLocation * percentWidth);
+                lastSelectedDocAttribute.StartingYLocation = (int)(lastSelectedDocAttribute.StartingYLocation * percentHeight);
+                lastSelectedDocAttribute.EndingXLocation = (int)(lastSelectedDocAttribute.EndingXLocation * percentWidth);
+                lastSelectedDocAttribute.EndingYLocation = (int)(lastSelectedDocAttribute.EndingYLocation * percentHeight);
+
+                Debug.WriteLine("starting x = " + lastSelectedDocAttribute.StartingXLocation + "\tending x = " + lastSelectedDocAttribute.EndingXLocation);
+                Debug.WriteLine("starting y = " + lastSelectedDocAttribute.StartingYLocation + "\tending y = " + lastSelectedDocAttribute.EndingYLocation);
+
+
+                TextBox_GotFocus(lastSelectedDocAttribute, e);
+
                 //todo: save that when you click on save button - NOT NOW
-                analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name);
-                FileEditor.Instance.AddAttributeToFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, lastSelectedDocAttribute);
+                int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.FindIndex(x => x.Name == lastSelectedDocAttribute.Name);
+                if (indexOfxistingAttribute >= 0)
+                {
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingXLocation = lastSelectedDocAttribute.StartingXLocation;
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingYLocation = lastSelectedDocAttribute.StartingYLocation;
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingXLocation = lastSelectedDocAttribute.EndingXLocation;
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingYLocation = lastSelectedDocAttribute.EndingYLocation;
+                }
+                else
+                {
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(lastSelectedDocAttribute);
+                }
+                //FileEditor.Instance.AddAttributeToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, lastSelectedDocAttribute);
                 //todo: read selected part of image to value (textBox)
                 //show what is selected
             }

@@ -154,7 +154,7 @@ namespace WpfPrototype
             }
         }
 
-        public void AddAttributesToFile(string fileName, List<DocAttribute> docAttributes)
+        public void AddAttributesToFileAndTemplate(string fileName, List<DocAttribute> docAttributes)
         {
             Template template = SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == fileName) != null);
             if (template != null) {
@@ -165,6 +165,7 @@ namespace WpfPrototype
                     foreach (DocAttribute attribute in docAttributes)
                     {
                         AddAttributeToTemplate(template, attribute);
+                        AddAttributeToFileAndTemplate(fileName, attribute);
                     }
 
                     //todo: calculate averageDocAttribute for template
@@ -173,7 +174,7 @@ namespace WpfPrototype
             }
         }
 
-        public void AddAttributeToFile(string fileName, DocAttribute docAttribute)
+        public void AddAttributeToFileAndTemplate(string fileName, DocAttribute docAttribute)
         {
             Template template = SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == fileName) != null);
             if (template != null)
