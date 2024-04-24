@@ -141,15 +141,15 @@ namespace WpfPrototype
             if (!template.AllDocAttributes.Any(x => x.Name == docAttribute.Name))
             {
                 template.AllDocAttributes.Add(docAttribute);
-                FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == template.Name).AllDocAttributes.Add(docAttribute);
+                SettingsEntity.Templates.Find(x => x.Name == template.Name).AllDocAttributes.Add(docAttribute);
                 WriteSettingsEntityToFile();
             }
             else
             {
-                int index = template.AllDocAttributes.FindIndex(x => x == docAttribute);
-                if (index > 0)
+                int index = template.AllDocAttributes.FindIndex(x => x.Name == docAttribute.Name);
+                if (index >= 0)
                 {
-                    FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == template.Name).AllDocAttributes[index] = docAttribute;
+                    SettingsEntity.Templates.Find(x => x.Name == template.Name).AllDocAttributes[index] = docAttribute;
                 }
             }
         }
@@ -161,10 +161,10 @@ namespace WpfPrototype
                 DocFile docFile = SettingsEntity.DocFiles.Find(x => x.FilePath == fileName);
                 if (docFile != null)
                 {
-                    docFile.DocAttributes = docAttributes;
+                    //docFile.DocAttributes = docAttributes;
                     foreach (DocAttribute attribute in docAttributes)
                     {
-                        AddAttributeToTemplate(template, attribute);
+                        //AddAttributeToTemplate(template, attribute);
                         AddAttributeToFileAndTemplate(fileName, attribute);
                     }
 
@@ -182,8 +182,8 @@ namespace WpfPrototype
                 DocFile docFile = SettingsEntity.DocFiles.Find(x => x.FilePath == fileName);
                 if (docFile != null)
                 {
-                    int index = docFile.DocAttributes.FindIndex(x => x == docAttribute);
-                    if (index > 0)
+                    int index = docFile.DocAttributes.FindIndex(x => x.Name == docAttribute.Name);
+                    if (index >= 0)
                     {
                         SettingsEntity.DocFiles.Find(x => x.FilePath == fileName).DocAttributes[index] = docAttribute;
                     }

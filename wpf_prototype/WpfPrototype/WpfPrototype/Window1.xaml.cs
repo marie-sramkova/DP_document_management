@@ -171,7 +171,14 @@ namespace WpfPrototype
                 var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
                 List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
                 Debug.WriteLine(docsAttrs[0].Name + ", " + docsAttrs[0].Value + ", " + docsAttrs[0].Type + " - " + listViewAttributes.Items.Count);
-                FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>());
+                if (docsAttrs == null)
+                {
+                    FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>());
+                }
+                else
+                {
+                    FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
+                }
             }
             //todo: save template or analyzed document
         }
@@ -272,6 +279,7 @@ namespace WpfPrototype
             {
                 DocAttribute docAttribute = new DocAttribute(txtBox.Text, "", attributeComboBox.SelectedValue.ToString(), 0, 0, 0, 0);
                 FileEditor.Instance.AddAttributeToTemplate(template, docAttribute);
+                analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(docAttribute);
 
                 panel.Height = new GridLength(10, GridUnitType.Star);
                 CreateAttributeListView(template);
