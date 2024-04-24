@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json.Linq;
+using SkiaSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -235,6 +236,8 @@ namespace WpfPrototype
                 }
             }
 
+            ShowImageWithAllAttributeBoundaries(selectedTemplate);
+
             listViewAttributes.ItemsSource = docAttributes;
 
             Button buttonNewAttribute = new Button();
@@ -245,6 +248,25 @@ namespace WpfPrototype
             };
             templateAndAttributeStackPanel.Children.Add(buttonNewAttribute);
 
+        }
+
+        private void ShowImageWithAllAttributeBoundaries(Template selectedTemplate)
+        {
+            List<DocAttribute> docAttributes = new List<DocAttribute>();
+            
+            if (selectedTemplate.AllDocAttributes.Count > 0)
+            {
+                foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
+                {
+
+                    CalculateAverageAttributeLocation(attribute);
+                    docAttributes.Add(attribute);
+                    if (attribute != null && attribute.EndingXLocation != 0 && attribute.EndingYLocation != 0 && attribute.StartingXLocation != attribute.EndingXLocation && attribute.StartingYLocation != attribute.EndingYLocation)
+                    {
+                        AddAttributeBoundariesToBitmap(attribute);
+                    }
+                }
+            }
         }
 
         private void ButtonNewAttribute_Click(Template template)
@@ -349,7 +371,8 @@ namespace WpfPrototype
             try
             {
                 atr = (sender as FrameworkElement).DataContext as DocAttribute;
-            }catch (NullReferenceException ex)
+            }
+            catch (NullReferenceException ex)
             {
                 atr = sender as DocAttribute;
             }
@@ -357,43 +380,82 @@ namespace WpfPrototype
             CalculateAverageAttributeLocation(atr);
             if (atr != null && atr.EndingXLocation != 0 && atr.EndingYLocation != 0 && atr.StartingXLocation != atr.EndingXLocation && atr.StartingYLocation != atr.EndingYLocation)
             {
-                Bitmap outputImage = new Bitmap((int)bitmap.PixelWidth, (int)bitmap.PixelHeight);
-                Graphics G = Graphics.FromImage(outputImage);
-
-
-                G.DrawImage(System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png"), 0, 0);
-
-
-                for (global::System.Int32 i = atr.StartingXLocation; i < atr.EndingXLocation; i++)
-                {
-                    outputImage.SetPixel(i, atr.StartingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
-                    outputImage.SetPixel(i, atr.EndingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
-                }
-                for (global::System.Int32 i = atr.StartingYLocation; i < atr.EndingYLocation; i++)
-                {
-                    outputImage.SetPixel(atr.StartingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
-                    outputImage.SetPixel(atr.EndingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
-                }
-
-                using (var memory = new MemoryStream())
-                {
-                    outputImage.Save(memory, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    memory.Position = 0;
-
-                    bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = memory;
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-                }
-                imgAnalyzedDocument.Source = bitmap;
-                Debug.WriteLine("changedPNG saved");
+                ShowImage();
+                AddAttributeBoundariesToBitmap(atr);
             }
-            else 
+            else
             {
                 ShowImage();
             }
             lastSelectedDocAttribute = atr;
+        }
+
+        private void AddAttributeBoundariesToBitmap(DocAttribute atr)
+        {
+
+            Bitmap outputImage = new Bitmap((int)bitmap.PixelWidth, (int)bitmap.PixelHeight);
+            Graphics graphics = Graphics.FromImage(outputImage);
+
+            Bitmap bitmap2 = ConvertBitmapImageToDrawingBitmap();
+
+
+            //G.DrawImage(System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png"), 0, 0);
+            graphics.DrawImage(bitmap2, 0, 0);
+
+
+
+            for (global::System.Int32 i = atr.StartingXLocation; i < atr.EndingXLocation; i++)
+            {
+                outputImage.SetPixel(i, atr.StartingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
+                outputImage.SetPixel(i, atr.EndingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
+            }
+            for (global::System.Int32 i = atr.StartingYLocation; i < atr.EndingYLocation; i++)
+            {
+                outputImage.SetPixel(atr.StartingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+                outputImage.SetPixel(atr.EndingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+            }
+
+            using (var memory = new MemoryStream())
+            {
+                outputImage.Save(memory, System.Drawing.Imaging.ImageFormat.Jpeg);
+                memory.Position = 0;
+
+                bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = memory;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+            }
+            imgAnalyzedDocument.Source = bitmap;
+        }
+
+        private Bitmap ConvertBitmapImageToDrawingBitmap()
+        {
+            int stride = bitmap.PixelWidth * 4;
+            byte[] buffer = new byte[stride * bitmap.PixelHeight];
+            bitmap.CopyPixels(buffer, stride, 0);
+
+            // create bitmap
+            System.Drawing.Bitmap bitmap2 =
+                new System.Drawing.Bitmap(
+                    bitmap.PixelWidth,
+                    bitmap.PixelHeight,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            // lock bitmap data
+            System.Drawing.Imaging.BitmapData bitmapData =
+                bitmap2.LockBits(
+                    new System.Drawing.Rectangle(0, 0, bitmap2.Width, bitmap2.Height),
+                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                    bitmap2.PixelFormat);
+
+            // copy byte array to bitmap data
+            System.Runtime.InteropServices.Marshal.Copy(
+                buffer, 0, bitmapData.Scan0, buffer.Length);
+
+            // unlock
+            bitmap2.UnlockBits(bitmapData);
+            return bitmap2;
         }
 
         private void CalculateAverageAttributeLocation(DocAttribute atr)
@@ -444,6 +506,19 @@ namespace WpfPrototype
                 lastSelectedDocAttribute.EndingXLocation = (int)p.X;
                 lastSelectedDocAttribute.EndingYLocation = (int)p.Y;
 
+                if (lastSelectedDocAttribute.StartingXLocation > lastSelectedDocAttribute.EndingXLocation) 
+                {
+                    int tmp = lastSelectedDocAttribute.StartingXLocation;
+                    lastSelectedDocAttribute.StartingXLocation = lastSelectedDocAttribute.EndingXLocation;
+                    lastSelectedDocAttribute.EndingXLocation = tmp;
+                }
+                if (lastSelectedDocAttribute.StartingYLocation > lastSelectedDocAttribute.EndingYLocation)
+                {
+                    int tmp = lastSelectedDocAttribute.StartingYLocation;
+                    lastSelectedDocAttribute.StartingYLocation = lastSelectedDocAttribute.EndingYLocation;
+                    lastSelectedDocAttribute.EndingYLocation = tmp;
+                }
+
                 double percentWidth = (double)bitmap.PixelWidth / imgAnalyzedDocument.ActualWidth;
                 double percentHeight = (double)bitmap.PixelHeight / imgAnalyzedDocument.ActualHeight;
                 lastSelectedDocAttribute.StartingXLocation = (int)(lastSelectedDocAttribute.StartingXLocation * percentWidth);
@@ -457,7 +532,6 @@ namespace WpfPrototype
 
                 TextBox_GotFocus(lastSelectedDocAttribute, e);
 
-                //todo: save that when you click on save button - NOT NOW
                 int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.FindIndex(x => x.Name == lastSelectedDocAttribute.Name);
                 if (indexOfxistingAttribute >= 0)
                 {
@@ -470,10 +544,17 @@ namespace WpfPrototype
                 {
                     analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(lastSelectedDocAttribute);
                 }
-                //FileEditor.Instance.AddAttributeToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, lastSelectedDocAttribute);
                 //todo: read selected part of image to value (textBox)
                 //show what is selected
             }
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ShowImage();
+            lastSelectedDocAttribute = null;
+            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
+            ShowImageWithAllAttributeBoundaries(selectedTemplate);
         }
     }
 }
