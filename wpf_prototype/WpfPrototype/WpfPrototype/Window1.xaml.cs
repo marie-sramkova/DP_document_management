@@ -25,6 +25,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using TallComponents.PDF.Rasterizer;
 using Tesseract;
+using WpfPrototype.additionalLogic;
 using WpfPrototype.additionalLogic.entities;
 using WpfPrototype.Properties;
 using static System.Net.Mime.MediaTypeNames;
@@ -136,21 +137,10 @@ namespace WpfPrototype
 
         private void ButtonProcess_Click(object sender, RoutedEventArgs e)
         {
-            var path = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\tessdata";
-            using (var engine = new TesseractEngine(path, "ces", EngineMode.Default))
-            {
-                using (var img = Pix.LoadFromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png"))
-                {
-                    // engine.SetVariable("tessedit_char_whitelist", "0123456789");
-                    using (var page = engine.Process(img))
-                    {
-                        var text = page.GetText();
-                        Debug.WriteLine("text: " + text);
-                        labelSelectedFile.Content = text;
-                        //textBoxDocumentType.Text = text;
-                    }
-                }
-            }
+            TesseractORM tesseractORM = new TesseractORM();
+            string text = tesseractORM.GetTextFromImage("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
+           
+            labelSelectedFile.Content = text;
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
