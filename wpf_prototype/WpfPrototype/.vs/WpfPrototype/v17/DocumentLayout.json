@@ -48,7 +48,7 @@
               "RelativeDocumentMoniker": "WpfPrototype\\additionalLogic\\FileEditor.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\additionalLogic\\FileEditor.cs",
               "RelativeToolTip": "WpfPrototype\\additionalLogic\\FileEditor.cs",
-              "ViewState": "AQIAAIcAAAAAAAAAAAAYwJcAAABjAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAALsAAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-15T17:38:51.13Z",
               "EditorCaption": ""
@@ -74,7 +74,8 @@
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\Window1.xaml",
               "RelativeToolTip": "WpfPrototype\\Window1.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-03-27T22:37:34.172Z"
+              "WhenOpened": "2024-03-27T22:37:34.172Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -84,7 +85,7 @@
               "RelativeDocumentMoniker": "WpfPrototype\\Window1.xaml.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\Window1.xaml.cs",
               "RelativeToolTip": "WpfPrototype\\Window1.xaml.cs",
-              "ViewState": "AQIAAGwBAAAAAAAAAAAmwG8BAAARAAAA",
+              "ViewState": "AQIAAEYBAAAAAAAAAAD4v1QBAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-22T16:31:03.067Z",
               "EditorCaption": ""
@@ -98,7 +99,8 @@
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\MainWindow.xaml",
               "RelativeToolTip": "WpfPrototype\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-03-27T15:27:27.527Z"
+              "WhenOpened": "2024-03-27T15:27:27.527Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
