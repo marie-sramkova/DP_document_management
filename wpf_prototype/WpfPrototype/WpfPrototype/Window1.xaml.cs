@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json.Linq;
+using SkiaSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using TallComponents.PDF.Rasterizer;
 using Tesseract;
+using WpfPrototype.additionalLogic;
 using WpfPrototype.additionalLogic.entities;
 using WpfPrototype.Properties;
 using static System.Net.Mime.MediaTypeNames;
@@ -39,6 +41,7 @@ namespace WpfPrototype
         private int pointerToActualAnalyzedFile = 0;
         private DocAttribute lastSelectedDocAttribute;
         private BitmapImage bitmap;
+        TesseractOCR tesseractORM;
 
         public Window1()
         {
@@ -46,6 +49,7 @@ namespace WpfPrototype
             //this.WindowState = WindowState.Maximized;
             //this.WindowStyle = WindowStyle.None;
 
+            tesseractORM = new TesseractOCR();
             CreateTemplateButtons();
 
             foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
@@ -135,21 +139,16 @@ namespace WpfPrototype
 
         private void ButtonProcess_Click(object sender, RoutedEventArgs e)
         {
-            var path = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\tessdata";
-            using (var engine = new TesseractEngine(path, "ces", EngineMode.Default))
+            System.Drawing.Image img = System.Drawing.Image.FromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
+            byte[] arr;
+            using (MemoryStream ms = new MemoryStream())
             {
-                using (var img = Pix.LoadFromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png"))
-                {
-                    // engine.SetVariable("tessedit_char_whitelist", "0123456789");
-                    using (var page = engine.Process(img))
-                    {
-                        var text = page.GetText();
-                        Debug.WriteLine("text: " + text);
-                        labelSelectedFile.Content = text;
-                        //textBoxDocumentType.Text = text;
-                    }
-                }
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                arr = ms.ToArray();
             }
+            string text = tesseractORM.GetTextFromImage(arr);
+
+            labelSelectedFile.Content = text;
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
@@ -166,7 +165,7 @@ namespace WpfPrototype
             {
                 ButtonNewTemplate_Click(sender, e);
             }
-            else 
+            else
             {
                 var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
                 List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
@@ -229,11 +228,13 @@ namespace WpfPrototype
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == selectedTemplateName.Name);
             if (selectedTemplate.AllDocAttributes.Count > 0)
             {
-                foreach (DocAttribute atribute in selectedTemplate.AllDocAttributes)
+                foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
                 {
-                    docAttributes.Add(atribute);
+                    docAttributes.Add(attribute);
                 }
             }
+
+            ShowImageWithAllAttributeBoundaries(selectedTemplate);
 
             listViewAttributes.ItemsSource = docAttributes;
 
@@ -245,6 +246,37 @@ namespace WpfPrototype
             };
             templateAndAttributeStackPanel.Children.Add(buttonNewAttribute);
 
+        }
+
+        private void ShowImageWithAllAttributeBoundaries(Template selectedTemplate)
+        {
+            List<DocAttribute> docAttributes = new List<DocAttribute>();
+
+            if (selectedTemplate.AllDocAttributes.Count > 0)
+            {
+                foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
+                {
+                    DocAttribute actualAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == attribute.Name);
+                    if (actualAttribute == null)
+                    {
+                        CalculateAverageAttributeLocation(attribute);
+                        docAttributes.Add(attribute);
+                        if (attribute != null && attribute.EndingXLocation != 0 && attribute.EndingYLocation != 0 && attribute.StartingXLocation != attribute.EndingXLocation && attribute.StartingYLocation != attribute.EndingYLocation)
+                        {
+                            AddAttributeBoundariesToBitmap(attribute);
+                        }
+                    }
+                    else
+                    {
+                        docAttributes.Add(actualAttribute);
+                        if (actualAttribute != null && actualAttribute.EndingXLocation != 0 && actualAttribute.EndingYLocation != 0 && actualAttribute.StartingXLocation != actualAttribute.EndingXLocation && actualAttribute.StartingYLocation != attribute.EndingYLocation)
+                        {
+                            AddAttributeBoundariesToBitmap(actualAttribute);
+                        }
+                    }
+
+                }
+            }
         }
 
         private void ButtonNewAttribute_Click(Template template)
@@ -316,7 +348,7 @@ namespace WpfPrototype
             {
                 buttonRight.IsEnabled = false;
             }
-            else 
+            else
             {
                 buttonRight.IsEnabled = true;
             }
@@ -345,58 +377,118 @@ namespace WpfPrototype
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            DocAttribute atr;
+            DocAttribute attr;
             try
             {
-                atr = (sender as FrameworkElement).DataContext as DocAttribute;
-            }catch (NullReferenceException ex)
-            {
-                atr = sender as DocAttribute;
+                attr = (sender as FrameworkElement).DataContext as DocAttribute;
             }
-            Debug.WriteLine("selected attribute: " + atr.Name);
-            CalculateAverageAttributeLocation(atr);
-            if (atr != null && atr.EndingXLocation != 0 && atr.EndingYLocation != 0 && atr.StartingXLocation != atr.EndingXLocation && atr.StartingYLocation != atr.EndingYLocation)
+            catch (NullReferenceException ex)
             {
-                Bitmap outputImage = new Bitmap((int)bitmap.PixelWidth, (int)bitmap.PixelHeight);
-                Graphics G = Graphics.FromImage(outputImage);
-
-
-                G.DrawImage(System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png"), 0, 0);
-
-
-                for (global::System.Int32 i = atr.StartingXLocation; i < atr.EndingXLocation; i++)
-                {
-                    outputImage.SetPixel(i, atr.StartingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
-                    outputImage.SetPixel(i, atr.EndingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
-                }
-                for (global::System.Int32 i = atr.StartingYLocation; i < atr.EndingYLocation; i++)
-                {
-                    outputImage.SetPixel(atr.StartingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
-                    outputImage.SetPixel(atr.EndingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
-                }
-
-                using (var memory = new MemoryStream())
-                {
-                    outputImage.Save(memory, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    memory.Position = 0;
-
-                    bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = memory;
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-                }
-                imgAnalyzedDocument.Source = bitmap;
-                Debug.WriteLine("changedPNG saved");
+                attr = sender as DocAttribute;
             }
-            else 
+
+            //CalculateAverageAttributeLocation(attr);
+            if (attr != null && attr.EndingXLocation != 0 && attr.EndingYLocation != 0 && attr.StartingXLocation != attr.EndingXLocation && attr.StartingYLocation != attr.EndingYLocation)
+            {
+                ShowImage();
+                AddAttributeBoundariesToBitmap(attr);
+                string value = GetAttributeValue(attr);
+                var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
+                List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
+                docsAttrs.Find(x => x.Name == attr.Name).Value = value;
+                Debug.WriteLine(value);
+                //listViewAttributes.ItemsSource = docsAttrs;
+                //listViewAttributes.SelectedItem = attr;
+                labelSelectedFile.Content = value;
+            }
+            else if (listViewAttributes.SelectedItem == null)
             {
                 ShowImage();
             }
-            lastSelectedDocAttribute = atr;
+            lastSelectedDocAttribute = attr;
+
         }
 
-        private void CalculateAverageAttributeLocation(DocAttribute atr)
+        private string GetAttributeValue(DocAttribute attr)
+        {
+            Bitmap source = new Bitmap(ConvertBitmapImageToDrawingBitmap(bitmap));
+            Bitmap cuttedBitmap = source.Clone(new System.Drawing.Rectangle(attr.StartingXLocation, attr.StartingYLocation, attr.EndingXLocation - attr.StartingXLocation, attr.EndingYLocation - attr.StartingYLocation), source.PixelFormat);
+            cuttedBitmap.Save("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\tmp.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+
+
+            ImageConverter converter = new ImageConverter();
+            string text = tesseractORM.GetTextFromImage((byte[])converter.ConvertTo(cuttedBitmap, typeof(byte[])));
+            return text;
+        }
+
+        private void AddAttributeBoundariesToBitmap(DocAttribute attr)
+        {
+            Bitmap outputImage = new Bitmap((int)bitmap.PixelWidth, (int)bitmap.PixelHeight);
+            Graphics graphics = Graphics.FromImage(outputImage);
+
+            Bitmap bitmap2 = ConvertBitmapImageToDrawingBitmap(bitmap);
+
+
+            //G.DrawImage(System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png"), 0, 0);
+            graphics.DrawImage(bitmap2, 0, 0);
+
+
+
+            for (global::System.Int32 i = attr.StartingXLocation; i < attr.EndingXLocation; i++)
+            {
+                outputImage.SetPixel(i, attr.StartingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
+                outputImage.SetPixel(i, attr.EndingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
+            }
+            for (global::System.Int32 i = attr.StartingYLocation; i < attr.EndingYLocation; i++)
+            {
+                outputImage.SetPixel(attr.StartingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+                outputImage.SetPixel(attr.EndingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+            }
+
+            using (var memory = new MemoryStream())
+            {
+                outputImage.Save(memory, System.Drawing.Imaging.ImageFormat.Jpeg);
+                memory.Position = 0;
+
+                bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = memory;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+            }
+            imgAnalyzedDocument.Source = bitmap;
+        }
+
+        private Bitmap ConvertBitmapImageToDrawingBitmap(BitmapImage bitmapInput)
+        {
+            int stride = bitmapInput.PixelWidth * 4;
+            byte[] buffer = new byte[stride * bitmapInput.PixelHeight];
+            bitmapInput.CopyPixels(buffer, stride, 0);
+
+            // create bitmap
+            System.Drawing.Bitmap bitmap2 =
+                new System.Drawing.Bitmap(
+                    bitmapInput.PixelWidth,
+                    bitmapInput.PixelHeight,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            // lock bitmap data
+            System.Drawing.Imaging.BitmapData bitmapData =
+                bitmap2.LockBits(
+                    new System.Drawing.Rectangle(0, 0, bitmap2.Width, bitmap2.Height),
+                    System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                    bitmap2.PixelFormat);
+
+            // copy byte array to bitmap data
+            System.Runtime.InteropServices.Marshal.Copy(
+                buffer, 0, bitmapData.Scan0, buffer.Length);
+
+            // unlock
+            bitmap2.UnlockBits(bitmapData);
+            return bitmap2;
+        }
+
+        private void CalculateAverageAttributeLocation(DocAttribute attr)
         {
             int count = 0;
             int sumOfStartingXLocation = 0;
@@ -405,7 +497,7 @@ namespace WpfPrototype
             int sumOfEndingYLocation = 0;
             foreach (DocFile docFile in FileEditor.Instance.SettingsEntity.DocFiles)
             {
-                DocAttribute  docAttr = docFile.DocAttributes.Find(x => x.Name == atr.Name);
+                DocAttribute docAttr = docFile.DocAttributes.Find(x => x.Name == attr.Name);
                 if (docAttr != null && docAttr.EndingYLocation != 0 && docAttr.StartingXLocation != docAttr.EndingXLocation && docAttr.StartingYLocation != docAttr.EndingYLocation)
                 {
                     sumOfStartingXLocation += docAttr.StartingXLocation;
@@ -415,12 +507,12 @@ namespace WpfPrototype
                     count = count + 1;
                 }
             }
-            if(count > 0)
+            if (count > 0)
             {
-                atr.StartingXLocation = sumOfStartingXLocation / count;
-                atr.StartingYLocation = sumOfStartingYLocation / count;
-                atr.EndingXLocation = sumOfEndingXLocation / count;
-                atr.EndingYLocation = sumOfEndingYLocation / count;
+                attr.StartingXLocation = sumOfStartingXLocation / count;
+                attr.StartingYLocation = sumOfStartingYLocation / count;
+                attr.EndingXLocation = sumOfEndingXLocation / count;
+                attr.EndingYLocation = sumOfEndingYLocation / count;
             }
         }
 
@@ -435,7 +527,7 @@ namespace WpfPrototype
                 //todo: show what is selected
             }
         }
-        
+
         private void imgAnalyzedDocument_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (lastSelectedDocAttribute != null)
@@ -444,6 +536,19 @@ namespace WpfPrototype
                 lastSelectedDocAttribute.EndingXLocation = (int)p.X;
                 lastSelectedDocAttribute.EndingYLocation = (int)p.Y;
 
+                if (lastSelectedDocAttribute.StartingXLocation > lastSelectedDocAttribute.EndingXLocation)
+                {
+                    int tmp = lastSelectedDocAttribute.StartingXLocation;
+                    lastSelectedDocAttribute.StartingXLocation = lastSelectedDocAttribute.EndingXLocation;
+                    lastSelectedDocAttribute.EndingXLocation = tmp;
+                }
+                if (lastSelectedDocAttribute.StartingYLocation > lastSelectedDocAttribute.EndingYLocation)
+                {
+                    int tmp = lastSelectedDocAttribute.StartingYLocation;
+                    lastSelectedDocAttribute.StartingYLocation = lastSelectedDocAttribute.EndingYLocation;
+                    lastSelectedDocAttribute.EndingYLocation = tmp;
+                }
+
                 double percentWidth = (double)bitmap.PixelWidth / imgAnalyzedDocument.ActualWidth;
                 double percentHeight = (double)bitmap.PixelHeight / imgAnalyzedDocument.ActualHeight;
                 lastSelectedDocAttribute.StartingXLocation = (int)(lastSelectedDocAttribute.StartingXLocation * percentWidth);
@@ -451,13 +556,8 @@ namespace WpfPrototype
                 lastSelectedDocAttribute.EndingXLocation = (int)(lastSelectedDocAttribute.EndingXLocation * percentWidth);
                 lastSelectedDocAttribute.EndingYLocation = (int)(lastSelectedDocAttribute.EndingYLocation * percentHeight);
 
-                Debug.WriteLine("starting x = " + lastSelectedDocAttribute.StartingXLocation + "\tending x = " + lastSelectedDocAttribute.EndingXLocation);
-                Debug.WriteLine("starting y = " + lastSelectedDocAttribute.StartingYLocation + "\tending y = " + lastSelectedDocAttribute.EndingYLocation);
-
-
                 TextBox_GotFocus(lastSelectedDocAttribute, e);
 
-                //todo: save that when you click on save button - NOT NOW
                 int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.FindIndex(x => x.Name == lastSelectedDocAttribute.Name);
                 if (indexOfxistingAttribute >= 0)
                 {
@@ -470,10 +570,26 @@ namespace WpfPrototype
                 {
                     analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(lastSelectedDocAttribute);
                 }
-                //FileEditor.Instance.AddAttributeToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, lastSelectedDocAttribute);
+
+                //ImageConverter converter = new ImageConverter();
+                //string text = tesseractORM.GetTextFromImage((byte[])converter.ConvertTo(ConvertBitmapImageToDrawingBitmap(bitmap), typeof(byte[])));
+                //Debug.WriteLine(text);
+
+                //labelSelectedFile.Content = text;
+
+
+
                 //todo: read selected part of image to value (textBox)
                 //show what is selected
             }
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ShowImage();
+            lastSelectedDocAttribute = null;
+            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
+            ShowImageWithAllAttributeBoundaries(selectedTemplate);
         }
     }
 }
