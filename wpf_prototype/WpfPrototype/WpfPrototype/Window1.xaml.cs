@@ -348,6 +348,10 @@ namespace WpfPrototype
             {
                 buttonLeft.IsEnabled = true;
             }
+            listView2.Height = new GridLength(0, GridUnitType.Star);
+            listView.Height = new GridLength(81, GridUnitType.Star);
+            panel.Height = new GridLength(10, GridUnitType.Star);
+            CreateTemplateButtons();
             SelectActualAnalyzedFile();
 
             ShowImage();
@@ -372,6 +376,10 @@ namespace WpfPrototype
             {
                 buttonLeft.IsEnabled = true;
             }
+            listView2.Height = new GridLength(0, GridUnitType.Star);
+            listView.Height = new GridLength(81, GridUnitType.Star);
+            panel.Height = new GridLength(10, GridUnitType.Star);
+            CreateTemplateButtons();
             SelectActualAnalyzedFile();
 
             ShowImage();
