@@ -100,12 +100,20 @@ namespace WpfPrototype
             }
             else
             {
-                //todo: another file formats to show us png
-                if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                try
                 {
-                    pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
-                    SelectActualAnalyzedFile();
+                    File.Delete(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
+                    File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
+                }catch(Exception ex)
+                {
+                    //todo: cannot convert file to out.png to show image view
+                    if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                    {
+                        pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
+                        SelectActualAnalyzedFile();
+                    }
                 }
+                //todo: another file formats to show as png
             }
         }
 
