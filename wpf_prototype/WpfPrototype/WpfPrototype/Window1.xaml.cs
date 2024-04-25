@@ -392,14 +392,18 @@ namespace WpfPrototype
             {
                 ShowImage();
                 AddAttributeBoundariesToBitmap(attr);
-                string value = GetAttributeValue(attr);
-                var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
-                List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
-                docsAttrs.Find(x => x.Name == attr.Name).Value = value;
-                Debug.WriteLine(value);
+                //string value = GetAttributeValue(attr);
+                //var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
+                //List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
+                //docsAttrs.Find(x => x.Name == attr.Name).Value = value;
+                //Debug.WriteLine(value);
+
+
                 //listViewAttributes.ItemsSource = docsAttrs;
                 //listViewAttributes.SelectedItem = attr;
-                labelSelectedFile.Content = value;
+
+
+                //labelSelectedFile.Content = value;
             }
             else if (listViewAttributes.SelectedItem == null)
             {
@@ -570,6 +574,18 @@ namespace WpfPrototype
                 {
                     analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(lastSelectedDocAttribute);
                 }
+
+                string value = GetAttributeValue(lastSelectedDocAttribute);
+                var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
+                List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
+                docsAttrs.Find(x => x.Name == lastSelectedDocAttribute.Name).Value = value;
+                Debug.WriteLine(value);
+                listViewAttributes.ItemsSource = docsAttrs;
+                listViewAttributes.SelectedItem = lastSelectedDocAttribute;
+
+
+                labelSelectedFile.Content = value;
+
 
                 //ImageConverter converter = new ImageConverter();
                 //string text = tesseractORM.GetTextFromImage((byte[])converter.ConvertTo(ConvertBitmapImageToDrawingBitmap(bitmap), typeof(byte[])));
