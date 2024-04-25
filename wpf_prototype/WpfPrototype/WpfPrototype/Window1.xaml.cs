@@ -409,11 +409,13 @@ namespace WpfPrototype
             }
             Bitmap source = new Bitmap(ConvertBitmapImageToDrawingBitmap(bitmap));
             Bitmap cuttedBitmap = source.Clone(new System.Drawing.Rectangle(attr.StartingXLocation, attr.StartingYLocation, attr.EndingXLocation - attr.StartingXLocation, attr.EndingYLocation - attr.StartingYLocation), source.PixelFormat);
-            cuttedBitmap.Save("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\tmp.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            cuttedBitmap.Save(UserSettings.directoryPath+"\\tmp.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
 
 
             ImageConverter converter = new ImageConverter();
             string text = tesseractORM.GetTextFromImage((byte[])converter.ConvertTo(cuttedBitmap, typeof(byte[])));
+
+            File.Delete(UserSettings.directoryPath + "\\tmp.jpg");
             return text;
         }
 
