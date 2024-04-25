@@ -75,7 +75,7 @@ namespace WpfPrototype
 
         private void ShowImage()
         {
-            Uri uri = new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png", UriKind.RelativeOrAbsolute);
+            Uri uri = new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg", UriKind.RelativeOrAbsolute);
             bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
@@ -91,19 +91,19 @@ namespace WpfPrototype
 
             if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf"))
             {
-                ConvertPdfToPng(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.png");
+                ConvertPdfToPng(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.jpg");
             }
             else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
             {
-                File.Delete(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
-                File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
+                File.Delete(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
+                File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
             }
             else
             {
                 try
                 {
-                    File.Delete(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
-                    File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png");
+                    File.Delete(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
+                    File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
                 }catch(Exception ex)
                 {
                     //todo: cannot convert file to out.png to show image view
@@ -147,7 +147,7 @@ namespace WpfPrototype
 
         private void ButtonProcess_Click(object sender, RoutedEventArgs e)
         {
-            System.Drawing.Image img = System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.png");
+            System.Drawing.Image img = System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.jpg");
             byte[] arr;
             using (MemoryStream ms = new MemoryStream())
             {
@@ -177,7 +177,6 @@ namespace WpfPrototype
             {
                 var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
                 List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
-                Debug.WriteLine(docsAttrs[0].Name + ", " + docsAttrs[0].Value + ", " + docsAttrs[0].Type + " - " + listViewAttributes.Items.Count);
                 if (docsAttrs == null)
                 {
                     FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>());
@@ -185,6 +184,10 @@ namespace WpfPrototype
                 else
                 {
                     FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
+                    if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                    {
+                        ButtonRight_Click(sender, e);
+                    }
                 }
             }
             //todo: save template or analyzed document
@@ -450,17 +453,24 @@ namespace WpfPrototype
             //G.DrawImage(System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png"), 0, 0);
             graphics.DrawImage(bitmap2, 0, 0);
 
+            
 
+            if (attr.StartingXLocation < outputImage.Width && attr.EndingXLocation < outputImage.Width && attr.StartingYLocation < outputImage.Height && attr.EndingYLocation < outputImage.Height)
+            {
+                for (global::System.Int32 i = attr.StartingXLocation; i < attr.EndingXLocation; i++)
+                {
 
-            for (global::System.Int32 i = attr.StartingXLocation; i < attr.EndingXLocation; i++)
-            {
-                outputImage.SetPixel(i, attr.StartingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
-                outputImage.SetPixel(i, attr.EndingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
-            }
-            for (global::System.Int32 i = attr.StartingYLocation; i < attr.EndingYLocation; i++)
-            {
-                outputImage.SetPixel(attr.StartingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
-                outputImage.SetPixel(attr.EndingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+                    outputImage.SetPixel(i, attr.StartingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
+                    outputImage.SetPixel(i, attr.EndingYLocation, System.Drawing.Color.FromArgb(255, 0, 0));
+
+                }
+                for (global::System.Int32 i = attr.StartingYLocation; i < attr.EndingYLocation; i++)
+                {
+
+                    outputImage.SetPixel(attr.StartingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+                    outputImage.SetPixel(attr.EndingXLocation, i, System.Drawing.Color.FromArgb(255, 0, 0));
+
+                }
             }
 
             using (var memory = new MemoryStream())

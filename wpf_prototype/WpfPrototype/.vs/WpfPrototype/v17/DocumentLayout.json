@@ -11,6 +11,10 @@
       "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\window1.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\additionallogic\\fileeditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\additionallogic\\fileeditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\additionallogic\\tesseractocr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\additionallogic\\tesseractocr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -21,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\additionallogic\\fileeditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\additionallogic\\fileeditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +42,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "TesseractOCR.cs",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\additionalLogic\\TesseractOCR.cs",
               "RelativeDocumentMoniker": "WpfPrototype\\additionalLogic\\TesseractOCR.cs",
@@ -54,13 +54,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "FileEditor.cs",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\additionalLogic\\FileEditor.cs",
               "RelativeDocumentMoniker": "WpfPrototype\\additionalLogic\\FileEditor.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\additionalLogic\\FileEditor.cs",
               "RelativeToolTip": "WpfPrototype\\additionalLogic\\FileEditor.cs",
-              "ViewState": "AQIAAHcAAAAAAAAAAAAwwKQAAAAUAAAA",
+              "ViewState": "AQIAALMAAAAAAAAAAAAAAMIAAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-15T17:38:51.13Z"
             },
@@ -73,8 +73,7 @@
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\Window1.xaml",
               "RelativeToolTip": "WpfPrototype\\Window1.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-03-27T22:37:34.172Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-27T22:37:34.172Z"
             },
             {
               "$type": "Document",
@@ -84,14 +83,14 @@
               "RelativeDocumentMoniker": "WpfPrototype\\Window1.xaml.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\Window1.xaml.cs",
               "RelativeToolTip": "WpfPrototype\\Window1.xaml.cs",
-              "ViewState": "AQIAAGUAAAAAAAAAAAAAAHQAAAAMAAAA",
+              "ViewState": "AQIAAJUAAAAAAAAAAAAAAKsAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-22T16:31:03.067Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\MainWindow.xaml",
               "RelativeDocumentMoniker": "WpfPrototype\\MainWindow.xaml",
@@ -102,7 +101,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "WpfPrototype\\MainWindow.xaml.cs",
