@@ -70,7 +70,7 @@
                             <DataTemplate>
                                 <WrapPanel>
                                     <Label Content="{Binding Name}" Width="100"/>
-                                    <TextBox Text="{Binding Value}" Width="100" TextWrapping="Wrap" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"></TextBox>
+                                    <TextBox Text="{Binding Value}" Width="100" TextWrapping="Wrap" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
                                     <Label Content="{Binding Type}" Width="50"/>
                                     <Button Content="Delete" FontWeight="Bold"></Button>
                                 </WrapPanel>
