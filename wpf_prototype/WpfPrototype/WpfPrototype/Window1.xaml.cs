@@ -91,7 +91,7 @@ namespace WpfPrototype
 
             if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf"))
             {
-                ConvertPdfToPng(analyzedFiles[pointerToActualAnalyzedFile].FilePath, "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
+                ConvertPdfToPng(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.png");
             }
             else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
             {
@@ -139,7 +139,7 @@ namespace WpfPrototype
 
         private void ButtonProcess_Click(object sender, RoutedEventArgs e)
         {
-            System.Drawing.Image img = System.Drawing.Image.FromFile("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\data\\out.png");
+            System.Drawing.Image img = System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.png");
             byte[] arr;
             using (MemoryStream ms = new MemoryStream())
             {
@@ -260,6 +260,10 @@ namespace WpfPrototype
                     if (actualAttribute == null)
                     {
                         CalculateAverageAttributeLocation(attribute);
+                        if (attribute != null && (attribute.EndingXLocation == 0 || attribute.EndingYLocation == 0 || attribute.StartingXLocation == attribute.EndingXLocation || attribute.StartingYLocation == attribute.EndingYLocation)) 
+                        {
+                            attribute.Value = "";
+                        }
                         docAttributes.Add(attribute);
                         if (attribute != null && attribute.EndingXLocation != 0 && attribute.EndingYLocation != 0 && attribute.StartingXLocation != attribute.EndingXLocation && attribute.StartingYLocation != attribute.EndingYLocation)
                         {
