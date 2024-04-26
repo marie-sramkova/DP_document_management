@@ -2,6 +2,7 @@
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -154,7 +155,7 @@ namespace WpfPrototype
             }
         }
 
-        public void AddAttributesToFileAndTemplate(string fileName, List<DocAttribute> docAttributes)
+        public void AddAttributesToFileAndTemplate(string fileName, BindingList<DocAttribute> docAttributes)
         {
             Template template = SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == fileName) != null);
             if (template != null) {

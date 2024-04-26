@@ -3,6 +3,7 @@ using SkiaSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -23,6 +24,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Xml;
+using System.Xml.Linq;
 using TallComponents.PDF.Rasterizer;
 using Tesseract;
 using WpfPrototype.additionalLogic;
@@ -42,9 +44,24 @@ namespace WpfPrototype
         private DocAttribute lastSelectedDocAttribute;
         private BitmapImage bitmap;
         TesseractOCR tesseractORM;
+        public class Model : NotifyPropertyChangedBase 
+        {
+            private BindingList<DocAttribute> _BindingAttributes;
+            public BindingList<DocAttribute> BindingAttributes { get { return _BindingAttributes; } set { _BindingAttributes = value; RaisePropertyChanged(nameof(BindingAttributes)); } }
+            private BindingList<Template> _BindingTemplates;
+            public BindingList<Template> BindingTemplates { get { return _BindingTemplates; } set { _BindingTemplates = value; RaisePropertyChanged(nameof(BindingTemplates)); } }
+
+        }
+
+        private Model model;
+
 
         public Window1()
         {
+            this.model = new Model();   
+            model.BindingAttributes = new BindingList<DocAttribute>();
+            model.BindingTemplates = new BindingList<Template>();
+            this.DataContext = model;
             InitializeComponent();
             //this.WindowState = WindowState.Maximized;
             //this.WindowStyle = WindowStyle.None;
@@ -121,14 +138,14 @@ namespace WpfPrototype
         {
             buttonSave.Content = "Create new template";
 
-            List<Template> templates = new List<Template>();
+            BindingList<Template> templates = new BindingList<Template>();
 
             foreach (Template template in FileEditor.Instance.SettingsEntity.Templates)
             {
                 templates.Add(template);
             }
 
-            listViewTemplates.ItemsSource = templates;
+            model.BindingTemplates = templates;
         }
 
         private static void ConvertPdfToPng(String inputPdfPath, String outputPngPath)
@@ -175,11 +192,10 @@ namespace WpfPrototype
             }
             else
             {
-                var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
-                List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
+                BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
                 if (docsAttrs == null)
                 {
-                    FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>());
+                    FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>());
                 }
                 else
                 {
@@ -195,7 +211,7 @@ namespace WpfPrototype
 
         private void ButtonNewTemplate_Click(object sender, RoutedEventArgs e)
         {
-            listViewTemplates.ItemsSource = new List<Template>();
+            model.BindingTemplates = new BindingList<Template>();
             buttonSave.Visibility = Visibility.Hidden;
 
             //todo: new template form
@@ -234,7 +250,7 @@ namespace WpfPrototype
             listView.Height = new GridLength(0, GridUnitType.Star);
             panel.Height = new GridLength(10, GridUnitType.Star);
             templateAndAttributeStackPanel.Children.Clear();
-            List<DocAttribute> docAttributes = new List<DocAttribute>();
+            BindingList<DocAttribute> docAttributes = new BindingList<DocAttribute>();
 
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == selectedTemplateName.Name);
             if (selectedTemplate.AllDocAttributes.Count > 0)
@@ -247,7 +263,7 @@ namespace WpfPrototype
 
             ShowImageWithAllAttributeBoundaries(selectedTemplate);
 
-            listViewAttributes.ItemsSource = docAttributes;
+            model.BindingAttributes = docAttributes;
 
             Button buttonNewAttribute = new Button();
             buttonNewAttribute.Content = "Add new attribute";
@@ -296,7 +312,7 @@ namespace WpfPrototype
 
         private void ButtonNewAttribute_Click(Template template)
         {
-            listViewTemplates.ItemsSource = new List<Template>();
+            model.BindingTemplates = new BindingList<Template>();
             //buttonSave.Visibility = Visibility.Hidden;
 
             //todo: new template form
@@ -493,25 +509,21 @@ namespace WpfPrototype
             byte[] buffer = new byte[stride * bitmapInput.PixelHeight];
             bitmapInput.CopyPixels(buffer, stride, 0);
 
-            // create bitmap
             System.Drawing.Bitmap bitmap2 =
                 new System.Drawing.Bitmap(
                     bitmapInput.PixelWidth,
                     bitmapInput.PixelHeight,
                     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            // lock bitmap data
             System.Drawing.Imaging.BitmapData bitmapData =
                 bitmap2.LockBits(
                     new System.Drawing.Rectangle(0, 0, bitmap2.Width, bitmap2.Height),
                     System.Drawing.Imaging.ImageLockMode.WriteOnly,
                     bitmap2.PixelFormat);
 
-            // copy byte array to bitmap data
             System.Runtime.InteropServices.Marshal.Copy(
                 buffer, 0, bitmapData.Scan0, buffer.Length);
 
-            // unlock
             bitmap2.UnlockBits(bitmapData);
             return bitmap2;
         }
@@ -628,15 +640,14 @@ namespace WpfPrototype
                 if (lastSelectedDocAttribute != null)
                 {
                     string value = GetAttributeValue(lastSelectedDocAttribute);
-                    var docAttrsTemp = listViewAttributes.ItemsSource as List<DocAttribute>;
-                    List<DocAttribute> docsAttrs = docAttrsTemp.Cast<DocAttribute>().ToList();
-                    docsAttrs.Find(x => x.Name == lastSelectedDocAttribute.Name).Value = value;
-                    docsAttrs.Find(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation;
-                    docsAttrs.Find(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation;
-                    docsAttrs.Find(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation;
-                    docsAttrs.Find(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation;
+                    BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).Value = value;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation;
                     Debug.WriteLine(value);
-                    listViewAttributes.ItemsSource = docsAttrs;
+                    model.BindingAttributes = docsAttrs;
                     listViewAttributes.SelectedItem = lastSelectedDocAttribute;
 
 
