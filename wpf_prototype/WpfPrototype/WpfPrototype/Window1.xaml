@@ -55,7 +55,7 @@
                         <RowDefinition Height="1*"></RowDefinition>
                         <RowDefinition Height="8*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <ListView x:Name="listViewTemplates" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
+                    <ListView ItemsSource="{Binding BindingTemplates}" x:Name="listViewTemplates" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel>
@@ -65,7 +65,7 @@
                         </ListView.ItemTemplate>
                     </ListView>
 
-                    <ListView Margin="10" Name="listViewAttributes" Grid.Row="1" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" >
+                    <ListView ItemsSource="{Binding BindingAttributes}"  Margin="10" Name="listViewAttributes" Grid.Row="1" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel>
