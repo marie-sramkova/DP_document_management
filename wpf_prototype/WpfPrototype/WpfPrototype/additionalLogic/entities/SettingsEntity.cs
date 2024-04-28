@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfPrototype.additionalLogic.entities
 {
-    public class SettingsEntity
+    public class SettingsEntity : NotifyPropertyChangedBase
     {
-        public List<Template> Templates { get; set; }
-        public List<DocFile> DocFiles { get; set; }
+        private BindingList<Template> _templates;
+        public BindingList<Template> Templates { get { return _templates; } set { _templates = value; RaisePropertyChanged(nameof(Templates)); } }
+        private BindingList<DocFile> _docFiles;
+
+        public BindingList<DocFile> DocFiles { get { return _docFiles; } set { _docFiles = value; RaisePropertyChanged(nameof(DocFiles)); } }
 
         public SettingsEntity() {}
 
@@ -23,8 +27,5 @@ namespace WpfPrototype.additionalLogic.entities
         {
             Templates.Add(template);
         }
-
-
-
     }
 }

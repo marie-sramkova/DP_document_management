@@ -233,7 +233,7 @@ namespace WpfPrototype
             buttonNewTemplate.Click += (s, e) =>
             {
                 Template template = new Template(txtBox.Text);
-                template.DocFiles.Add(new DocFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new List<DocAttribute>()));
+                template.DocFiles.Add(new DocFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>()));
                 FileEditor.Instance.AddNewTemplate(template);
 
                 panel.Height = new GridLength(0, GridUnitType.Star);
@@ -252,7 +252,7 @@ namespace WpfPrototype
             templateAndAttributeStackPanel.Children.Clear();
             BindingList<DocAttribute> docAttributes = new BindingList<DocAttribute>();
 
-            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.Name == selectedTemplateName.Name);
+            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
             if (selectedTemplate.AllDocAttributes.Count > 0)
             {
                 foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
@@ -283,7 +283,7 @@ namespace WpfPrototype
             {
                 foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
                 {
-                    DocAttribute actualAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == attribute.Name);
+                    DocAttribute actualAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == attribute.Name);
                     if (actualAttribute == null)
                     {
                         CalculateAverageAttributeLocation(attribute);
@@ -537,7 +537,7 @@ namespace WpfPrototype
             int sumOfEndingYLocation = 0;
             foreach (DocFile docFile in FileEditor.Instance.SettingsEntity.DocFiles)
             {
-                DocAttribute docAttr = docFile.DocAttributes.Find(x => x.Name == attr.Name);
+                DocAttribute docAttr = docFile.DocAttributes.SingleOrDefault(x => x.Name == attr.Name);
                 if (docAttr != null && docAttr.EndingYLocation != 0 && docAttr.StartingXLocation != docAttr.EndingXLocation && docAttr.StartingYLocation != docAttr.EndingYLocation)
                 {
                     sumOfStartingXLocation += docAttr.StartingXLocation;
@@ -598,7 +598,7 @@ namespace WpfPrototype
 
                 if (lastSelectedDocAttribute.StartingXLocation == lastSelectedDocAttribute.EndingXLocation || lastSelectedDocAttribute.StartingYLocation == lastSelectedDocAttribute.EndingYLocation)
                 {
-                    int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.FindIndex(x => x.Name == lastSelectedDocAttribute.Name);
+                    int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.IndexOf(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name));
                     //lastSelectedDocAttribute = /*FileEditor.Instance.SettingsEntity.DocFiles.Find(x => x.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath).DocAttributes.Find(y => y.Name == lastSelectedDocAttribute.Name);
                     if (indexOfxistingAttribute >= 0 && (analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingXLocation != analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingXLocation && analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingYLocation != analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingYLocation))
                     {
@@ -624,7 +624,7 @@ namespace WpfPrototype
 
                     TextBox_GotFocus(lastSelectedDocAttribute, e);
 
-                    int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.FindIndex(x => x.Name == lastSelectedDocAttribute.Name);
+                    int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.IndexOf(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name));
                     if (indexOfxistingAttribute >= 0)
                     {
                         analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingXLocation = lastSelectedDocAttribute.StartingXLocation;
@@ -642,10 +642,10 @@ namespace WpfPrototype
                     string value = GetAttributeValue(lastSelectedDocAttribute);
                     BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
                     docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).Value = value;
-                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation;
-                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation;
-                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation;
-                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Find(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation;
+                    docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation;
                     Debug.WriteLine(value);
                     model.BindingAttributes = docsAttrs;
                     listViewAttributes.SelectedItem = lastSelectedDocAttribute;
@@ -673,7 +673,7 @@ namespace WpfPrototype
         {
             ShowImage();
             lastSelectedDocAttribute = null;
-            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
+            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
             ShowImageWithAllAttributeBoundaries(selectedTemplate);
         }
     }

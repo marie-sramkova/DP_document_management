@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Tesseract;
+using WpfPrototype.additionalLogic;
 using WpfPrototype.additionalLogic.entities;
 
 namespace WpfPrototype
@@ -25,15 +26,41 @@ namespace WpfPrototype
     public partial class MainWindow : Window
     {
         bool expanded = false;
-        List<DocFile> docFilesInSettingsFile;
+        BindingList<DocFile> docFilesInSettingsFile;
         List<string> newFiles;
+
+        public class Model : NotifyPropertyChangedBase
+        {
+            private SettingsEntity _SettingsEntity;
+            public SettingsEntity SettingsEntity { get { return _SettingsEntity; } set { _SettingsEntity = value; RaisePropertyChanged(nameof(SettingsEntity)); } }
+
+        }
+
+        public Model model;
 
 
         public MainWindow()
         {
-            docFilesInSettingsFile = new List<DocFile>();
-            newFiles = new List<string>();
+            this.model = new Model();
+            this.model.SettingsEntity = FileEditor.Instance.SettingsEntity;
+
+            this.DataContext = model;
             InitializeComponent();
+            ShowListViewWithTemplatesFilesAndAttributes();
+            CalculateAndShowNewDocsToAnalyze();
+
+            //model.SettingsEntity = FileEditor.Instance.SettingsEntity;
+        }
+
+        private void ShowListViewWithTemplatesFilesAndAttributes()
+        {
+            //this.model.SettingsEntity = FileEditor.Instance.SettingsEntity;
+        }
+
+        private void CalculateAndShowNewDocsToAnalyze()
+        {
+            docFilesInSettingsFile = new BindingList<DocFile>();
+            newFiles = new List<string>();
             int documentsCount = 0;
             if (UserSettings.directoryPath != null)
             {
@@ -103,6 +130,9 @@ namespace WpfPrototype
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
+
+            //model.SettingsEntity = FileEditor.Instance.SettingsEntity;
+            //model.SettingsEntity.Templates = FileEditor.Instance.SettingsEntity.Templates;
             //todo: open new window with settings
         }
     }
