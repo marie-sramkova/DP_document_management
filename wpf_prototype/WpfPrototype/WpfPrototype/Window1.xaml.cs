@@ -44,6 +44,8 @@ namespace WpfPrototype
         private DocAttribute lastSelectedDocAttribute;
         private BitmapImage bitmap;
         TesseractOCR tesseractORM;
+        BtnSaveState btnSaveState = BtnSaveState.CREATE_TEMPLATE;
+
         public class Model : NotifyPropertyChangedBase 
         {
             private BindingList<DocAttribute> _BindingAttributes;
@@ -186,23 +188,40 @@ namespace WpfPrototype
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            if (listViewTemplates.SelectedItem == null && listViewAttributes.Items.Count == 0)
+            if (btnSaveState == BtnSaveState.CREATE_TEMPLATE)
             {
                 ButtonNewTemplate_Click(sender, e);
             }
-            else
+            else if(btnSaveState == BtnSaveState.SAVE_ANALYZED_FILE)
             {
                 BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
                 if (docsAttrs == null)
                 {
-                    FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>());
+                    return;
+                    //FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>());
                 }
                 else
                 {
                     FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
-                    if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                    analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
+                    if (analyzedFiles.Count == 0)
                     {
-                        ButtonRight_Click(sender, e);
+                        templateAndAttributeStackPanel.Children.Clear();
+                        ButtonBack_Click(sender, e);
+                    }
+                    else
+                    {
+                        if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                        {
+                            templateAndAttributeStackPanel.Children.Clear();
+                            ButtonRight_Click(sender, e);
+                        }
+                        else
+                        {
+                            templateAndAttributeStackPanel.Children.Clear();
+                            pointerToActualAnalyzedFile = analyzedFiles.Count;
+                            ButtonLeft_Click(sender, e);
+                        }
                     }
                 }
             }
@@ -221,9 +240,9 @@ namespace WpfPrototype
             templateAndAttributeStackPanel.Children.Clear();
             Label lbl = new Label();
             lbl.Content = "Template name: ";
-            TextBox txtBox = new TextBox();
+            TextBox txtBoxTemplateName = new TextBox();
             templateAndAttributeStackPanel.Children.Add(lbl);
-            templateAndAttributeStackPanel.Children.Add(txtBox);
+            templateAndAttributeStackPanel.Children.Add(txtBoxTemplateName);
             //todo: change label to space
             templateAndAttributeStackPanel.Children.Add(new Label());
             //buttonSave.Visibility = Visibility.Visible;
@@ -232,7 +251,11 @@ namespace WpfPrototype
             buttonNewTemplate.Content = "Create";
             buttonNewTemplate.Click += (s, e) =>
             {
-                Template template = new Template(txtBox.Text);
+                if (txtBoxTemplateName.Text == "") 
+                {
+                    return;
+                }
+                Template template = new Template(txtBoxTemplateName.Text);
                 template.DocFiles.Add(new DocFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>()));
                 FileEditor.Instance.AddNewTemplate(template);
 
@@ -240,6 +263,7 @@ namespace WpfPrototype
                 CreateAttributeListView(template);
                 buttonSave.Visibility = Visibility.Visible;
                 buttonSave.Content = "Save";
+                btnSaveState = BtnSaveState.SAVE_ANALYZED_FILE;
             };
             templateAndAttributeStackPanel.Children.Add(buttonNewTemplate);
         }
@@ -279,7 +303,7 @@ namespace WpfPrototype
         {
             List<DocAttribute> docAttributes = new List<DocAttribute>();
 
-            if (selectedTemplate.AllDocAttributes.Count > 0)
+            if (selectedTemplate != null && selectedTemplate.AllDocAttributes.Count > 0)
             {
                 foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
                 {
@@ -313,7 +337,7 @@ namespace WpfPrototype
         private void ButtonNewAttribute_Click(Template template)
         {
             model.BindingTemplates = new BindingList<Template>();
-            //buttonSave.Visibility = Visibility.Hidden;
+            buttonSave.Visibility = Visibility.Hidden;
 
             //todo: new template form
             panel.Height = new GridLength(51, GridUnitType.Star);
@@ -322,7 +346,7 @@ namespace WpfPrototype
             templateAndAttributeStackPanel.Children.Clear();
             Label lbl = new Label();
             lbl.Content = "Attribute name: ";
-            TextBox txtBox = new TextBox();
+            TextBox txtBoxAttributeName = new TextBox();
             Label lblComboBox = new Label();
             lblComboBox.Content = "Type: ";
             ComboBox attributeComboBox = new ComboBox();
@@ -331,7 +355,7 @@ namespace WpfPrototype
             attributeComboBox.Items.Add("Date");
             attributeComboBox.Items.Add("Picture");
             templateAndAttributeStackPanel.Children.Add(lbl);
-            templateAndAttributeStackPanel.Children.Add(txtBox);
+            templateAndAttributeStackPanel.Children.Add(txtBoxAttributeName);
             templateAndAttributeStackPanel.Children.Add(lblComboBox);
             templateAndAttributeStackPanel.Children.Add(attributeComboBox);
             //todo: change label to space
@@ -342,7 +366,12 @@ namespace WpfPrototype
             buttonNewAttribute.Content = "Create";
             buttonNewAttribute.Click += (s, e) =>
             {
-                DocAttribute docAttribute = new DocAttribute(txtBox.Text, "", attributeComboBox.SelectedValue.ToString(), 0, 0, 0, 0);
+                if(attributeComboBox.SelectedValue == null || txtBoxAttributeName.Text == "") 
+                {
+                    return;
+                }
+                buttonSave.Visibility = Visibility.Visible;
+                DocAttribute docAttribute = new DocAttribute(txtBoxAttributeName.Text, "", attributeComboBox.SelectedValue.ToString(), 0, 0, 0, 0);
                 FileEditor.Instance.AddAttributeToTemplate(template, docAttribute);
                 analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(docAttribute);
 
@@ -354,6 +383,8 @@ namespace WpfPrototype
 
         private void ButtonRight_Click(object sender, RoutedEventArgs e)
         {
+            buttonSave.Visibility = Visibility.Visible;
+            btnSaveState = BtnSaveState.CREATE_TEMPLATE;
             pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
             if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
             {
@@ -378,6 +409,8 @@ namespace WpfPrototype
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
         {
+            buttonSave.Visibility = Visibility.Visible;
+            btnSaveState = BtnSaveState.CREATE_TEMPLATE;
             pointerToActualAnalyzedFile = pointerToActualAnalyzedFile - 1;
             if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
             {
@@ -408,6 +441,7 @@ namespace WpfPrototype
         {
             buttonSave.Content = "Save";
             buttonSave.Visibility = Visibility.Visible;
+            btnSaveState = BtnSaveState.SAVE_ANALYZED_FILE;
             Template selectedTemplate = (Template)listViewTemplates.SelectedItems[0];
             FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
             //todo: show listview with attributes

@@ -94,8 +94,8 @@ namespace WpfPrototype
             String fileText = "";
             if (!File.Exists(UserSettings.settingsFilePath))
             {
-                File.Create(UserSettings.settingsFilePath);
-
+                using (File.Create(UserSettings.settingsFilePath)) { }
+                
             }
             //add try-catch - reading from file!!!
             fileText = File.ReadAllText(UserSettings.settingsFilePath);
