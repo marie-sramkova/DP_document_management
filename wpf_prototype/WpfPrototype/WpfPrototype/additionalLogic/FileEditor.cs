@@ -60,7 +60,7 @@ namespace WpfPrototype
             {
                 if (!SettingsEntity.DocFiles.Any(x => x.FilePath == file) && !System.IO.Path.GetFileName(file).Equals("settings.txt"))
                 {
-                    List<DocAttribute> docAttributes = new List<DocAttribute>();
+                    BindingList<DocAttribute> docAttributes = new BindingList<DocAttribute>();
                     DocFile newDoc = new DocFile(file, docAttributes);
                     SettingsEntity.DocFiles.Add(newDoc);
                 }
@@ -124,13 +124,13 @@ namespace WpfPrototype
         private void CreateEmptySettingsEntity()
         {
             SettingsEntity = new SettingsEntity();
-            SettingsEntity.DocFiles = new List<DocFile>();
-            SettingsEntity.Templates = new List<Template>();
+            SettingsEntity.DocFiles = new BindingList<DocFile>();
+            SettingsEntity.Templates = new BindingList<Template>();
         }
 
         public void AddFileToTemplate(string templateName, DocFile file)
         {
-            Template savedTemplate = SettingsEntity.Templates.Find(x => x.Name == templateName);
+            Template savedTemplate = SettingsEntity.Templates.SingleOrDefault(x => x.Name == templateName);
             if (!savedTemplate.DocFiles.Any(x => x.FilePath == file.FilePath)) { 
                 savedTemplate.DocFiles.Add(file);
                 WriteSettingsEntityToFile();
@@ -142,24 +142,24 @@ namespace WpfPrototype
             if (!template.AllDocAttributes.Any(x => x.Name == docAttribute.Name))
             {
                 template.AllDocAttributes.Add(docAttribute);
-                SettingsEntity.Templates.Find(x => x.Name == template.Name).AllDocAttributes.Add(docAttribute);
+                SettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).AllDocAttributes.Add(docAttribute);
                 WriteSettingsEntityToFile();
             }
             else
             {
-                int index = template.AllDocAttributes.FindIndex(x => x.Name == docAttribute.Name);
+                int index = template.AllDocAttributes.IndexOf(template.AllDocAttributes.SingleOrDefault(x => x.Name == docAttribute.Name));
                 if (index >= 0)
                 {
-                    SettingsEntity.Templates.Find(x => x.Name == template.Name).AllDocAttributes[index] = docAttribute;
+                    SettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).AllDocAttributes[index] = docAttribute;
                 }
             }
         }
 
         public void AddAttributesToFileAndTemplate(string fileName, BindingList<DocAttribute> docAttributes)
         {
-            Template template = SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == fileName) != null);
+            Template template = SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == fileName) != null);
             if (template != null) {
-                DocFile docFile = SettingsEntity.DocFiles.Find(x => x.FilePath == fileName);
+                DocFile docFile = SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName);
                 if (docFile != null)
                 {
                     //docFile.DocAttributes = docAttributes;
@@ -177,20 +177,20 @@ namespace WpfPrototype
 
         public void AddAttributeToFileAndTemplate(string fileName, DocAttribute docAttribute)
         {
-            Template template = SettingsEntity.Templates.Find(x => x.DocFiles.Find(y => y.FilePath == fileName) != null);
+            Template template = SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == fileName) != null);
             if (template != null)
             {
-                DocFile docFile = SettingsEntity.DocFiles.Find(x => x.FilePath == fileName);
+                DocFile docFile = SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName);
                 if (docFile != null)
                 {
-                    int index = docFile.DocAttributes.FindIndex(x => x.Name == docAttribute.Name);
+                    int index = docFile.DocAttributes.IndexOf(docFile.DocAttributes.SingleOrDefault(x => x.Name == docAttribute.Name));
                     if (index >= 0)
                     {
-                        SettingsEntity.DocFiles.Find(x => x.FilePath == fileName).DocAttributes[index] = docAttribute;
+                        SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName).DocAttributes[index] = docAttribute;
                     }
                     else 
                     {
-                        SettingsEntity.DocFiles.Find(x => x.FilePath == fileName).DocAttributes.Add(docAttribute);
+                        SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName).DocAttributes.Add(docAttribute);
                     }
 
                     AddAttributeToTemplate(template, docAttribute);
