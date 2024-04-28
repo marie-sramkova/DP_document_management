@@ -15,7 +15,11 @@ namespace WpfPrototype.additionalLogic.entities
 
         public BindingList<DocFile> DocFiles { get { return _docFiles; } set { _docFiles = value; RaisePropertyChanged(nameof(DocFiles)); } }
 
-        public SettingsEntity() {}
+        public SettingsEntity() 
+        {
+            Templates = new BindingList<Template>();
+            DocFiles = new BindingList<DocFile>();
+        }
 
 
         public void AddDoc(DocFile docFile)
