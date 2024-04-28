@@ -43,6 +43,50 @@ namespace WpfPrototype
         {
             this.model = new Model();
             this.model.SettingsEntity = FileEditor.Instance.SettingsEntity;
+            foreach (var template in model.SettingsEntity.Templates)
+            {
+                foreach (var file in template.DocFiles)
+                {
+                    file.DocAttributes = FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == file.FilePath).DocAttributes;
+                }
+            }
+
+            SettingsEntity tmpSettingsEntity = new SettingsEntity();
+            foreach (var file in FileEditor.Instance.SettingsEntity.DocFiles)
+            {
+                if (file.DocAttributes.Count != 0)
+                {
+                    foreach (var attribute in file.DocAttributes)
+                    {
+                        StringBuilder newValue = new StringBuilder("");
+                        string[] valuePieces = attribute.Value.Replace("\n", " ").Split(" ");
+                        for (global::System.Int32 i = 0; i < valuePieces.Length; i++)
+                        {
+                            if (valuePieces[i] != "")
+                            {
+                                newValue.Append(valuePieces[i]).Append(" ");
+                            }
+                        }
+                        attribute.Value = newValue.ToString();
+                    }
+                    Template template = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(x => x.FilePath == file.FilePath) != null);
+                    if (!tmpSettingsEntity.Templates.Any(x => x.Name == template.Name))
+                    {
+                        tmpSettingsEntity.Templates.Add(template);
+                        tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Clear();
+                        tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Add(file);
+                    }
+                    else
+                    {
+                        if(!tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Any(x => x.FilePath == file.FilePath))
+                        {
+                            tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Add(file);
+                        }
+                    }
+                }
+            }
+
+            model.SettingsEntity = tmpSettingsEntity;
 
             this.DataContext = model;
             InitializeComponent();
@@ -122,7 +166,7 @@ namespace WpfPrototype
             }
             FileEditor.Instance.AddNewFilesWithoutAttributes(filesToStore);
             //todo: save new documents into settings file
-            
+
             Window1 window1 = new Window1();
             window1.Show();
             Close();
