@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using TallComponents.PDF.Rasterizer;
 using Tesseract;
 using WpfPrototype.additionalLogic;
@@ -214,6 +216,7 @@ namespace WpfPrototype
                         if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
                         {
                             templateAndAttributeStackPanel.Children.Clear();
+                            pointerToActualAnalyzedFile = pointerToActualAnalyzedFile - 1;
                             ButtonRight_Click(sender, e);
                         }
                         else
@@ -274,20 +277,28 @@ namespace WpfPrototype
             listView.Height = new GridLength(0, GridUnitType.Star);
             panel.Height = new GridLength(10, GridUnitType.Star);
             templateAndAttributeStackPanel.Children.Clear();
-            BindingList<DocAttribute> docAttributes = new BindingList<DocAttribute>();
 
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
-            if (selectedTemplate.AllDocAttributes.Count > 0)
+            BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
+            allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
+            foreach (var attr in selectedTemplate.AllDocAttributes)
             {
-                foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
+                if (!allAttributes.Any(x => x.Name == attr.Name))
                 {
-                    docAttributes.Add(attribute);
+                    allAttributes.Add(attr);
                 }
             }
+            //if (analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Count > 0)
+            //{
+            //    foreach (DocAttribute attribute in analyzedFiles[pointerToActualAnalyzedFile].DocAttributes)
+            //    {
+            //        docAttributes.Add(attribute);
+            //    }
+            //}
 
-            ShowImageWithAllAttributeBoundaries(selectedTemplate);
+            ShowImageWithAllAttributeBoundaries();
 
-            model.BindingAttributes = docAttributes;
+            model.BindingAttributes = allAttributes;
 
             Button buttonNewAttribute = new Button();
             buttonNewAttribute.Content = "Add new attribute";
@@ -299,13 +310,27 @@ namespace WpfPrototype
 
         }
 
-        private void ShowImageWithAllAttributeBoundaries(Template selectedTemplate)
+        private void ShowImageWithAllAttributeBoundaries()
         {
             List<DocAttribute> docAttributes = new List<DocAttribute>();
-
-            if (selectedTemplate != null && selectedTemplate.AllDocAttributes.Count > 0)
+            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
+            BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
+            allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
+            if (selectedTemplate != null)
             {
-                foreach (DocAttribute attribute in selectedTemplate.AllDocAttributes)
+                foreach (var attr in selectedTemplate.AllDocAttributes)
+                {
+                    if (!allAttributes.Any(x => x.Name == attr.Name))
+                    {
+                        allAttributes.Add(attr);
+                    }
+                }
+            }
+
+
+            if (selectedTemplate != null && allAttributes.Count > 0)
+            {
+                foreach (DocAttribute attribute in allAttributes)
                 {
                     DocAttribute actualAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == attribute.Name);
                     if (actualAttribute == null)
@@ -446,6 +471,11 @@ namespace WpfPrototype
             FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
             //todo: show listview with attributes
             CreateAttributeListView(selectedTemplate);
+
+            foreach (var attr in model.BindingAttributes)
+            {
+                CalculateAverageAttributeLocation(attr);
+            }
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -459,7 +489,6 @@ namespace WpfPrototype
             {
                 attr = sender as DocAttribute;
             }
-
             if (attr != null && attr.EndingXLocation != 0 && attr.EndingYLocation != 0 && attr.StartingXLocation != attr.EndingXLocation && attr.StartingYLocation != attr.EndingYLocation)
             {
                 ShowImage();
@@ -471,7 +500,7 @@ namespace WpfPrototype
                 ShowImage();
             }
             lastSelectedDocAttribute = attr;
-
+            listViewAttributes.SelectedItem = attr;
         }
 
         private string GetAttributeValue(DocAttribute attr)
@@ -494,6 +523,12 @@ namespace WpfPrototype
 
         private void AddAttributeBoundariesToBitmap(DocAttribute attr)
         {
+            if (attr.EndingXLocation > bitmap.PixelWidth || attr.EndingYLocation > bitmap.PixelHeight)
+            {
+                attr.Value = "";
+                imgAnalyzedDocument.Source = bitmap;
+                return;
+            }
             Bitmap outputImage = new Bitmap((int)bitmap.PixelWidth, (int)bitmap.PixelHeight);
             Graphics graphics = Graphics.FromImage(outputImage);
 
@@ -534,6 +569,8 @@ namespace WpfPrototype
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
             }
+            string value = GetAttributeValue(attr);
+            attr.Value = value;
             imgAnalyzedDocument.Source = bitmap;
         }
 
@@ -616,61 +653,9 @@ namespace WpfPrototype
                 System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
                 lastSelectedDocAttribute.EndingXLocation = (int)p.X;
                 lastSelectedDocAttribute.EndingYLocation = (int)p.Y;
+                organizeLocations();
 
-                if (lastSelectedDocAttribute.StartingXLocation > lastSelectedDocAttribute.EndingXLocation)
-                {
-                    int tmp = lastSelectedDocAttribute.StartingXLocation;
-                    lastSelectedDocAttribute.StartingXLocation = lastSelectedDocAttribute.EndingXLocation;
-                    lastSelectedDocAttribute.EndingXLocation = tmp;
-                }
-                if (lastSelectedDocAttribute.StartingYLocation > lastSelectedDocAttribute.EndingYLocation)
-                {
-                    int tmp = lastSelectedDocAttribute.StartingYLocation;
-                    lastSelectedDocAttribute.StartingYLocation = lastSelectedDocAttribute.EndingYLocation;
-                    lastSelectedDocAttribute.EndingYLocation = tmp;
-                }
-
-                if (lastSelectedDocAttribute.StartingXLocation == lastSelectedDocAttribute.EndingXLocation || lastSelectedDocAttribute.StartingYLocation == lastSelectedDocAttribute.EndingYLocation)
-                {
-                    int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.IndexOf(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name));
-                    //lastSelectedDocAttribute = /*FileEditor.Instance.SettingsEntity.DocFiles.Find(x => x.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath).DocAttributes.Find(y => y.Name == lastSelectedDocAttribute.Name);
-                    if (indexOfxistingAttribute >= 0 && (analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingXLocation != analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingXLocation && analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingYLocation != analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingYLocation))
-                    {
-                        lastSelectedDocAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute];
-                        TextBox_GotFocus(lastSelectedDocAttribute, e);
-                    }
-                    else
-                    {
-                        lastSelectedDocAttribute = new DocAttribute(lastSelectedDocAttribute.Name, "", lastSelectedDocAttribute.Type, 0, 0, 0, 0);
-                        CalculateAverageAttributeLocation(lastSelectedDocAttribute);
-                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(lastSelectedDocAttribute);
-                        TextBox_GotFocus(lastSelectedDocAttribute, e);
-                    }
-                }
-                else
-                {
-                    double percentWidth = (double)bitmap.PixelWidth / imgAnalyzedDocument.ActualWidth;
-                    double percentHeight = (double)bitmap.PixelHeight / imgAnalyzedDocument.ActualHeight;
-                    lastSelectedDocAttribute.StartingXLocation = (int)(lastSelectedDocAttribute.StartingXLocation * percentWidth);
-                    lastSelectedDocAttribute.StartingYLocation = (int)(lastSelectedDocAttribute.StartingYLocation * percentHeight);
-                    lastSelectedDocAttribute.EndingXLocation = (int)(lastSelectedDocAttribute.EndingXLocation * percentWidth);
-                    lastSelectedDocAttribute.EndingYLocation = (int)(lastSelectedDocAttribute.EndingYLocation * percentHeight);
-
-                    TextBox_GotFocus(lastSelectedDocAttribute, e);
-
-                    int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.IndexOf(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name));
-                    if (indexOfxistingAttribute >= 0)
-                    {
-                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingXLocation = lastSelectedDocAttribute.StartingXLocation;
-                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingYLocation = lastSelectedDocAttribute.StartingYLocation;
-                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingXLocation = lastSelectedDocAttribute.EndingXLocation;
-                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingYLocation = lastSelectedDocAttribute.EndingYLocation;
-                    }
-                    else
-                    {
-                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(new DocAttribute(lastSelectedDocAttribute.Name, lastSelectedDocAttribute.Value, lastSelectedDocAttribute.Type, lastSelectedDocAttribute.StartingXLocation, lastSelectedDocAttribute.StartingYLocation, lastSelectedDocAttribute.EndingXLocation, lastSelectedDocAttribute.EndingYLocation));
-                    }
-                }
+                recalculateNewLocationsFromPixels(e);
                 if (lastSelectedDocAttribute != null)
                 {
                     string value = GetAttributeValue(lastSelectedDocAttribute);
@@ -703,12 +688,135 @@ namespace WpfPrototype
             }
         }
 
+        private void recalculateNewLocationsFromPixels(MouseButtonEventArgs e)
+        {
+            if (lastSelectedDocAttribute.StartingXLocation == lastSelectedDocAttribute.EndingXLocation || lastSelectedDocAttribute.StartingYLocation == lastSelectedDocAttribute.EndingYLocation)
+            {
+                int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.IndexOf(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name));
+                //lastSelectedDocAttribute = /*FileEditor.Instance.SettingsEntity.DocFiles.Find(x => x.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath).DocAttributes.Find(y => y.Name == lastSelectedDocAttribute.Name);
+                if (indexOfxistingAttribute >= 0 && (analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingXLocation != analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingXLocation && analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingYLocation != analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingYLocation))
+                {
+                    lastSelectedDocAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute];
+                    TextBox_GotFocus(lastSelectedDocAttribute, e);
+                }
+                else
+                {
+                    lastSelectedDocAttribute = new DocAttribute(lastSelectedDocAttribute.Name, "", lastSelectedDocAttribute.Type, 0, 0, 0, 0);
+                    CalculateAverageAttributeLocation(lastSelectedDocAttribute);
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(lastSelectedDocAttribute);
+                    TextBox_GotFocus(lastSelectedDocAttribute, e);
+                }
+            }
+            else
+            {
+                double percentWidth = (double)bitmap.PixelWidth / imgAnalyzedDocument.ActualWidth;
+                double percentHeight = (double)bitmap.PixelHeight / imgAnalyzedDocument.ActualHeight;
+                lastSelectedDocAttribute.StartingXLocation = (int)(lastSelectedDocAttribute.StartingXLocation * percentWidth);
+                lastSelectedDocAttribute.StartingYLocation = (int)(lastSelectedDocAttribute.StartingYLocation * percentHeight);
+                lastSelectedDocAttribute.EndingXLocation = (int)(lastSelectedDocAttribute.EndingXLocation * percentWidth);
+                lastSelectedDocAttribute.EndingYLocation = (int)(lastSelectedDocAttribute.EndingYLocation * percentHeight);
+
+                TextBox_GotFocus(lastSelectedDocAttribute, e);
+
+                int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.IndexOf(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name));
+                if (indexOfxistingAttribute >= 0)
+                {
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingXLocation = lastSelectedDocAttribute.StartingXLocation;
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingYLocation = lastSelectedDocAttribute.StartingYLocation;
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingXLocation = lastSelectedDocAttribute.EndingXLocation;
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingYLocation = lastSelectedDocAttribute.EndingYLocation;
+                }
+                else
+                {
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(new DocAttribute(lastSelectedDocAttribute.Name, lastSelectedDocAttribute.Value, lastSelectedDocAttribute.Type, lastSelectedDocAttribute.StartingXLocation, lastSelectedDocAttribute.StartingYLocation, lastSelectedDocAttribute.EndingXLocation, lastSelectedDocAttribute.EndingYLocation));
+                }
+            }
+        }
+
+        private void organizeLocations()
+        {
+            if (lastSelectedDocAttribute.StartingXLocation > lastSelectedDocAttribute.EndingXLocation)
+            {
+                int tmp = lastSelectedDocAttribute.StartingXLocation;
+                lastSelectedDocAttribute.StartingXLocation = lastSelectedDocAttribute.EndingXLocation;
+                lastSelectedDocAttribute.EndingXLocation = tmp;
+            }
+            if (lastSelectedDocAttribute.StartingYLocation > lastSelectedDocAttribute.EndingYLocation)
+            {
+                int tmp = lastSelectedDocAttribute.StartingYLocation;
+                lastSelectedDocAttribute.StartingYLocation = lastSelectedDocAttribute.EndingYLocation;
+                lastSelectedDocAttribute.EndingYLocation = tmp;
+            }
+        }
+
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             ShowImage();
             lastSelectedDocAttribute = null;
-            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
-            ShowImageWithAllAttributeBoundaries(selectedTemplate);
+            ShowImageWithAllAttributeBoundaries();
+            buttonSave.Focus();
+        }
+
+        private void listViewAttributes_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            (sender as ListView).SelectedIndex = -1;
+            TextBox_LostFocus(sender, e);
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ListView lv = (sender as ListView);
+            if (lv != null)
+            {
+                return;
+            }
+            TextBox textBox = (sender as TextBox);
+            if (textBox != null)
+            {
+                return;
+            }
+            if (imgAnalyzedDocument.IsMouseOver) 
+            {
+                return;
+            }
+            listViewAttributes.SelectedIndex = -1;
+            TextBox_LostFocus(sender, e);
+        }
+
+
+        private void txtBox_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBox_GotFocus((sender as TextBox), e);
+        }
+
+        //private void listViewAttributes_GotFocus(object sender, RoutedEventArgs e)
+        //{
+        //    DocAttribute docAttribute = (sender as ListView).SelectedItem as DocAttribute;
+        //    int i = (sender as ListView).SelectedIndex;
+        //    if (docAttribute != null)
+        //    {
+        //        TextBox_GotFocus(docAttribute, e);
+        //    }
+        //    else
+        //    {
+        //        TextBox_GotFocus(sender, e);
+
+        //    }
+        //}
+
+        private void listViewAttributes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DocAttribute docAttribute = (sender as ListView).SelectedItem as DocAttribute;
+            int i = (sender as ListView).SelectedIndex;
+            if (docAttribute != null)
+            {
+                TextBox_GotFocus(docAttribute, e);
+            }
+            else
+            {
+                TextBox_GotFocus(sender, e);
+
+            }
         }
     }
 }
