@@ -379,7 +379,6 @@ namespace WpfPrototype
             attributeComboBox.Items.Add("Number");
             attributeComboBox.Items.Add("Text");
             attributeComboBox.Items.Add("Date");
-            attributeComboBox.Items.Add("Picture");
             templateAndAttributeStackPanel.Children.Add(lbl);
             templateAndAttributeStackPanel.Children.Add(txtBoxAttributeName);
             templateAndAttributeStackPanel.Children.Add(lblComboBox);
