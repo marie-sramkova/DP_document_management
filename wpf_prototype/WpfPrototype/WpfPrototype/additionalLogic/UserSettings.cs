@@ -12,7 +12,8 @@ namespace WpfPrototype
         
         //todo: change in settings
         public static string directoryPath = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka";
-        public static string settingsFilePath = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\settings.txt";
-        
+        public static string settingsDocumentsFilePath = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\settings_documents.txt";
+        public static string settingsTemplatesFilePath = "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\settings_templates.txt";
+
     }
 }

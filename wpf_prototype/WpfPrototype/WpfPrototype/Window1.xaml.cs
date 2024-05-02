@@ -31,6 +31,7 @@ using TallComponents.PDF.Rasterizer;
 using Tesseract;
 using WpfPrototype.additionalLogic;
 using WpfPrototype.additionalLogic.entities;
+using WpfPrototype.additionalLogic.ocr;
 using WpfPrototype.Properties;
 using static System.Net.Mime.MediaTypeNames;
 

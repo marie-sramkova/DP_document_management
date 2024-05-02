@@ -58,20 +58,11 @@ namespace WpfPrototype
             ReadFileToSettingsEntity();
             foreach (var file in files)
             {
-                if (!SettingsEntity.DocFiles.Any(x => x.FilePath == file) && !System.IO.Path.GetFileName(file).Equals("settings.txt"))
+                if (!SettingsEntity.DocFiles.Any(x => x.FilePath == file) && (file != UserSettings.settingsDocumentsFilePath) || file != UserSettings.settingsTemplatesFilePath)
                 {
                     BindingList<DocAttribute> docAttributes = new BindingList<DocAttribute>();
                     DocFile newDoc = new DocFile(file, docAttributes);
                     SettingsEntity.DocFiles.Add(newDoc);
-                }
-                else if (System.IO.Path.GetFileName(file).Equals("settings.txt")) 
-                {
-                    
-                }
-                else
-                {
-                    //todo: inform that the document has been already analyzed
-                    return;
                 }
             }
             WriteSettingsEntityToFile();
@@ -91,34 +82,57 @@ namespace WpfPrototype
 
         private void ReadFileToSettingsEntity()
         {
-            String fileText = "";
-            if (!File.Exists(UserSettings.settingsFilePath))
+            CreateEmptySettingsEntity();
+            String fileTextDocuments = "";
+            String fileTextTemplates = "";
+            if (!File.Exists(UserSettings.settingsDocumentsFilePath))
             {
-                using (File.Create(UserSettings.settingsFilePath)) { }
+                using (File.Create(UserSettings.settingsDocumentsFilePath)) { }
                 
             }
-            //add try-catch - reading from file!!!
-            fileText = File.ReadAllText(UserSettings.settingsFilePath);
-            if (fileText.Length > 0)
+            if (!File.Exists(UserSettings.settingsTemplatesFilePath))
             {
-                SettingsEntity = JsonConvert.DeserializeObject<SettingsEntity>(fileText);
+                using (File.Create(UserSettings.settingsTemplatesFilePath)) { }
+
             }
-            else 
+            //add try-catch - reading from file!!!
+            fileTextDocuments = File.ReadAllText(UserSettings.settingsDocumentsFilePath);
+            fileTextTemplates = File.ReadAllText(UserSettings.settingsTemplatesFilePath);
+            if (fileTextDocuments.Length > 0)
             {
-                CreateEmptySettingsEntity();
+                SettingsEntity.DocFiles = JsonConvert.DeserializeObject<BindingList<DocFile>>(fileTextDocuments);
+                if (SettingsEntity.DocFiles == null)
+                {
+                    SettingsEntity.DocFiles = new BindingList<DocFile>();
+                }
+            }
+            if (fileTextTemplates.Length > 0)
+            {
+                SettingsEntity.Templates = JsonConvert.DeserializeObject<BindingList<Template>>(fileTextTemplates);
+                if (SettingsEntity.Templates == null)
+                {
+                    SettingsEntity.Templates = new BindingList<Template>();
+                }
             }
         }
 
         public void WriteSettingsEntityToFile()
         {
-            String fileText = "";
-            if (!File.Exists(UserSettings.settingsFilePath))
+            String fileTextDocuments = "";
+            String fileTextTemplates = "";
+            if (!File.Exists(UserSettings.settingsDocumentsFilePath))
             {
-                File.Create(UserSettings.settingsFilePath);
+                File.Create(UserSettings.settingsDocumentsFilePath);
             }
-            fileText = Newtonsoft.Json.JsonConvert.SerializeObject(SettingsEntity, Formatting.Indented);
+            if (!File.Exists(UserSettings.settingsTemplatesFilePath))
+            {
+                File.Create(UserSettings.settingsTemplatesFilePath);
+            }
+            fileTextDocuments = Newtonsoft.Json.JsonConvert.SerializeObject(SettingsEntity.DocFiles, Formatting.Indented);
+            fileTextTemplates = Newtonsoft.Json.JsonConvert.SerializeObject(SettingsEntity.Templates, Formatting.Indented);
             //add try-catch - writing to file!!!
-            File.WriteAllText(UserSettings.settingsFilePath, fileText);
+            File.WriteAllText(UserSettings.settingsDocumentsFilePath, fileTextDocuments);
+            File.WriteAllText(UserSettings.settingsTemplatesFilePath, fileTextTemplates);
         }
 
         private void CreateEmptySettingsEntity()

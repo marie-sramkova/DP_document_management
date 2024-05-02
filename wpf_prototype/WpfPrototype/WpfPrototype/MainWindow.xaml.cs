@@ -109,7 +109,7 @@ namespace WpfPrototype
             if (UserSettings.directoryPath != null)
             {
                 newFiles = Directory.GetFiles(UserSettings.directoryPath, "*", SearchOption.AllDirectories).ToList();
-                documentsCount = newFiles.Count - 1;
+                documentsCount = newFiles.Count - 2;
                 if (FileEditor.Instance.SettingsEntity != null)
                 {
                     docFilesInSettingsFile = FileEditor.Instance.SettingsEntity.DocFiles;
