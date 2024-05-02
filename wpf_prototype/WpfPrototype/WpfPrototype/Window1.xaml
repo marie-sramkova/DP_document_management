@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfPrototype"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Width="800">
+        Title="Window1"
+        WindowState = "Maximized" MouseDown="Window_MouseDown">
     <Border Padding="5">
         <Grid>
             <Grid.RowDefinitions>
@@ -65,14 +66,14 @@
                         </ListView.ItemTemplate>
                     </ListView>
 
-                    <ListView ItemsSource="{Binding BindingAttributes}"  Margin="10" Name="listViewAttributes" Grid.Row="1" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" >
+                    <ListView ItemsSource="{Binding BindingAttributes}"  Margin="10" Name="listViewAttributes" Grid.Row="1" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseLeftButtonDown="listViewAttributes_MouseLeftButtonDown"  SelectionChanged="listViewAttributes_SelectionChanged" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel>
                                     <Label Content="{Binding Name}" Width="100"/>
-                                    <TextBox Text="{Binding Value}" Width="100" TextWrapping="Wrap" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
-                                    <Label Content="{Binding Type}" Width="50"/>
-                                    <Button Content="Delete" FontWeight="Bold"></Button>
+                                    <TextBox Text="{Binding Value}" x:Name="txtBox" Width="250" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
+                                    <Label Content="{Binding Type}" Padding="10, 0, 10, 0" Width="70"/>
+                                    <Button Content="Delete" FontWeight="Bold" Height="30"></Button>
                                 </WrapPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>

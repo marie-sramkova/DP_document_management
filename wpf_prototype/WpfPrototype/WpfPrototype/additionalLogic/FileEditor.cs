@@ -142,8 +142,8 @@ namespace WpfPrototype
             if (!template.AllDocAttributes.Any(x => x.Name == docAttribute.Name))
             {
                 template.AllDocAttributes.Add(docAttribute);
-                SettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).AllDocAttributes.Add(docAttribute);
-                WriteSettingsEntityToFile();
+                //SettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).AllDocAttributes.Add(docAttribute);
+                //WriteSettingsEntityToFile();
             }
             else
             {
