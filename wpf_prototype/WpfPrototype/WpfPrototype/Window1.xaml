@@ -9,12 +9,87 @@
         WindowState = "Maximized" MouseDown="Window_MouseDown">
     <Border Padding="5">
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="49*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="49*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0">
+                <DockPanel HorizontalAlignment="Left" DockPanel.Dock="Top" Height="30">
+                    <Button x:Name="buttonBack" Click="ButtonBack_Click" Grid.Column="0" Width="50" DockPanel.Dock="Left">
+                        <TextBlock>&lt;- Back</TextBlock>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Bottom" Height="30">
+                    <Button x:Name="buttonSave" Content="Confirm" Click="ButtonSave_Click"></Button>
+                </DockPanel>
+                <DockPanel HorizontalAlignment="Center" LastChildFill="False">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="91*" x:Name="listView"></RowDefinition>
+                            <RowDefinition Height="0*" x:Name="listView2"></RowDefinition>
+                            <RowDefinition Height="0*" x:Name="panel"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Margin="20">
+                            <ListView ItemsSource="{Binding BindingTemplates}" x:Name="listViewTemplates" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel>
+                                            <Label Content="{Binding Name}"/>
+                                        </WrapPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                        <Grid VerticalAlignment="Stretch" Grid.Row="1" Margin="20">
+                            <ListView ItemsSource="{Binding BindingAttributes}" Name="listViewAttributes" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseLeftButtonDown="listViewAttributes_MouseLeftButtonDown"  SelectionChanged="listViewAttributes_SelectionChanged" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel>
+                                            <Label Content="{Binding Name}" Width="100" HorizontalAlignment="Left"/>
+                                            <TextBox Text="{Binding Value}" x:Name="txtBox" Width="400" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
+                                            <Label Content="{Binding Type}" Padding="10, 0, 10, 0" Width="70"/>
+                                            <Button Content="Delete" FontWeight="Bold" Height="30" Width="70" HorizontalAlignment="Right"></Button>
+                                        </WrapPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                        <Grid Grid.Row="2" Margin="10">
+                            <StackPanel x:Name="templateAndAttributeStackPanel" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"></StackPanel>
+                        </Grid>
+                    </Grid>
+                </DockPanel>
+            </DockPanel>
+            <GridSplitter Grid.Column="1"></GridSplitter>
+            <DockPanel Grid.Column="2">
+                <DockPanel DockPanel.Dock="Top" Height="30" HorizontalAlignment="Stretch" LastChildFill="True">
+                    <Button x:Name="buttonLeft" Width="50" Click="ButtonLeft_Click" DockPanel.Dock="Left">
+                        <TextBlock>&lt;&lt;</TextBlock>
+                    </Button>
+                    <Button x:Name="buttonRight" Width="50" Click="ButtonRight_Click" DockPanel.Dock="Right">
+                        <TextBlock>&gt;&gt;</TextBlock>
+                    </Button>
+
+                    <Label Name="labelSelectedFile" Content="filename.docx"></Label>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Bottom">
+                    <Image x:Name="imgAnalyzedDocument" MouseDown="imgAnalyzedDocument_MouseDown" MouseUp="imgAnalyzedDocument_MouseUp"></Image>
+                </DockPanel>
+            </DockPanel>
+        </Grid>
+
+
+
+
+
+        <!--<Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="7*"></RowDefinition>
                 <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="84*"></RowDefinition>
+                <RowDefinition Height="91*"></RowDefinition>
                 <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="7*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -86,14 +161,7 @@
                     <Image x:Name="imgAnalyzedDocument" MouseDown="imgAnalyzedDocument_MouseDown" MouseUp="imgAnalyzedDocument_MouseUp"></Image>
                 </Grid>
             </Grid>
-            <Grid Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="79*"></ColumnDefinition>
-                    <ColumnDefinition Width="20*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="buttonProcess" Content="Process" Grid.Column="1" Click="ButtonProcess_Click"></Button>
-            </Grid>
-        </Grid>
+            
+        </Grid>-->
     </Border>
 </Window>

@@ -68,6 +68,7 @@ namespace WpfPrototype
             model.BindingTemplates = new BindingList<Template>();
             this.DataContext = model;
             InitializeComponent();
+
             //this.WindowState = WindowState.Maximized;
             //this.WindowStyle = WindowStyle.None;
 
@@ -167,20 +168,6 @@ namespace WpfPrototype
             }
         }
 
-        private void ButtonProcess_Click(object sender, RoutedEventArgs e)
-        {
-            System.Drawing.Image img = System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.jpg");
-            byte[] arr;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                arr = ms.ToArray();
-            }
-            string text = tesseractORM.GetTextFromImage(arr);
-
-            labelSelectedFile.Content = text;
-        }
-
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
             imgAnalyzedDocument.Source = null;
@@ -255,7 +242,7 @@ namespace WpfPrototype
             buttonNewTemplate.Content = "Create";
             buttonNewTemplate.Click += (s, e) =>
             {
-                if (txtBoxTemplateName.Text == "") 
+                if (txtBoxTemplateName.Text == "")
                 {
                     return;
                 }
@@ -337,7 +324,7 @@ namespace WpfPrototype
                     if (actualAttribute == null)
                     {
                         CalculateAverageAttributeLocation(attribute);
-                        if (attribute != null && (attribute.EndingXLocation == 0 || attribute.EndingYLocation == 0 || attribute.StartingXLocation == attribute.EndingXLocation || attribute.StartingYLocation == attribute.EndingYLocation)) 
+                        if (attribute != null && (attribute.EndingXLocation == 0 || attribute.EndingYLocation == 0 || attribute.StartingXLocation == attribute.EndingXLocation || attribute.StartingYLocation == attribute.EndingYLocation))
                         {
                             attribute.Value = "";
                         }
@@ -391,7 +378,7 @@ namespace WpfPrototype
             buttonNewAttribute.Content = "Create";
             buttonNewAttribute.Click += (s, e) =>
             {
-                if(attributeComboBox.SelectedValue == null || txtBoxAttributeName.Text == "") 
+                if (attributeComboBox.SelectedValue == null || txtBoxAttributeName.Text == "")
                 {
                     return;
                 }
@@ -424,8 +411,8 @@ namespace WpfPrototype
                 buttonLeft.IsEnabled = true;
             }
             listView2.Height = new GridLength(0, GridUnitType.Star);
-            listView.Height = new GridLength(81, GridUnitType.Star);
-            panel.Height = new GridLength(10, GridUnitType.Star);
+            listView.Height = new GridLength(91, GridUnitType.Star);
+            panel.Height = new GridLength(0, GridUnitType.Star);
             CreateTemplateButtons();
             SelectActualAnalyzedFile();
 
@@ -454,8 +441,8 @@ namespace WpfPrototype
                 buttonLeft.IsEnabled = true;
             }
             listView2.Height = new GridLength(0, GridUnitType.Star);
-            listView.Height = new GridLength(81, GridUnitType.Star);
-            panel.Height = new GridLength(10, GridUnitType.Star);
+            listView.Height = new GridLength(91, GridUnitType.Star);
+            panel.Height = new GridLength(0, GridUnitType.Star);
             CreateTemplateButtons();
             SelectActualAnalyzedFile();
 
