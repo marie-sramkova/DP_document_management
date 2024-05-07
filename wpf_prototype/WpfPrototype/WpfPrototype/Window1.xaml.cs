@@ -95,6 +95,8 @@ namespace WpfPrototype
             SelectActualAnalyzedFile();
 
             ShowImage();
+            ConvertPdfToPng("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\Potvrzení lékaře CZ - kopie.pdf", "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\Potvrzení lékaře CZ - kopie.jpg");
+            ImageComparator.CompareImagesAndReturnPercentageOfSimilarity(new Bitmap(ConvertBitmapImageToDrawingBitmap(bitmap)), new System.Drawing.Bitmap("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\Potvrzení lékaře CZ - kopie.jpg"));
         }
 
         private void ShowImage()
@@ -802,7 +804,6 @@ namespace WpfPrototype
             else
             {
                 TextBox_GotFocus(sender, e);
-
             }
         }
     }
