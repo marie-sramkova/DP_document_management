@@ -48,7 +48,7 @@
                                     <DataTemplate>
                                         <WrapPanel>
                                             <Label Content="{Binding Name}" Width="100" HorizontalAlignment="Left"/>
-                                            <TextBox Text="{Binding Value}" x:Name="txtBox" Width="400" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
+                                            <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Delay=2000}" x:Name="txtBox" Width="400" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
                                             <Label Content="{Binding Type}" Padding="10, 0, 10, 0" Width="70"/>
                                             <Button Content="Delete" FontWeight="Bold" Height="30" Width="70" HorizontalAlignment="Right"></Button>
                                         </WrapPanel>
