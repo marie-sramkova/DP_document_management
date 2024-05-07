@@ -48,6 +48,7 @@ namespace WpfPrototype
         private BitmapImage bitmap;
         TesseractOCR tesseractORM;
         BtnSaveState btnSaveState = BtnSaveState.CREATE_TEMPLATE;
+        bool changeValueOfTextBoxAvailable = false;
 
         public class Model : NotifyPropertyChangedBase 
         {
@@ -451,6 +452,7 @@ namespace WpfPrototype
 
         private void ListViewTemplatesAndAttributes_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            changeValueOfTextBoxAvailable = true;
             buttonSave.Content = "Save";
             buttonSave.Visibility = Visibility.Visible;
             btnSaveState = BtnSaveState.SAVE_ANALYZED_FILE;
@@ -463,6 +465,7 @@ namespace WpfPrototype
             {
                 CalculateAverageAttributeLocation(attr);
             }
+            changeValueOfTextBoxAvailable = false;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -556,8 +559,12 @@ namespace WpfPrototype
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
             }
-            string value = GetAttributeValue(attr);
-            attr.Value = value;
+            if (changeValueOfTextBoxAvailable == true && attr != null && attr.StartingXLocation != 0 && attr.StartingYLocation != 0 && attr.EndingXLocation != attr.StartingXLocation && attr.EndingYLocation != attr.StartingYLocation)
+            {
+                string value = GetAttributeValue(attr);
+                attr.Value = value;
+                imgAnalyzedDocument.Source = bitmap;
+            }
             imgAnalyzedDocument.Source = bitmap;
         }
 
@@ -593,8 +600,10 @@ namespace WpfPrototype
             int sumOfStartingYLocation = 0;
             int sumOfEndingXLocation = 0;
             int sumOfEndingYLocation = 0;
-            foreach (DocFile docFile in FileEditor.Instance.SettingsEntity.DocFiles)
+            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
+            foreach (DocFile docFileFromTemplate in selectedTemplate.DocFiles)
             {
+                DocFile docFile = FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == docFileFromTemplate.FilePath);
                 DocAttribute docAttr = docFile.DocAttributes.SingleOrDefault(x => x.Name == attr.Name);
                 if (docAttr != null && docAttr.EndingYLocation != 0 && docAttr.StartingXLocation != docAttr.EndingXLocation && docAttr.StartingYLocation != docAttr.EndingYLocation)
                 {
@@ -635,6 +644,7 @@ namespace WpfPrototype
 
         private void imgAnalyzedDocument_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            changeValueOfTextBoxAvailable = true;
             if (lastSelectedDocAttribute != null)
             {
                 System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
@@ -673,6 +683,7 @@ namespace WpfPrototype
                 //todo: read selected part of image to value (textBox)
                 //show what is selected
             }
+            changeValueOfTextBoxAvailable = false;
         }
 
         private void recalculateNewLocationsFromPixels(MouseButtonEventArgs e)
@@ -738,6 +749,9 @@ namespace WpfPrototype
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
+            Model newModel = this.DataContext as Model;
+            this.model = newModel;
+            this.DataContext = model;
             ShowImage();
             lastSelectedDocAttribute = null;
             ShowImageWithAllAttributeBoundaries();
@@ -776,20 +790,6 @@ namespace WpfPrototype
             TextBox_GotFocus((sender as TextBox), e);
         }
 
-        //private void listViewAttributes_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    DocAttribute docAttribute = (sender as ListView).SelectedItem as DocAttribute;
-        //    int i = (sender as ListView).SelectedIndex;
-        //    if (docAttribute != null)
-        //    {
-        //        TextBox_GotFocus(docAttribute, e);
-        //    }
-        //    else
-        //    {
-        //        TextBox_GotFocus(sender, e);
-
-        //    }
-        //}
 
         private void listViewAttributes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
