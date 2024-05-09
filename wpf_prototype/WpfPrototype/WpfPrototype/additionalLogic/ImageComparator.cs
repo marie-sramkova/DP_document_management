@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 
@@ -12,39 +14,62 @@ namespace WpfPrototype.additionalLogic
     {
         public static double CompareImagesAndReturnPercentageOfSimilarity(Image firstImage, Image secondImage)
         {
-            Image newFirstImage = new Bitmap(firstImage);
-            Image newSecondImage = new Bitmap(secondImage);
             double similarityPercentage = 0.0;
-            if (firstImage != null && secondImage != null)
+            if (firstImage != null && secondImage != null && ((firstImage.Width > firstImage.Height) == (secondImage.Width > secondImage.Height)))
             {
+                Image newFirstImage = new Bitmap(firstImage);
+                Image newSecondImage = new Bitmap(secondImage);
+            
                 MakeImagesTheSameSize(newFirstImage, newSecondImage);
+
+                firstImage = MakeImageBlackAndWhite(newFirstImage);
+                secondImage = MakeImageBlackAndWhite(newSecondImage);
+
+
+                similarityPercentage = CompareTwoImagesAndReturnSimilarityPercentage(newFirstImage, newSecondImage);
             }
             return similarityPercentage;
         }
 
         private static void MakeImagesTheSameSize(Image firstImage, Image secondImage)
         {
-            int minX = firstImage.Width;
-            int minY = firstImage.Height;
-            if (secondImage.Width > minX) { minX = secondImage.Width; }
-            if (secondImage.Height > minY) { minY = secondImage.Height; }
-            if (firstImage.Width > minX || firstImage.Height > minY)
+            firstImage = ResizeImage(firstImage, new Size(100, 160));
+            secondImage = ResizeImage(secondImage, new Size(100, 160));
+        }
+
+        private unsafe static double CompareTwoImagesAndReturnSimilarityPercentage(Image firstImage, Image secondImage)
+        {
+            double similarityPercentage = 0.0;
+            if (firstImage.Width == secondImage.Width && firstImage.Height == secondImage.Height)
             {
-                firstImage = ResizeImage(firstImage, new Size(minX, minY));
+
+                int countOfSamePixels = 0;
+                Bitmap firstBitmap = new Bitmap(firstImage);
+                Bitmap secondBitmap = new Bitmap(secondImage);
+                BitmapData firstBitmapData = firstBitmap.LockBits(new Rectangle(0, 0, firstImage.Width, firstImage.Height), ImageLockMode.ReadWrite, firstBitmap.PixelFormat);
+                BitmapData secondBitmapData = secondBitmap.LockBits(new Rectangle(0, 0, secondImage.Width, secondImage.Height), ImageLockMode.ReadWrite, secondBitmap.PixelFormat);
+                byte* scan0FirstImage = (byte*)firstBitmapData.Scan0.ToPointer();
+                int strideFirstImage = firstBitmapData.Stride / 4;
+
+                byte* scan0SecondImage = (byte*)secondBitmapData.Scan0.ToPointer();
+                int strideSecondImage = secondBitmapData.Stride / 4;
+
+
+                for (int i = 0; i < firstBitmapData.Width; ++i)
+                {
+                    for (int j = 0; j < firstBitmapData.Height; ++j)
+                    {
+                        UInt32 pixelColourFirstImage = scan0FirstImage[(i * strideFirstImage) + j];
+                        UInt32 pixelColourSecondImage = scan0SecondImage[(i * strideSecondImage) + j];
+                        if (pixelColourFirstImage == pixelColourSecondImage) { countOfSamePixels = countOfSamePixels + 1; }
+                    }
+                }
+
+                firstBitmap.UnlockBits(firstBitmapData);
+                secondBitmap.UnlockBits(secondBitmapData);
+                similarityPercentage = (countOfSamePixels * 100) / (firstImage.Width * firstImage.Height);
             }
-            if (secondImage.Width > minX || secondImage.Height > minY)
-            {
-                secondImage = ResizeImage(secondImage, new Size(minX, minY));
-            }
-            firstImage = ResizeImage(firstImage, new Size(50, 80));
-            secondImage = ResizeImage(secondImage, new Size(50, 80));
-
-            firstImage = MakeImageBlackAndWhite(firstImage);
-            secondImage = MakeImageBlackAndWhite(secondImage);
-
-            firstImage.Save("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\newImage2.jpg");
-            secondImage.Save("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\newImage.jpg");
-
+            return similarityPercentage;
         }
 
         private static Image MakeImageBlackAndWhite(Image img)

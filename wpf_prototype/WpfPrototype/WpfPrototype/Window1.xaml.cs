@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
@@ -54,9 +55,22 @@ namespace WpfPrototype
         {
             private BindingList<DocAttribute> _BindingAttributes;
             public BindingList<DocAttribute> BindingAttributes { get { return _BindingAttributes; } set { _BindingAttributes = value; RaisePropertyChanged(nameof(BindingAttributes)); } }
-            private BindingList<Template> _BindingTemplates;
-            public BindingList<Template> BindingTemplates { get { return _BindingTemplates; } set { _BindingTemplates = value; RaisePropertyChanged(nameof(BindingTemplates)); } }
+            private BindingList<TemplateWithPercentage> _BindingTemplates;
+            public BindingList<TemplateWithPercentage> BindingTemplates { get { return _BindingTemplates; } set { _BindingTemplates = value; RaisePropertyChanged(nameof(BindingTemplates)); } }
+        }
 
+        public class TemplateWithPercentage : Template
+        {
+            private double _SimilarityPercentage;
+            public double SimilarityPercentage { get { return _SimilarityPercentage; } set { _SimilarityPercentage = value; RaisePropertyChanged(nameof(SimilarityPercentage)); } }
+
+            public TemplateWithPercentage(string text) : base(text)
+            {
+                Name = text;
+                AllDocAttributes = new BindingList<DocAttribute>();
+                DocFiles = new BindingList<DocFile>();
+                SimilarityPercentage = 0.0;
+            }
         }
 
         private Model model;
@@ -64,9 +78,9 @@ namespace WpfPrototype
 
         public Window1()
         {
-            this.model = new Model();   
+            this.model = new Model();
             model.BindingAttributes = new BindingList<DocAttribute>();
-            model.BindingTemplates = new BindingList<Template>();
+            model.BindingTemplates = new BindingList<TemplateWithPercentage>();
             this.DataContext = model;
             InitializeComponent();
 
@@ -74,11 +88,10 @@ namespace WpfPrototype
             //this.WindowStyle = WindowStyle.None;
 
             tesseractORM = new TesseractOCR();
-            CreateTemplateButtons();
 
             foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
             {
-                if (docFile.DocAttributes.Count == 0)
+                if (docFile.DocAttributes.Count == 0 && (docFile.FilePath != UserSettings.settingsDocumentsFilePath && docFile.FilePath != UserSettings.settingsTemplatesFilePath))
                 {
                     analyzedFiles.Add(docFile);
                 }
@@ -91,16 +104,89 @@ namespace WpfPrototype
             }
             buttonLeft.IsEnabled = false;
 
+
+            CreateTemplateButtons();
+
             //todo: templates buttons
             SelectActualAnalyzedFile();
 
             ShowImage();
-            ConvertPdfToPng("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\Potvrzení lékaře CZ - kopie.pdf", "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\Potvrzení lékaře CZ - kopie.jpg");
-            ImageComparator.CompareImagesAndReturnPercentageOfSimilarity(new Bitmap(ConvertBitmapImageToDrawingBitmap(bitmap)), new System.Drawing.Bitmap("D:\\sramk\\Documents\\vysoka_skola\\diplomka\\zkusebniSlozka\\Potvrzení lékaře CZ - kopie.jpg"));
+
+
+            foreach (var template in this.model.BindingTemplates)
+            {
+                double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
+                template.SimilarityPercentage = finalPercentage;
+            }
+        }
+
+        private double CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(Template template)
+        {
+            double sumOfPercentage = 0;
+            int countOfPercentage = 0;
+            double finalPercentage = 0.0;
+            foreach (DocFile file in template.DocFiles)
+            {
+                if (file.FilePath.EndsWith("pdf"))
+                {
+                    ConvertPdfToImage(file.FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\imageToCompare.jpg");
+                }
+                else if (file.FilePath.EndsWith("png"))
+                {
+                    System.Drawing.Image imageToCompare = null;
+                    using (FileStream fs = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
+                    {
+                        imageToCompare = System.Drawing.Image.FromStream(fs);
+                    }
+                    imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/imageToCompare.jpg");
+                }
+                else
+                {
+                    try
+                    {
+                        System.Drawing.Image imageToCompare = null;
+                        using (FileStream fs = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
+                        {
+                            imageToCompare = System.Drawing.Image.FromStream(fs);
+                        }
+                        imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/imageToCompare.jpg");
+                    }
+                    catch (Exception ex)
+                    {
+                        //todo: another file formats to show as png
+                    }
+                }
+                try
+                {
+                    System.Drawing.Image actualImage = null;
+                    using (FileStream fs = new FileStream(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg", FileMode.Open, FileAccess.Read))
+                    {
+                        actualImage = System.Drawing.Image.FromStream(fs);
+                    }
+                    
+                    System.Drawing.Image imageToCompare = null;
+                    using (FileStream fs = new FileStream(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
+                    {
+                        imageToCompare = System.Drawing.Image.FromStream(fs);
+                    }
+                    
+                    double similarityPercentage = ImageComparator.CompareImagesAndReturnPercentageOfSimilarity(imageToCompare, actualImage);
+                    sumOfPercentage = sumOfPercentage + similarityPercentage;
+                    countOfPercentage = countOfPercentage + 1;
+                }
+                catch (Exception e)
+                {
+                    //todo: cant compare these to images
+                }
+            }
+
+            finalPercentage = sumOfPercentage / countOfPercentage;
+            return finalPercentage;
         }
 
         private void ShowImage()
         {
+            
             Uri uri = new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg", UriKind.RelativeOrAbsolute);
             bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -117,20 +203,29 @@ namespace WpfPrototype
 
             if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf"))
             {
-                ConvertPdfToPng(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.jpg");
+                ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.jpg");
             }
             else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
             {
-                File.Delete(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
-                File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
+                System.Drawing.Image imageToCompare = null;
+                using (FileStream fs = new FileStream(analyzedFiles[pointerToActualAnalyzedFile].FilePath, FileMode.Open, FileAccess.Read))
+                {
+                    imageToCompare = System.Drawing.Image.FromStream(fs);
+                }
+                imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
             }
             else
             {
                 try
                 {
-                    File.Delete(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
-                    File.Copy(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
-                }catch(Exception ex)
+                    System.Drawing.Image imageToCompare = null;
+                    using (FileStream fs = new FileStream(analyzedFiles[pointerToActualAnalyzedFile].FilePath, FileMode.Open, FileAccess.Read))
+                    {
+                        imageToCompare = System.Drawing.Image.FromStream(fs);
+                    }
+                    imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
+                }
+                catch(Exception ex)
                 {
                     //todo: cannot convert file to out.png to show image view
                     if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
@@ -147,17 +242,20 @@ namespace WpfPrototype
         {
             buttonSave.Content = "Create new template";
 
-            BindingList<Template> templates = new BindingList<Template>();
+            BindingList<TemplateWithPercentage> templates = new BindingList<TemplateWithPercentage>();
 
             foreach (Template template in FileEditor.Instance.SettingsEntity.Templates)
             {
-                templates.Add(template);
+                TemplateWithPercentage newTemplate = new TemplateWithPercentage(template.Name);
+                newTemplate.DocFiles = template.DocFiles;
+                newTemplate.AllDocAttributes = template.AllDocAttributes;
+                templates.Add(newTemplate);
             }
 
             model.BindingTemplates = templates;
         }
 
-        private static void ConvertPdfToPng(String inputPdfPath, String outputPngPath)
+        private static void ConvertPdfToImage(String inputPdfPath, String outputPngPath)
         {
             using (FileStream fileIn = new FileStream(inputPdfPath, FileMode.Open, FileAccess.Read))
             {
@@ -191,7 +289,6 @@ namespace WpfPrototype
                 if (docsAttrs == null)
                 {
                     return;
-                    //FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>());
                 }
                 else
                 {
@@ -224,7 +321,7 @@ namespace WpfPrototype
 
         private void ButtonNewTemplate_Click(object sender, RoutedEventArgs e)
         {
-            model.BindingTemplates = new BindingList<Template>();
+            model.BindingTemplates = new BindingList<TemplateWithPercentage>();
             buttonSave.Visibility = Visibility.Hidden;
 
             //todo: new template form
@@ -279,13 +376,6 @@ namespace WpfPrototype
                     allAttributes.Add(attr);
                 }
             }
-            //if (analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Count > 0)
-            //{
-            //    foreach (DocAttribute attribute in analyzedFiles[pointerToActualAnalyzedFile].DocAttributes)
-            //    {
-            //        docAttributes.Add(attribute);
-            //    }
-            //}
 
             ShowImageWithAllAttributeBoundaries();
 
@@ -298,7 +388,6 @@ namespace WpfPrototype
                 ButtonNewAttribute_Click(selectedTemplate);
             };
             templateAndAttributeStackPanel.Children.Add(buttonNewAttribute);
-
         }
 
         private void ShowImageWithAllAttributeBoundaries()
@@ -345,14 +434,13 @@ namespace WpfPrototype
                             AddAttributeBoundariesToBitmap(actualAttribute);
                         }
                     }
-
                 }
             }
         }
 
         private void ButtonNewAttribute_Click(Template template)
         {
-            model.BindingTemplates = new BindingList<Template>();
+            model.BindingTemplates = new BindingList<TemplateWithPercentage>();
             buttonSave.Visibility = Visibility.Hidden;
 
             //todo: new template form
@@ -416,10 +504,17 @@ namespace WpfPrototype
             listView2.Height = new GridLength(0, GridUnitType.Star);
             listView.Height = new GridLength(91, GridUnitType.Star);
             panel.Height = new GridLength(0, GridUnitType.Star);
+
             CreateTemplateButtons();
             SelectActualAnalyzedFile();
 
             ShowImage();
+
+            foreach (var template in this.model.BindingTemplates)
+            {
+                double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
+                template.SimilarityPercentage = finalPercentage;
+            }
         }
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
@@ -450,6 +545,12 @@ namespace WpfPrototype
             SelectActualAnalyzedFile();
 
             ShowImage();
+
+            foreach (var template in this.model.BindingTemplates)
+            {
+                double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
+                template.SimilarityPercentage = finalPercentage;
+            }
         }
 
         private void ListViewTemplatesAndAttributes_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -485,7 +586,6 @@ namespace WpfPrototype
             {
                 ShowImage();
                 AddAttributeBoundariesToBitmap(attr);
-
             }
             else
             {
@@ -671,19 +771,6 @@ namespace WpfPrototype
 
                     labelSelectedFile.Content = value;
                 }
-
-
-
-                //ImageConverter converter = new ImageConverter();
-                //string text = tesseractORM.GetTextFromImage((byte[])converter.ConvertTo(ConvertBitmapImageToDrawingBitmap(bitmap), typeof(byte[])));
-                //Debug.WriteLine(text);
-
-                //labelSelectedFile.Content = text;
-
-
-
-                //todo: read selected part of image to value (textBox)
-                //show what is selected
             }
             changeValueOfTextBoxAvailable = false;
         }
@@ -693,7 +780,6 @@ namespace WpfPrototype
             if (lastSelectedDocAttribute.StartingXLocation == lastSelectedDocAttribute.EndingXLocation || lastSelectedDocAttribute.StartingYLocation == lastSelectedDocAttribute.EndingYLocation)
             {
                 int indexOfxistingAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.IndexOf(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name));
-                //lastSelectedDocAttribute = /*FileEditor.Instance.SettingsEntity.DocFiles.Find(x => x.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath).DocAttributes.Find(y => y.Name == lastSelectedDocAttribute.Name);
                 if (indexOfxistingAttribute >= 0 && (analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingXLocation != analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingXLocation && analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].StartingYLocation != analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute].EndingYLocation))
                 {
                     lastSelectedDocAttribute = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes[indexOfxistingAttribute];
