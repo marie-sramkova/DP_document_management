@@ -37,6 +37,7 @@
                                     <DataTemplate>
                                         <WrapPanel>
                                             <Label Content="{Binding Name}"/>
+                                            <Label Content="{Binding SimilarityPercentage}"/>
                                         </WrapPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
