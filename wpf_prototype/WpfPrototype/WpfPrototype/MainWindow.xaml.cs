@@ -41,6 +41,7 @@ namespace WpfPrototype
 
         public MainWindow()
         {
+            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data");
             this.model = new Model();
             this.model.SettingsEntity = FileEditor.Instance.SettingsEntity;
             foreach (var template in model.SettingsEntity.Templates)

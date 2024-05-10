@@ -78,6 +78,7 @@ namespace WpfPrototype
 
         public Window1()
         {
+            //System.Diagnostics.Debugger.Launch();
             this.model = new Model();
             model.BindingAttributes = new BindingList<DocAttribute>();
             model.BindingTemplates = new BindingList<TemplateWithPercentage>();
@@ -118,6 +119,7 @@ namespace WpfPrototype
                 double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
                 template.SimilarityPercentage = finalPercentage;
             }
+            labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
         }
 
         private double CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(Template template)
@@ -129,7 +131,7 @@ namespace WpfPrototype
             {
                 if (file.FilePath.EndsWith("pdf"))
                 {
-                    ConvertPdfToImage(file.FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\imageToCompare.jpg");
+                    ConvertPdfToImage(file.FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\imageToCompare.jpg");
                 }
                 else if (file.FilePath.EndsWith("png"))
                 {
@@ -138,7 +140,7 @@ namespace WpfPrototype
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
-                    imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/imageToCompare.jpg");
+                    imageToCompare.Save((Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)) + "/data/imageToCompare.jpg");
                 }
                 else
                 {
@@ -159,13 +161,13 @@ namespace WpfPrototype
                 try
                 {
                     System.Drawing.Image actualImage = null;
-                    using (FileStream fs = new FileStream(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg", FileMode.Open, FileAccess.Read))
+                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg", FileMode.Open, FileAccess.Read))
                     {
                         actualImage = System.Drawing.Image.FromStream(fs);
                     }
                     
                     System.Drawing.Image imageToCompare = null;
-                    using (FileStream fs = new FileStream(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
+                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
@@ -187,7 +189,7 @@ namespace WpfPrototype
         private void ShowImage()
         {
             
-            Uri uri = new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg", UriKind.RelativeOrAbsolute);
+            Uri uri = new Uri(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg", UriKind.RelativeOrAbsolute);
             bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
@@ -203,7 +205,7 @@ namespace WpfPrototype
 
             if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf"))
             {
-                ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\data\\out.jpg");
+                ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\out.jpg");
             }
             else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
             {
@@ -212,7 +214,7 @@ namespace WpfPrototype
                 {
                     imageToCompare = System.Drawing.Image.FromStream(fs);
                 }
-                imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
+                imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg");
             }
             else
             {
@@ -223,7 +225,7 @@ namespace WpfPrototype
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
-                    imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.jpg");
+                    imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg");
                 }
                 catch(Exception ex)
                 {
@@ -515,6 +517,8 @@ namespace WpfPrototype
                 double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
                 template.SimilarityPercentage = finalPercentage;
             }
+
+            labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
         }
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
@@ -551,6 +555,8 @@ namespace WpfPrototype
                 double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
                 template.SimilarityPercentage = finalPercentage;
             }
+
+            labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
         }
 
         private void ListViewTemplatesAndAttributes_MouseDoubleClick(object sender, MouseButtonEventArgs e)
