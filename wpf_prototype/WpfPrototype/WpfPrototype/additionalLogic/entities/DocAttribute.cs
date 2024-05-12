@@ -10,21 +10,10 @@ namespace WpfPrototype.additionalLogic.entities
 {
     public class DocAttribute : NotifyPropertyChangedBase
     {
-
-        //public String Name { get; set; }
-        //public String Value { get; set; }
-        //public String Type { get; set; }
-        //public int StartingXLocation { get; set; }
-        //public int StartingYLocation { get; set; }
-        //public int EndingXLocation { get; set; }
-        //public int EndingYLocation { get; set; }
         private String _Name;
         public String Name { get { return _Name; } set { _Name = value; RaisePropertyChanged(nameof(Name)); } }
-
-        //public String Value { get; set; }
         private String _Value;
         public String Value { get { return _Value; } set { _Value = value; RaisePropertyChanged(nameof(Value)); } }
-
         private String _Type;
         public String Type { get { return _Type; } set { _Type = value; RaisePropertyChanged(nameof(Value)); } }
         private int _StartingXLocation;

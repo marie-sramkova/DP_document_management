@@ -78,15 +78,11 @@ namespace WpfPrototype
 
         public Window1()
         {
-            //System.Diagnostics.Debugger.Launch();
             this.model = new Model();
             model.BindingAttributes = new BindingList<DocAttribute>();
             model.BindingTemplates = new BindingList<TemplateWithPercentage>();
             this.DataContext = model;
             InitializeComponent();
-
-            //this.WindowState = WindowState.Maximized;
-            //this.WindowStyle = WindowStyle.None;
 
             tesseractORM = new TesseractOCR();
 
@@ -98,7 +94,6 @@ namespace WpfPrototype
                 }
             }
 
-            //buttonSave.Visibility = Visibility.Hidden;
             if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
             {
                 buttonRight.IsEnabled = false;
@@ -107,12 +102,8 @@ namespace WpfPrototype
 
 
             CreateTemplateButtons();
-
-            //todo: templates buttons
             SelectActualAnalyzedFile();
-
             ShowImage();
-
 
             foreach (var template in this.model.BindingTemplates)
             {
@@ -131,7 +122,7 @@ namespace WpfPrototype
             {
                 if (file.FilePath.EndsWith("pdf"))
                 {
-                    ConvertPdfToImage(file.FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\imageToCompare.jpg");
+                    ConvertPdfToImage(file.FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\imageToCompare.jpg");
                 }
                 else if (file.FilePath.EndsWith("png"))
                 {
@@ -140,7 +131,7 @@ namespace WpfPrototype
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
-                    imageToCompare.Save((Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)) + "/data/imageToCompare.jpg");
+                    imageToCompare.Save((Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)) + "/data/DocumentManagementApp/imageToCompare.jpg");
                 }
                 else
                 {
@@ -151,7 +142,7 @@ namespace WpfPrototype
                         {
                             imageToCompare = System.Drawing.Image.FromStream(fs);
                         }
-                        imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/imageToCompare.jpg");
+                        imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/DocumentManagementApp/imageToCompare.jpg");
                     }
                     catch (Exception ex)
                     {
@@ -161,13 +152,13 @@ namespace WpfPrototype
                 try
                 {
                     System.Drawing.Image actualImage = null;
-                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg", FileMode.Open, FileAccess.Read))
+                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg", FileMode.Open, FileAccess.Read))
                     {
                         actualImage = System.Drawing.Image.FromStream(fs);
                     }
                     
                     System.Drawing.Image imageToCompare = null;
-                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
+                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
@@ -183,13 +174,17 @@ namespace WpfPrototype
             }
 
             finalPercentage = sumOfPercentage / countOfPercentage;
+            if (Double.IsNaN(finalPercentage))
+            {
+                finalPercentage = 0.0;
+            }
             return finalPercentage;
         }
 
         private void ShowImage()
         {
             
-            Uri uri = new Uri(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg", UriKind.RelativeOrAbsolute);
+            Uri uri = new Uri(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg", UriKind.RelativeOrAbsolute);
             bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
@@ -197,15 +192,13 @@ namespace WpfPrototype
             bitmap.UriSource = uri;
             bitmap.EndInit();
             imgAnalyzedDocument.Source = bitmap;
-            //File.Delete(uri.AbsolutePath);
         }
 
         private void SelectActualAnalyzedFile()
         {
-
             if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf"))
             {
-                ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\out.jpg");
+                ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
             }
             else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
             {
@@ -214,7 +207,7 @@ namespace WpfPrototype
                 {
                     imageToCompare = System.Drawing.Image.FromStream(fs);
                 }
-                imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg");
+                imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
             }
             else
             {
@@ -225,7 +218,7 @@ namespace WpfPrototype
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
-                    imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg");
+                    imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
                 }
                 catch(Exception ex)
                 {
@@ -243,9 +236,7 @@ namespace WpfPrototype
         private void CreateTemplateButtons()
         {
             buttonSave.Content = "Create new template";
-
             BindingList<TemplateWithPercentage> templates = new BindingList<TemplateWithPercentage>();
-
             foreach (Template template in FileEditor.Instance.SettingsEntity.Templates)
             {
                 TemplateWithPercentage newTemplate = new TemplateWithPercentage(template.Name);
@@ -253,7 +244,6 @@ namespace WpfPrototype
                 newTemplate.AllDocAttributes = template.AllDocAttributes;
                 templates.Add(newTemplate);
             }
-
             model.BindingTemplates = templates;
         }
 
@@ -338,7 +328,6 @@ namespace WpfPrototype
             templateAndAttributeStackPanel.Children.Add(txtBoxTemplateName);
             //todo: change label to space
             templateAndAttributeStackPanel.Children.Add(new Label());
-            //buttonSave.Visibility = Visibility.Visible;
 
             Button buttonNewTemplate = new Button();
             buttonNewTemplate.Content = "Create";
@@ -378,9 +367,7 @@ namespace WpfPrototype
                     allAttributes.Add(attr);
                 }
             }
-
             ShowImageWithAllAttributeBoundaries();
-
             model.BindingAttributes = allAttributes;
 
             Button buttonNewAttribute = new Button();
@@ -408,7 +395,6 @@ namespace WpfPrototype
                     }
                 }
             }
-
 
             if (selectedTemplate != null && allAttributes.Count > 0)
             {
@@ -444,8 +430,6 @@ namespace WpfPrototype
         {
             model.BindingTemplates = new BindingList<TemplateWithPercentage>();
             buttonSave.Visibility = Visibility.Hidden;
-
-            //todo: new template form
             panel.Height = new GridLength(51, GridUnitType.Star);
             listView.Height = new GridLength(0, GridUnitType.Star);
             templateAndAttributeStackPanel.VerticalAlignment = VerticalAlignment.Center;
@@ -465,7 +449,6 @@ namespace WpfPrototype
             templateAndAttributeStackPanel.Children.Add(attributeComboBox);
             //todo: change label to space
             templateAndAttributeStackPanel.Children.Add(new Label());
-            //buttonSave.Visibility = Visibility.Visible;
 
             Button buttonNewAttribute = new Button();
             buttonNewAttribute.Content = "Create";
@@ -519,6 +502,7 @@ namespace WpfPrototype
             }
 
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
+            //this.DataContext = model;
         }
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
@@ -567,7 +551,6 @@ namespace WpfPrototype
             btnSaveState = BtnSaveState.SAVE_ANALYZED_FILE;
             Template selectedTemplate = (Template)listViewTemplates.SelectedItems[0];
             FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
-            //todo: show listview with attributes
             CreateAttributeListView(selectedTemplate);
 
             foreach (var attr in model.BindingAttributes)
@@ -609,13 +592,10 @@ namespace WpfPrototype
             }
             Bitmap source = new Bitmap(ConvertBitmapImageToDrawingBitmap(bitmap));
             Bitmap cuttedBitmap = source.Clone(new System.Drawing.Rectangle(attr.StartingXLocation, attr.StartingYLocation, attr.EndingXLocation - attr.StartingXLocation, attr.EndingYLocation - attr.StartingYLocation), source.PixelFormat);
-            cuttedBitmap.Save(UserSettings.directoryPath+"\\tmp.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-
-
+            cuttedBitmap.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/tmp.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             ImageConverter converter = new ImageConverter();
             string text = tesseractORM.GetTextFromImage((byte[])converter.ConvertTo(cuttedBitmap, typeof(byte[])));
-
-            File.Delete(UserSettings.directoryPath + "\\tmp.jpg");
+            File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/tmp.jpg");
             return text;
         }
 
@@ -632,11 +612,7 @@ namespace WpfPrototype
 
             Bitmap bitmap2 = ConvertBitmapImageToDrawingBitmap(bitmap);
 
-
-            //G.DrawImage(System.Drawing.Image.FromFile(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png"), 0, 0);
             graphics.DrawImage(bitmap2, 0, 0);
-
-            
 
             if (attr.StartingXLocation < outputImage.Width && attr.EndingXLocation < outputImage.Width && attr.StartingYLocation < outputImage.Height && attr.EndingYLocation < outputImage.Height)
             {
@@ -745,8 +721,6 @@ namespace WpfPrototype
                 System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
                 lastSelectedDocAttribute.StartingXLocation = (int)p.X;
                 lastSelectedDocAttribute.StartingYLocation = (int)p.Y;
-
-                //todo: show what is selected
             }
         }
 
@@ -773,7 +747,6 @@ namespace WpfPrototype
                     Debug.WriteLine(value);
                     model.BindingAttributes = docsAttrs;
                     listViewAttributes.SelectedItem = lastSelectedDocAttribute;
-
 
                     labelSelectedFile.Content = value;
                 }

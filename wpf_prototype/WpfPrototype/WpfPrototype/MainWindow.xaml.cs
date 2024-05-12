@@ -41,8 +41,35 @@ namespace WpfPrototype
 
         public MainWindow()
         {
-            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data");
-            this.model = new Model();
+            String filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/folderPath.txt";
+            String dirPath = "";
+            if (File.Exists(filePath))
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    dirPath = reader.ReadToEnd();
+                }
+                if (dirPath != "" && Directory.Exists(dirPath))
+                {
+                    UserSettings.directoryPath = dirPath;
+                    this.model = new Model();
+                    InitializeComponent();
+                    ShowListViewWithTemplatesFilesAndAttributes();
+                    CalculateAndShowNewDocsToAnalyze();
+                }
+                else
+                {
+                    ButtonSettings_Click(null, null);
+                }
+            } 
+            else
+            {
+                ButtonSettings_Click(null, null);
+            }
+        }
+
+        private void ShowListViewWithTemplatesFilesAndAttributes()
+        {
             this.model.SettingsEntity = FileEditor.Instance.SettingsEntity;
             foreach (var template in model.SettingsEntity.Templates)
             {
@@ -79,7 +106,7 @@ namespace WpfPrototype
                     }
                     else
                     {
-                        if(!tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Any(x => x.FilePath == file.FilePath))
+                        if (!tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Any(x => x.FilePath == file.FilePath))
                         {
                             tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Add(file);
                         }
@@ -88,18 +115,7 @@ namespace WpfPrototype
             }
 
             model.SettingsEntity = tmpSettingsEntity;
-
             this.DataContext = model;
-            InitializeComponent();
-            ShowListViewWithTemplatesFilesAndAttributes();
-            CalculateAndShowNewDocsToAnalyze();
-
-            //model.SettingsEntity = FileEditor.Instance.SettingsEntity;
-        }
-
-        private void ShowListViewWithTemplatesFilesAndAttributes()
-        {
-            //this.model.SettingsEntity = FileEditor.Instance.SettingsEntity;
         }
 
         private void CalculateAndShowNewDocsToAnalyze()
@@ -175,10 +191,9 @@ namespace WpfPrototype
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
-
-            //model.SettingsEntity = FileEditor.Instance.SettingsEntity;
-            //model.SettingsEntity.Templates = FileEditor.Instance.SettingsEntity.Templates;
-            //todo: open new window with settings
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.Show();
+            Close();
         }
     }
 }

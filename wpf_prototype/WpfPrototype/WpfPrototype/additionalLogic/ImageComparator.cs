@@ -74,7 +74,7 @@ namespace WpfPrototype.additionalLogic
 
         private static Image MakeImageBlackAndWhite(Image img)
         {
-            using (Graphics gr = Graphics.FromImage(img)) // SourceImage is a Bitmap object
+            using (Graphics gr = Graphics.FromImage(img))
             {
                 var gray_matrix = new float[][] {
                 new float[] { 0.299f, 0.299f, 0.299f, 0, 0 },
@@ -86,7 +86,7 @@ namespace WpfPrototype.additionalLogic
 
                 var ia = new System.Drawing.Imaging.ImageAttributes();
                 ia.SetColorMatrix(new System.Drawing.Imaging.ColorMatrix(gray_matrix));
-                ia.SetThreshold((float)0.8); // Change this threshold as needed
+                ia.SetThreshold((float)0.8); 
                 var rc = new Rectangle(0, 0, img.Width, img.Height);
                 gr.DrawImage(img, rc, 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, ia);
             }

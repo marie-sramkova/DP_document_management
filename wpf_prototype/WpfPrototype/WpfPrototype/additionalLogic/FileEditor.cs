@@ -68,18 +68,6 @@ namespace WpfPrototype
             WriteSettingsEntityToFile();
         }
 
-        //todo: where to convert to entity, here? which string is input?
-        //public void AddNewFilesWithAttributes(List<string> files)
-        //{
-        //    foreach (var file in files)
-        //    {
-        //        List<DocAttribute> docAttributes = new List<DocAttribute>();
-        //        //todo: convert attributes from analyzed file to entities
-        //        DocFile newDoc = new DocFile(file, docAttributes);
-        //    }
-        //    //todo: save to file
-        //}
-
         private void ReadFileToSettingsEntity()
         {
             CreateEmptySettingsEntity();
@@ -156,8 +144,6 @@ namespace WpfPrototype
             if (!template.AllDocAttributes.Any(x => x.Name == docAttribute.Name))
             {
                 template.AllDocAttributes.Add(docAttribute);
-                //SettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).AllDocAttributes.Add(docAttribute);
-                //WriteSettingsEntityToFile();
             }
             else
             {
@@ -176,14 +162,10 @@ namespace WpfPrototype
                 DocFile docFile = SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName);
                 if (docFile != null)
                 {
-                    //docFile.DocAttributes = docAttributes;
                     foreach (DocAttribute attribute in docAttributes)
                     {
-                        //AddAttributeToTemplate(template, attribute);
                         AddAttributeToFileAndTemplate(fileName, attribute);
                     }
-
-                    //todo: calculate averageDocAttribute for template
                     WriteSettingsEntityToFile();
                 }
             }
@@ -208,8 +190,6 @@ namespace WpfPrototype
                     }
 
                     AddAttributeToTemplate(template, docAttribute);
-
-                    //todo: calculate averageDocAttribute for template
                     WriteSettingsEntityToFile();
                 }
             }
