@@ -14,7 +14,6 @@ namespace WpfPrototype.additionalLogic.ocr
     {
         public string GetTextFromImage(byte[] bytes)
         {
-            //Debug.WriteLine(new Uri(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/out.png", UriKind.RelativeOrAbsolute));
             var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\tessdata";
             using (var engine = new TesseractEngine(path, "ces", EngineMode.Default))
             {

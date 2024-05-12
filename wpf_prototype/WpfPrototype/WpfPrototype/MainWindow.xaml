@@ -85,18 +85,6 @@
                 <ColumnDefinition Width="98*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <!--<ListView ItemsSource="{Binding SettingsEntity.Templates}" x:Name="listView1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <WrapPanel>
-                            <Label Content="{Binding Name}"/>
-                        </WrapPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>-->
-
-
-
             <ListView x:Name="PLCLV" Grid.Column="1" Margin="10" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Visible" BorderThickness="0" ItemsSource="{Binding SettingsEntity.Templates}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem" >
@@ -125,23 +113,9 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="{Binding FilePath}"></TextBlock>
-                                            <!--<ListView Grid.Row="1" Margin="10" ItemsSource="{Binding DocAttributes}">
-                                                <ListView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Margin="5">   
-                                                                <Run Text = "{Binding Name}"/>
-                                                            </TextBlock>
-
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ListView.ItemTemplate>
-                                            </ListView>-->
                                             <ListView Grid.Row="1" Margin="0,10,0,0" VerticalAlignment="Top" AlternationCount="3" ScrollViewer.VerticalScrollBarVisibility="Hidden" BorderThickness="0 " ItemsSource="{Binding DocAttributes}">
                                                 <ListView.ItemContainerStyle>
                                                     <Style TargetType="ListViewItem">
-                                                        <!--<Setter Property="BorderBrush" Value="Gray" />
-                                                        <Setter Property="BorderThickness" Value="1,1,1,1" />-->
                                                         <Setter Property="Focusable" Value="False"/>
                                                     </Style>
                                                 </ListView.ItemContainerStyle>
@@ -157,7 +131,7 @@
                                                                 <RowDefinition/>
                                                                 <RowDefinition/>
                                                             </Grid.RowDefinitions>
-                                                            <Border BorderBrush="Gray" BorderThickness="1"> 
+                                                            <Border BorderBrush="Gray" BorderThickness="1">
                                                                 <Label Content="{Binding Name}"></Label>
                                                             </Border>
                                                             <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
@@ -175,117 +149,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-
-            <!--<ListView x:Name="PLCLV" Grid.Column="1" Margin="10" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Visible"  
-                           BorderThickness="0" ItemsSource="{Binding SettingsEntity.Templates}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem" >
-                        <Setter Property="IsHitTestVisible" Value="False"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding Name}"></TextBlock>
-                            <ListView Grid.Row="1" Margin="10" AlternationCount="2" ScrollViewer.VerticalScrollBarVisibility="Hidden"  
-                           BorderThickness="0 " ItemsSource="{Binding DocFiles}">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="IsHitTestVisible" Value="False"/>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding FilePath}"></TextBlock>
-                                            <ListView Grid.Row="1" Margin="10" AlternationCount="2" ScrollViewer.VerticalScrollBarVisibility="Hidden" BorderThickness="0 " ItemsSource="{Binding DocAttributes}">
-                                                <ListView.ItemContainerStyle>
-                                                    <Style TargetType="ListViewItem">
-                                                        <Setter Property="IsHitTestVisible" Value="False"/>
-                                                    </Style>
-                                                </ListView.ItemContainerStyle>
-                                                <ListView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Margin="5">  
-                                                            <Run Text = "FilePath: "/>  
-                                                            <Run Text = "{Binding Type}"/>
-                                                            </TextBlock>
-
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ListView.ItemTemplate>
-                                            </ListView>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>-->
-
-            <!--<StackPanel Grid.Column="1" >
-                <ItemsControl ItemsSource="{Binding SettingsEntity.Templates}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderThickness="1" BorderBrush="Green">
-                                <ItemsControl ItemsSource="{Binding DocFiles}" 
-                           ItemTemplate="{Binding FilePath}" >
-                                </ItemsControl>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>-->
-
-            <!--<ListView  ItemsSource="{Binding SettingsEntity.Template}" x:Name="listView1" Grid.Column="1">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Files" Width="450" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ItemsControl ItemsSource="{Binding DocAttributes}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal"></StackPanel>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border>
-                                                    <Border.Style>
-                                                        <Style TargetType="Border">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Name}" Value="red">
-                                                                    
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Border.Style>
-                                                    <TextBlock Text="{Binding Name, StringFormat='{}{0} '}"></TextBlock>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Templ" 
-                                DisplayMemberBinding="{Binding FilePath}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>-->
-
         </Grid>
         <Grid Grid.Row="7">
             <Grid.ColumnDefinitions>
