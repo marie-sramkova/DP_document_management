@@ -85,10 +85,11 @@ namespace WpfPrototype
             InitializeComponent();
 
             tesseractORM = new TesseractOCR();
+            ControleIfFileIsActual();
 
             foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
             {
-                if (docFile.DocAttributes.Count == 0 && (docFile.FilePath != UserSettings.settingsDocumentsFilePath && docFile.FilePath != UserSettings.settingsTemplatesFilePath))
+                if (docFile.DocAttributes.Count == 0 && (docFile.FilePath != UserSettings.settingsDocumentsFilePath && docFile.FilePath != UserSettings.settingsTemplatesFilePath) && docFile.FilePath.Contains(UserSettings.directoryPath))
                 {
                     analyzedFiles.Add(docFile);
                 }
@@ -111,6 +112,24 @@ namespace WpfPrototype
                 template.SimilarityPercentage = finalPercentage;
             }
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
+        }
+
+        private static void ControleIfFileIsActual()
+        {
+            BindingList<DocFile> docsToStore = new BindingList<DocFile>();
+            foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
+            {
+                if (!docFile.FilePath.Contains(UserSettings.directoryPath))
+                {
+                    docsToStore.Add(docFile);
+                }
+            }
+
+            foreach (var doc in docsToStore)
+            {
+                FileEditor.Instance.RemoveFileFromDocs(doc);
+            }
+            FileEditor.Instance.WriteSettingsEntityToFile();
         }
 
         private double CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(Template template)
@@ -217,32 +236,36 @@ namespace WpfPrototype
             }
             else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath))
             {
-                System.Drawing.Image imageToCompare = null;
+                System.Drawing.Image img = null;
                 using (FileStream fs = new FileStream(analyzedFiles[pointerToActualAnalyzedFile].FilePath, FileMode.Open, FileAccess.Read))
                 {
-                    imageToCompare = System.Drawing.Image.FromStream(fs);
+                    img = System.Drawing.Image.FromStream(fs);
                 }
-                imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
+                img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
             }
             else
             {
                 try
                 {
-                    System.Drawing.Image imageToCompare = null;
+                    System.Drawing.Image img = null;
                     using (FileStream fs = new FileStream(analyzedFiles[pointerToActualAnalyzedFile].FilePath, FileMode.Open, FileAccess.Read))
                     {
-                        imageToCompare = System.Drawing.Image.FromStream(fs);
+                        img = System.Drawing.Image.FromStream(fs);
                     }
-                    imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
+                    img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
                 }
                 catch (Exception ex)
                 {
                     //todo: cannot convert file to out.png to show image view
-                    if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
-                    {
-                        pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
-                        SelectActualAnalyzedFile();
-                    }
+                    FileEditor.Instance.SettingsEntity.DocFiles.Remove(FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath));
+                    FileEditor.Instance.WriteSettingsEntityToFile();
+                    analyzedFiles.Remove(analyzedFiles[pointerToActualAnalyzedFile]);
+                    SelectActualAnalyzedFile();
+                    //if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                    //{
+                    //    pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
+                    //    SelectActualAnalyzedFile();
+                    //}
                 }
                 //todo: another file formats to show as png
             }

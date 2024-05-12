@@ -32,6 +32,8 @@ namespace WpfPrototype
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
             Close();
         }
 
@@ -59,6 +61,10 @@ namespace WpfPrototype
             else
             {
                 SaveDirectoryPathPermanentlyToFileInApp();
+                var settingsDocumentsFile = File.Create(UserSettings.settingsDocumentsFilePath);
+                settingsDocumentsFile.Close();
+                var settingsTemplatesFile = File.Create(UserSettings.settingsTemplatesFilePath);
+                settingsTemplatesFile.Close();
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
                 Close();

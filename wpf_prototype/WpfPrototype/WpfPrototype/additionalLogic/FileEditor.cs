@@ -68,6 +68,14 @@ namespace WpfPrototype
             WriteSettingsEntityToFile();
         }
 
+        public void RemoveFileFromDocs(DocFile file)
+        {
+            if (SettingsEntity.DocFiles.Any( x => x.FilePath.Equals(file.FilePath)))
+            {
+                SettingsEntity.DocFiles.Remove(SettingsEntity.DocFiles.First(x => x.FilePath.Equals(file.FilePath)));
+            }
+        }
+
         private void ReadFileToSettingsEntity()
         {
             CreateEmptySettingsEntity();
