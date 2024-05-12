@@ -126,13 +126,13 @@ namespace WpfPrototype
             if (UserSettings.directoryPath != null)
             {
                 newFiles = Directory.GetFiles(UserSettings.directoryPath, "*", SearchOption.AllDirectories).ToList();
-                documentsCount = newFiles.Count - 2;
+                documentsCount = newFiles.Count;
                 if (FileEditor.Instance.SettingsEntity != null)
                 {
                     docFilesInSettingsFile = FileEditor.Instance.SettingsEntity.DocFiles;
                     foreach (DocFile docFileInSettingsFile in docFilesInSettingsFile)
                     {
-                        if (newFiles.Contains(docFileInSettingsFile.FilePath) && docFileInSettingsFile.DocAttributes.Count != 0)
+                        if ((newFiles.Any(x => x.Equals(docFileInSettingsFile.FilePath)) && docFileInSettingsFile.DocAttributes.Count != 0) || (newFiles.Any(x => x.Equals(docFileInSettingsFile.FilePath)) && !docFileInSettingsFile.FilePath.Contains(UserSettings.directoryPath)))
                         {
                             documentsCount = documentsCount - 1;
                         }
