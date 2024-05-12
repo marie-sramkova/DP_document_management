@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using System;
 using System.Collections;
@@ -139,11 +139,11 @@ namespace WpfPrototype
             double finalPercentage = 0.0;
             foreach (DocFile file in template.DocFiles)
             {
-                if (file.FilePath.EndsWith("pdf") && File.Exists(file.FilePath))
+                if (file.FilePath.EndsWith("pdf") && File.Exists(file.FilePath) && file.FilePath.Contains(UserSettings.directoryPath))
                 {
                     ConvertPdfToImage(file.FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\imageToCompare.jpg");
                 }
-                else if (file.FilePath.EndsWith("png") && File.Exists(file.FilePath))
+                else if (file.FilePath.EndsWith("png") && File.Exists(file.FilePath) && File.Exists(file.FilePath) && file.FilePath.Contains(UserSettings.directoryPath))
                 {
                     System.Drawing.Image imageToCompare = null;
                     using (FileStream fs = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
@@ -156,12 +156,15 @@ namespace WpfPrototype
                 {
                     try
                     {
-                        System.Drawing.Image imageToCompare = null;
-                        using (FileStream fs = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
+                        if (File.Exists(file.FilePath) && file.FilePath.Contains(UserSettings.directoryPath))
                         {
-                            imageToCompare = System.Drawing.Image.FromStream(fs);
+                            System.Drawing.Image imageToCompare = null;
+                            using (FileStream fs = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
+                            {
+                                imageToCompare = System.Drawing.Image.FromStream(fs);
+                            }
+                            imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
                         }
-                        imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
                     }
                     catch (Exception ex)
                     {
@@ -323,7 +326,7 @@ namespace WpfPrototype
                 else
                 {
                     FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
-                    analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
+                    //analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
                     if (analyzedFiles.Count == 0)
                     {
                         templateAndAttributeStackPanel.Children.Clear();
@@ -907,6 +910,27 @@ namespace WpfPrototype
             else
             {
                 TextBox_GotFocus(sender, e);
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var dialogResult = MessageBox.Show("Are you sure you want to remove the attribute?", "Attribute deletion", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dialogResult == MessageBoxResult.Yes)
+            {
+                DocAttribute attr;
+                try
+                {
+                    attr = (sender as FrameworkElement).DataContext as DocAttribute;
+                }
+                catch (NullReferenceException ex)
+                {
+                    attr = sender as DocAttribute;
+                }
+                if (attr != null)
+                {
+                    this.model.BindingAttributes.Remove(attr);
+                }
             }
         }
     }
