@@ -122,7 +122,7 @@ namespace WpfPrototype
             {
                 if (file.FilePath.EndsWith("pdf"))
                 {
-                    ConvertPdfToImage(file.FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\imageToCompare.jpg");
+                    ConvertPdfToImage(file.FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\imageToCompare.jpg");
                 }
                 else if (file.FilePath.EndsWith("png"))
                 {
@@ -131,7 +131,7 @@ namespace WpfPrototype
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
-                    imageToCompare.Save((Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)) + "/data/imageToCompare.jpg");
+                    imageToCompare.Save((Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)) + "/data/DocumentManagementApp/imageToCompare.jpg");
                 }
                 else
                 {
@@ -142,7 +142,7 @@ namespace WpfPrototype
                         {
                             imageToCompare = System.Drawing.Image.FromStream(fs);
                         }
-                        imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/imageToCompare.jpg");
+                        imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/DocumentManagementApp/imageToCompare.jpg");
                     }
                     catch (Exception ex)
                     {
@@ -152,13 +152,13 @@ namespace WpfPrototype
                 try
                 {
                     System.Drawing.Image actualImage = null;
-                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg", FileMode.Open, FileAccess.Read))
+                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg", FileMode.Open, FileAccess.Read))
                     {
                         actualImage = System.Drawing.Image.FromStream(fs);
                     }
                     
                     System.Drawing.Image imageToCompare = null;
-                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
+                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
@@ -174,13 +174,17 @@ namespace WpfPrototype
             }
 
             finalPercentage = sumOfPercentage / countOfPercentage;
+            if (Double.IsNaN(finalPercentage))
+            {
+                finalPercentage = 0.0;
+            }
             return finalPercentage;
         }
 
         private void ShowImage()
         {
             
-            Uri uri = new Uri(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg", UriKind.RelativeOrAbsolute);
+            Uri uri = new Uri(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg", UriKind.RelativeOrAbsolute);
             bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
@@ -194,7 +198,7 @@ namespace WpfPrototype
         {
             if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf"))
             {
-                ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\out.jpg");
+                ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
             }
             else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
             {
@@ -203,7 +207,7 @@ namespace WpfPrototype
                 {
                     imageToCompare = System.Drawing.Image.FromStream(fs);
                 }
-                imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg");
+                imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
             }
             else
             {
@@ -214,7 +218,7 @@ namespace WpfPrototype
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
-                    imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/out.jpg");
+                    imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
                 }
                 catch(Exception ex)
                 {
@@ -498,6 +502,7 @@ namespace WpfPrototype
             }
 
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
+            //this.DataContext = model;
         }
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
@@ -587,10 +592,10 @@ namespace WpfPrototype
             }
             Bitmap source = new Bitmap(ConvertBitmapImageToDrawingBitmap(bitmap));
             Bitmap cuttedBitmap = source.Clone(new System.Drawing.Rectangle(attr.StartingXLocation, attr.StartingYLocation, attr.EndingXLocation - attr.StartingXLocation, attr.EndingYLocation - attr.StartingYLocation), source.PixelFormat);
-            cuttedBitmap.Save(UserSettings.directoryPath+"\\tmp.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            cuttedBitmap.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/tmp.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             ImageConverter converter = new ImageConverter();
             string text = tesseractORM.GetTextFromImage((byte[])converter.ConvertTo(cuttedBitmap, typeof(byte[])));
-            File.Delete(UserSettings.directoryPath + "\\tmp.jpg");
+            File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/tmp.jpg");
             return text;
         }
 

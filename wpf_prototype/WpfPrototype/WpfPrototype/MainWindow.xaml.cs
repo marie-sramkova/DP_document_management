@@ -41,11 +41,31 @@ namespace WpfPrototype
 
         public MainWindow()
         {
-            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data");
-            this.model = new Model();
-            InitializeComponent();
-            ShowListViewWithTemplatesFilesAndAttributes();
-            CalculateAndShowNewDocsToAnalyze();
+            String filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/folderPath.txt";
+            String dirPath = "";
+            if (File.Exists(filePath))
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    dirPath = reader.ReadToEnd();
+                }
+                if (dirPath != "" && Directory.Exists(dirPath))
+                {
+                    UserSettings.directoryPath = dirPath;
+                    this.model = new Model();
+                    InitializeComponent();
+                    ShowListViewWithTemplatesFilesAndAttributes();
+                    CalculateAndShowNewDocsToAnalyze();
+                }
+                else
+                {
+                    ButtonSettings_Click(null, null);
+                }
+            } 
+            else
+            {
+                ButtonSettings_Click(null, null);
+            }
         }
 
         private void ShowListViewWithTemplatesFilesAndAttributes()
@@ -173,6 +193,7 @@ namespace WpfPrototype
         {
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.Show();
+            Close();
         }
     }
 }
