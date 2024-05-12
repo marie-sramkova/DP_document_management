@@ -51,7 +51,7 @@ namespace WpfPrototype
         BtnSaveState btnSaveState = BtnSaveState.CREATE_TEMPLATE;
         bool changeValueOfTextBoxAvailable = false;
 
-        public class Model : NotifyPropertyChangedBase 
+        public class Model : NotifyPropertyChangedBase
         {
             private BindingList<DocAttribute> _BindingAttributes;
             public BindingList<DocAttribute> BindingAttributes { get { return _BindingAttributes; } set { _BindingAttributes = value; RaisePropertyChanged(nameof(BindingAttributes)); } }
@@ -120,18 +120,18 @@ namespace WpfPrototype
             double finalPercentage = 0.0;
             foreach (DocFile file in template.DocFiles)
             {
-                if (file.FilePath.EndsWith("pdf"))
+                if (file.FilePath.EndsWith("pdf") && File.Exists(file.FilePath))
                 {
                     ConvertPdfToImage(file.FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\imageToCompare.jpg");
                 }
-                else if (file.FilePath.EndsWith("png"))
+                else if (file.FilePath.EndsWith("png") && File.Exists(file.FilePath))
                 {
                     System.Drawing.Image imageToCompare = null;
                     using (FileStream fs = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
                     }
-                    imageToCompare.Save((Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)) + "/data/DocumentManagementApp/imageToCompare.jpg");
+                    imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
                 }
                 else
                 {
@@ -142,7 +142,7 @@ namespace WpfPrototype
                         {
                             imageToCompare = System.Drawing.Image.FromStream(fs);
                         }
-                        imageToCompare.Save(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/data/DocumentManagementApp/imageToCompare.jpg");
+                        imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
                     }
                     catch (Exception ex)
                     {
@@ -151,39 +151,54 @@ namespace WpfPrototype
                 }
                 try
                 {
-                    System.Drawing.Image actualImage = null;
-                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg", FileMode.Open, FileAccess.Read))
+                    if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg") && File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg"))
                     {
-                        actualImage = System.Drawing.Image.FromStream(fs);
+                        System.Drawing.Image actualImage = null;
+                        using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg", FileMode.Open, FileAccess.Read))
+                        {
+                            actualImage = System.Drawing.Image.FromStream(fs);
+                        }
+
+                        System.Drawing.Image imageToCompare = null;
+                        using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
+                        {
+                            imageToCompare = System.Drawing.Image.FromStream(fs);
+                        }
+
+                        double similarityPercentage = ImageComparator.CompareImagesAndReturnPercentageOfSimilarity(imageToCompare, actualImage);
+                        sumOfPercentage = sumOfPercentage + similarityPercentage;
+                        countOfPercentage = countOfPercentage + 1;
                     }
-                    
-                    System.Drawing.Image imageToCompare = null;
-                    using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg", FileMode.Open, FileAccess.Read))
-                    {
-                        imageToCompare = System.Drawing.Image.FromStream(fs);
-                    }
-                    
-                    double similarityPercentage = ImageComparator.CompareImagesAndReturnPercentageOfSimilarity(imageToCompare, actualImage);
-                    sumOfPercentage = sumOfPercentage + similarityPercentage;
-                    countOfPercentage = countOfPercentage + 1;
                 }
                 catch (Exception e)
                 {
                     //todo: cant compare these to images
                 }
             }
-
-            finalPercentage = sumOfPercentage / countOfPercentage;
+            if (countOfPercentage != 0)
+            {
+                finalPercentage = sumOfPercentage / countOfPercentage;
+            }
             if (Double.IsNaN(finalPercentage))
             {
                 finalPercentage = 0.0;
             }
+            try
+            {
+                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
+            }
+            catch (Exception e) { }
+            try
+            {
+                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
+            }
+            catch (Exception e) { }
             return finalPercentage;
         }
 
         private void ShowImage()
         {
-            
+
             Uri uri = new Uri(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg", UriKind.RelativeOrAbsolute);
             bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -196,11 +211,11 @@ namespace WpfPrototype
 
         private void SelectActualAnalyzedFile()
         {
-            if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf"))
+            if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath))
             {
                 ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
             }
-            else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png"))
+            else if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath))
             {
                 System.Drawing.Image imageToCompare = null;
                 using (FileStream fs = new FileStream(analyzedFiles[pointerToActualAnalyzedFile].FilePath, FileMode.Open, FileAccess.Read))
@@ -220,7 +235,7 @@ namespace WpfPrototype
                     }
                     imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     //todo: cannot convert file to out.png to show image view
                     if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
@@ -275,7 +290,7 @@ namespace WpfPrototype
             {
                 ButtonNewTemplate_Click(sender, e);
             }
-            else if(btnSaveState == BtnSaveState.SAVE_ANALYZED_FILE)
+            else if (btnSaveState == BtnSaveState.SAVE_ANALYZED_FILE)
             {
                 BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
                 if (docsAttrs == null)
@@ -586,7 +601,7 @@ namespace WpfPrototype
 
         private string GetAttributeValue(DocAttribute attr)
         {
-            if(attr.StartingXLocation == attr.EndingXLocation || attr.StartingYLocation == attr.EndingYLocation)
+            if (attr.StartingXLocation == attr.EndingXLocation || attr.StartingYLocation == attr.EndingYLocation)
             {
                 return "";
             }
@@ -705,7 +720,7 @@ namespace WpfPrototype
                 attr.EndingXLocation = sumOfEndingXLocation / count;
                 attr.EndingYLocation = sumOfEndingYLocation / count;
             }
-            else 
+            else
             {
                 attr.StartingXLocation = 0;
                 attr.StartingYLocation = 0;
@@ -843,7 +858,7 @@ namespace WpfPrototype
             {
                 return;
             }
-            if (imgAnalyzedDocument.IsMouseOver) 
+            if (imgAnalyzedDocument.IsMouseOver)
             {
                 return;
             }
