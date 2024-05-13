@@ -75,7 +75,10 @@ namespace WpfPrototype
             {
                 foreach (var file in template.DocFiles)
                 {
-                    file.DocAttributes = FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == file.FilePath).DocAttributes;
+                    if (FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == file.FilePath) != null)
+                    {
+                        file.DocAttributes = FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == file.FilePath).DocAttributes;
+                    }
                 }
             }
 
