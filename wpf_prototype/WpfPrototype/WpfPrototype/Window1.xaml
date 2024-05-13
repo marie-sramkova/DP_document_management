@@ -10,9 +10,9 @@
     <Border Padding="5">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="49*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="49*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="10*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <DockPanel Grid.Column="0">
@@ -48,9 +48,9 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <WrapPanel>
-                                            <Label Content="{Binding Name}" Width="100" HorizontalAlignment="Left"/>
-                                            <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Delay=2000}" x:Name="txtBox" Width="400" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
-                                            <Label Content="{Binding Type}" Padding="10, 0, 10, 0" Width="70"/>
+                                            <Label Content="{Binding Name}" Width="100" HorizontalAlignment="Left" VerticalContentAlignment="center"/>
+                                            <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Delay=2000}" x:Name="txtBox" MinWidth="200" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
+                                            <Label Content="{Binding Type}" Padding="10, 0, 10, 0" Width="70" VerticalContentAlignment="center"/>
                                             <Button Content="Delete" FontWeight="Bold" Height="30" Width="70" HorizontalAlignment="Right" Click="ButtonDelete_Click"></Button>
                                         </WrapPanel>
                                     </DataTemplate>
@@ -63,7 +63,16 @@
                     </Grid>
                 </DockPanel>
             </DockPanel>
-            <GridSplitter Grid.Column="1"></GridSplitter>
+            <GridSplitter Grid.Column="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Stretch" Background="#FFFFFF">
+                <GridSplitter.Template>
+                    <ControlTemplate>
+                        <Grid>
+                            <Button Content="⁞" />
+                            <Rectangle Fill="#00FFFFFF" />
+                        </Grid>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
             <DockPanel Grid.Column="2">
                 <DockPanel DockPanel.Dock="Top" Height="30" HorizontalAlignment="Stretch" LastChildFill="True">
                     <Button x:Name="buttonLeft" Width="50" Click="ButtonLeft_Click" DockPanel.Dock="Left">
@@ -80,89 +89,5 @@
                 </DockPanel>
             </DockPanel>
         </Grid>
-
-
-
-
-
-        <!--<Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="7*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="91*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="37*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="5*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="30*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="5*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="7*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="buttonBack"  Click="ButtonBack_Click" Grid.Column="0">
-                    <TextBlock>&lt;- Back</TextBlock>
-                </Button>
-                <Button x:Name="buttonLeft" Grid.Column="4" Click="ButtonLeft_Click">
-                    <TextBlock>&lt;&lt;</TextBlock>
-                </Button>
-                <Label Name="labelSelectedFile" Content="filename.docx" Grid.Column="6"></Label>
-                <Button x:Name="buttonRight" Grid.Column="8" Click="ButtonRight_Click">
-                    <TextBlock>&gt;&gt;</TextBlock>
-                </Button>
-                <Button x:Name="buttonDropFile" Content="Drop file" Grid.Column="10"></Button>
-            </Grid>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40*"></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition Width="58*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="91*" x:Name="listView"></RowDefinition>
-                        <RowDefinition Height="0*" x:Name="listView2"></RowDefinition>
-                        <RowDefinition Height="0*" x:Name="panel"></RowDefinition>
-                        <RowDefinition Height="1*"></RowDefinition>
-                        <RowDefinition Height="8*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <ListView ItemsSource="{Binding BindingTemplates}" x:Name="listViewTemplates" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <WrapPanel>
-                                    <Label Content="{Binding Name}"/>
-                                </WrapPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-
-                    <ListView ItemsSource="{Binding BindingAttributes}"  Margin="10" Name="listViewAttributes" Grid.Row="1" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseLeftButtonDown="listViewAttributes_MouseLeftButtonDown"  SelectionChanged="listViewAttributes_SelectionChanged" >
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <WrapPanel>
-                                    <Label Content="{Binding Name}" Width="100"/>
-                                    <TextBox Text="{Binding Value}" x:Name="txtBox" Width="250" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
-                                    <Label Content="{Binding Type}" Padding="10, 0, 10, 0" Width="70"/>
-                                    <Button Content="Delete" FontWeight="Bold" Height="30"></Button>
-                                </WrapPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-
-                    <StackPanel x:Name="templateAndAttributeStackPanel" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"></StackPanel>
-                    <Button x:Name="buttonSave" Content="Confirm" Grid.Row="4" Click="ButtonSave_Click"></Button>
-                </Grid>
-                <Grid Grid.Column="2">
-                    <Image x:Name="imgAnalyzedDocument" MouseDown="imgAnalyzedDocument_MouseDown" MouseUp="imgAnalyzedDocument_MouseUp"></Image>
-                </Grid>
-            </Grid>
-            
-        </Grid>-->
     </Border>
 </Window>
