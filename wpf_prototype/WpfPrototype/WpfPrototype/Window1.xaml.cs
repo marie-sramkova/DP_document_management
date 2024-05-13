@@ -50,6 +50,7 @@ namespace WpfPrototype
         TesseractOCR tesseractORM;
         BtnSaveState btnSaveState = BtnSaveState.CREATE_TEMPLATE;
         bool changeValueOfTextBoxAvailable = false;
+        bool updateAttributeFromTemplate = true;
 
         public class Model : NotifyPropertyChangedBase
         {
@@ -302,6 +303,7 @@ namespace WpfPrototype
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
+            updateAttributeFromTemplate = true;
             if (btnSaveState == BtnSaveState.CREATE_TEMPLATE)
             {
                 ButtonNewTemplate_Click(sender, e);
@@ -326,12 +328,14 @@ namespace WpfPrototype
                         if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
                         {
                             templateAndAttributeStackPanel.Children.Clear();
+                            analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
                             pointerToActualAnalyzedFile = pointerToActualAnalyzedFile - 1;
                             ButtonRight_Click(sender, e);
                         }
                         else
                         {
                             templateAndAttributeStackPanel.Children.Clear();
+                            analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
                             pointerToActualAnalyzedFile = analyzedFiles.Count;
                             ButtonLeft_Click(sender, e);
                         }
@@ -388,18 +392,16 @@ namespace WpfPrototype
             templateAndAttributeStackPanel.Children.Clear();
 
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
-            BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
-            allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
-            //FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
-            foreach (var attr in selectedTemplate.AllDocAttributes)
-            {
-                if (!allAttributes.Any(x => x.Name == attr.Name))
-                {
-                    allAttributes.Add(attr);
-                }
-            }
+            //BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
+            //allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
+            //foreach (var attr in selectedTemplate.AllDocAttributes)
+            //{
+            //    if (!allAttributes.Any(x => x.Name == attr.Name))
+            //    {
+            //        allAttributes.Add(attr);
+            //    }
+            //}
             ShowImageWithAllAttributeBoundaries();
-            model.BindingAttributes = allAttributes;
 
             Button buttonNewAttribute = new Button();
             buttonNewAttribute.Content = "Add new attribute";
@@ -416,7 +418,7 @@ namespace WpfPrototype
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
             BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
             allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
-            if (selectedTemplate != null)
+            if (selectedTemplate != null && updateAttributeFromTemplate == true)
             {
                 foreach (var attr in selectedTemplate.AllDocAttributes)
                 {
@@ -427,7 +429,7 @@ namespace WpfPrototype
                 }
             }
 
-            if (selectedTemplate != null && allAttributes.Count > 0)
+            if (selectedTemplate != null && allAttributes.Count > 0 && updateAttributeFromTemplate == true)
             {
                 foreach (DocAttribute attribute in allAttributes)
                 {
@@ -455,6 +457,8 @@ namespace WpfPrototype
                     }
                 }
             }
+
+                model.BindingAttributes = allAttributes;
         }
 
         private void ButtonNewAttribute_Click(Template template)
@@ -502,6 +506,7 @@ namespace WpfPrototype
 
         private void ButtonRight_Click(object sender, RoutedEventArgs e)
         {
+            updateAttributeFromTemplate = true;
             buttonSave.Visibility = Visibility.Visible;
             btnSaveState = BtnSaveState.CREATE_TEMPLATE;
             pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
@@ -538,6 +543,7 @@ namespace WpfPrototype
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
         {
+            updateAttributeFromTemplate = true;
             buttonSave.Visibility = Visibility.Visible;
             btnSaveState = BtnSaveState.CREATE_TEMPLATE;
             pointerToActualAnalyzedFile = pointerToActualAnalyzedFile - 1;
@@ -778,8 +784,6 @@ namespace WpfPrototype
                     Debug.WriteLine(value);
                     model.BindingAttributes = docsAttrs;
                     listViewAttributes.SelectedItem = lastSelectedDocAttribute;
-
-                    labelSelectedFile.Content = value;
                 }
             }
             changeValueOfTextBoxAvailable = false;
@@ -922,6 +926,7 @@ namespace WpfPrototype
                     analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Remove(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(attr.Name)));
                     //FileEditor.Instance.RemoveAttributeFromFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, attr);
                     this.model.BindingAttributes.Remove(attr);
+                    updateAttributeFromTemplate = false;
                 }
             }
         }

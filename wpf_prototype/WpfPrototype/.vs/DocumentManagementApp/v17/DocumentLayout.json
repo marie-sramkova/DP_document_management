@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\window1.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\additionallogic\\fileeditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\additionallogic\\fileeditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\settingswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\settingswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\additionallogic\\fileeditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\additionallogic\\fileeditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\window1.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -23,8 +23,8 @@
       "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\settingswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|solutionrelative:wpfprototype\\settingswindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8796C136-B6FD-451D-98F3-57D40AF68FD8}|WpfPrototype\\WpfPrototype.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\wpfprototype\\settingswindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -46,13 +46,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "FileEditor.cs",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\additionalLogic\\FileEditor.cs",
               "RelativeDocumentMoniker": "WpfPrototype\\additionalLogic\\FileEditor.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\additionalLogic\\FileEditor.cs",
               "RelativeToolTip": "WpfPrototype\\additionalLogic\\FileEditor.cs",
-              "ViewState": "AQIAAJEAAAAAAAAAAAAuwJ4AAAD1AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAJ4AAAD1AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-12T21:09:10.207Z",
               "EditorCaption": ""
@@ -76,14 +76,14 @@
               "RelativeDocumentMoniker": "WpfPrototype\\Window1.xaml.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\Window1.xaml.cs",
               "RelativeToolTip": "WpfPrototype\\Window1.xaml.cs",
-              "ViewState": "AQIAAIIBAAAAAAAAAAApwH0BAAAAAAAA",
+              "ViewState": "AQIAABECAAAAAAAAAAAiwB8CAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-12T17:42:29.494Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "SettingsWindow.xaml.cs",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\SettingsWindow.xaml.cs",
               "RelativeDocumentMoniker": "WpfPrototype\\SettingsWindow.xaml.cs",
@@ -103,20 +103,20 @@
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\MainWindow.xaml",
               "RelativeToolTip": "WpfPrototype\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-05-12T16:34:06.672Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-12T16:34:06.672Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "WpfPrototype\\MainWindow.xaml.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\MainWindow.xaml.cs",
               "RelativeToolTip": "WpfPrototype\\MainWindow.xaml.cs",
-              "ViewState": "AQIAAHcAAAAAAAAAAAAswIsAAAAQAAAA",
+              "ViewState": "AQIAAD8AAAAAAAAAAAAjwFAAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-10T07:14:27.245Z"
+              "WhenOpened": "2024-05-10T07:14:27.245Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -127,8 +127,7 @@
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\WpfPrototype\\Window1.xaml",
               "RelativeToolTip": "WpfPrototype\\Window1.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-05-10T07:50:47.479Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-10T07:50:47.479Z"
             }
           ]
         }
