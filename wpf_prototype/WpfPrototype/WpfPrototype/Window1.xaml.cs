@@ -150,8 +150,8 @@ namespace WpfPrototype
                     using (FileStream fs = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
                     {
                         imageToCompare = System.Drawing.Image.FromStream(fs);
+                        imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
                     }
-                    imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
                 }
                 else
                 {
@@ -163,8 +163,8 @@ namespace WpfPrototype
                             using (FileStream fs = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
                             {
                                 imageToCompare = System.Drawing.Image.FromStream(fs);
+                                imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
                             }
-                            imageToCompare.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
                         }
                     }
                     catch (Exception ex)
@@ -234,8 +234,8 @@ namespace WpfPrototype
                 using (FileStream fs = new FileStream(analyzedFiles[pointerToActualAnalyzedFile].FilePath, FileMode.Open, FileAccess.Read))
                 {
                     img = System.Drawing.Image.FromStream(fs);
+                    img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\out.jpg");
                 }
-                img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\out.jpg");
             }
             else
             {
@@ -245,8 +245,8 @@ namespace WpfPrototype
                     using (FileStream fs = new FileStream(analyzedFiles[pointerToActualAnalyzedFile].FilePath, FileMode.Open, FileAccess.Read))
                     {
                         img = System.Drawing.Image.FromStream(fs);
+                        img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\out.jpg");
                     }
-                    img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\out.jpg");
                 }
                 catch (Exception ex)
                 {
@@ -255,11 +255,6 @@ namespace WpfPrototype
                     FileEditor.Instance.WriteSettingsEntityToFile();
                     analyzedFiles.Remove(analyzedFiles[pointerToActualAnalyzedFile]);
                     SelectActualAnalyzedFile();
-                    //if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
-                    //{
-                    //    pointerToActualAnalyzedFile = pointerToActualAnalyzedFile + 1;
-                    //    SelectActualAnalyzedFile();
-                    //}
                 }
                 //todo: another file formats to show as png
             }
@@ -392,15 +387,6 @@ namespace WpfPrototype
             templateAndAttributeStackPanel.Children.Clear();
 
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
-            //BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
-            //allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
-            //foreach (var attr in selectedTemplate.AllDocAttributes)
-            //{
-            //    if (!allAttributes.Any(x => x.Name == attr.Name))
-            //    {
-            //        allAttributes.Add(attr);
-            //    }
-            //}
             ShowImageWithAllAttributeBoundaries();
 
             Button buttonNewAttribute = new Button();
@@ -538,7 +524,6 @@ namespace WpfPrototype
             }
 
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
-            //this.DataContext = model;
         }
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
@@ -924,7 +909,6 @@ namespace WpfPrototype
                 if (attr != null)
                 {
                     analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Remove(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(attr.Name)));
-                    //FileEditor.Instance.RemoveAttributeFromFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, attr);
                     this.model.BindingAttributes.Remove(attr);
                     updateAttributeFromTemplate = false;
                 }

@@ -83,6 +83,8 @@ namespace WpfPrototype
             }
 
             SettingsEntity tmpSettingsEntity = new SettingsEntity();
+            tmpSettingsEntity.Templates = new BindingList<Template>();
+            tmpSettingsEntity.DocFiles = new BindingList<DocFile>();
             foreach (var file in FileEditor.Instance.SettingsEntity.DocFiles)
             {
                 if (file.DocAttributes.Count != 0)
@@ -100,8 +102,8 @@ namespace WpfPrototype
                         }
                         attribute.Value = newValue.ToString();
                     }
-                    Template template = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(x => x.FilePath == file.FilePath) != null);
-                    if (!tmpSettingsEntity.Templates.Any(x => x.Name == template.Name))
+                    Template template = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(x => x.FilePath.Equals(file.FilePath)) != null);
+                    if (template != null && !tmpSettingsEntity.Templates.Any(x => x.Name.Equals(template.Name)))
                     {
                         tmpSettingsEntity.Templates.Add(template);
                         tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Clear();
@@ -109,7 +111,7 @@ namespace WpfPrototype
                     }
                     else
                     {
-                        if (!tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Any(x => x.FilePath == file.FilePath))
+                        if (template != null && !tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Any(x => x.FilePath == file.FilePath))
                         {
                             tmpSettingsEntity.Templates.SingleOrDefault(x => x.Name == template.Name).DocFiles.Add(file);
                         }
