@@ -53,3 +53,5 @@ D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Release\net8.0-windows\WpfPrototype.pdb
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Release\net8.0-windows\WpfPrototype.genruntimeconfig.cache
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Release\net8.0-windows\ref\WpfPrototype.dll
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Release\net8.0-windows\SettingsWindow.g.cs
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Release\net8.0-windows\SettingsWindow.baml
