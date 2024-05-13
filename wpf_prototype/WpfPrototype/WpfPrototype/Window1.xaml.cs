@@ -47,7 +47,7 @@ namespace WpfPrototype
         private int pointerToActualAnalyzedFile = 0;
         private DocAttribute lastSelectedDocAttribute;
         private BitmapImage bitmap;
-        TesseractOCR tesseractORM;
+        TesseractOCR tesseractOCR;
         BtnSaveState btnSaveState = BtnSaveState.CREATE_TEMPLATE;
         bool changeValueOfTextBoxAvailable = false;
         bool updateAttributeFromTemplate = true;
@@ -85,7 +85,7 @@ namespace WpfPrototype
             this.DataContext = model;
             InitializeComponent();
 
-            tesseractORM = new TesseractOCR();
+            tesseractOCR = new TesseractOCR();
             ControleIfFileIsActual();
 
             foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
@@ -616,7 +616,7 @@ namespace WpfPrototype
             Bitmap cuttedBitmap = source.Clone(new System.Drawing.Rectangle(attr.StartingXLocation, attr.StartingYLocation, attr.EndingXLocation - attr.StartingXLocation, attr.EndingYLocation - attr.StartingYLocation), source.PixelFormat);
             cuttedBitmap.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/tmp.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             ImageConverter converter = new ImageConverter();
-            string text = tesseractORM.GetTextFromImage((byte[])converter.ConvertTo(cuttedBitmap, typeof(byte[])));
+            string text = tesseractOCR.GetTextFromImage((byte[])converter.ConvertTo(cuttedBitmap, typeof(byte[])));
             File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/tmp.jpg");
             return text;
         }
