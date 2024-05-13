@@ -415,7 +415,7 @@ namespace WpfPrototype
                 }
             }
 
-            if (selectedTemplate != null && allAttributes.Count > 0 && updateAttributeFromTemplate == true)
+            if (selectedTemplate != null && allAttributes.Count > 0)
             {
                 foreach (DocAttribute attribute in allAttributes)
                 {
@@ -911,6 +911,7 @@ namespace WpfPrototype
                     analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Remove(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(attr.Name)));
                     this.model.BindingAttributes.Remove(attr);
                     updateAttributeFromTemplate = false;
+                    TextBox_LostFocus(sender, e);
                 }
             }
         }
