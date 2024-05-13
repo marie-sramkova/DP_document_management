@@ -15,11 +15,6 @@ namespace WpfPrototype.additionalLogic.ocr
     {
         public string GetTextFromImage(byte[] bytes)
         {
-            //System.Diagnostics.Debugger.Launch();
-            //var path = Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(System.AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString() + "/tessdata";
-
-            //var path = Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(System.AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString();
-            //var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
             var path = AppDomain.CurrentDomain.BaseDirectory;
             path = Path.Combine(path, "tessdata");
             Debug.WriteLine(path);
