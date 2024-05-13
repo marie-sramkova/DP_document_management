@@ -205,16 +205,6 @@ namespace WpfPrototype
             {
                 finalPercentage = 0.0;
             }
-            try
-            {
-                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/imageToCompare.jpg");
-            }
-            catch (Exception e) { }
-            try
-            {
-                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
-            }
-            catch (Exception e) { }
             return finalPercentage;
         }
 
@@ -244,7 +234,7 @@ namespace WpfPrototype
                 {
                     img = System.Drawing.Image.FromStream(fs);
                 }
-                img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
+                img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\out.jpg");
             }
             else
             {
@@ -255,7 +245,7 @@ namespace WpfPrototype
                     {
                         img = System.Drawing.Image.FromStream(fs);
                     }
-                    img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
+                    img.Save(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\out.jpg");
                 }
                 catch (Exception ex)
                 {
@@ -319,14 +309,13 @@ namespace WpfPrototype
             else if (btnSaveState == BtnSaveState.SAVE_ANALYZED_FILE)
             {
                 BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
-                if (docsAttrs == null)
+                if (docsAttrs == null || docsAttrs.Any(x => x.Value == ""))
                 {
                     return;
                 }
                 else
                 {
                     FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
-                    //analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
                     if (analyzedFiles.Count == 0)
                     {
                         templateAndAttributeStackPanel.Children.Clear();
@@ -401,6 +390,7 @@ namespace WpfPrototype
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
             BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
             allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
+            //FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
             foreach (var attr in selectedTemplate.AllDocAttributes)
             {
                 if (!allAttributes.Any(x => x.Name == attr.Name))
@@ -913,7 +903,7 @@ namespace WpfPrototype
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
             var dialogResult = MessageBox.Show("Are you sure you want to remove the attribute?", "Attribute deletion", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (dialogResult == MessageBoxResult.Yes)
@@ -929,6 +919,8 @@ namespace WpfPrototype
                 }
                 if (attr != null)
                 {
+                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Remove(analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(attr.Name)));
+                    //FileEditor.Instance.RemoveAttributeFromFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, attr);
                     this.model.BindingAttributes.Remove(attr);
                 }
             }

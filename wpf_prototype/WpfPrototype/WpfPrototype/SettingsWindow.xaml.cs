@@ -76,7 +76,9 @@ namespace WpfPrototype
             String filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\folderPath.txt";
             if (File.Exists(filePath))
             {
-                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+                var file = File.Create(filePath);
+                file.Close();
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Write))
                 {
                     byte[] info = new UTF8Encoding(true).GetBytes(UserSettings.directoryPath);
                     fs.Write(info, 0, info.Length);
