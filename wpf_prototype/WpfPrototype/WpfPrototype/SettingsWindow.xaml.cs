@@ -32,6 +32,8 @@ namespace WpfPrototype
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
             Close();
         }
 
@@ -59,6 +61,10 @@ namespace WpfPrototype
             else
             {
                 SaveDirectoryPathPermanentlyToFileInApp();
+                var settingsDocumentsFile = File.Create(UserSettings.settingsDocumentsFilePath);
+                settingsDocumentsFile.Close();
+                var settingsTemplatesFile = File.Create(UserSettings.settingsTemplatesFilePath);
+                settingsTemplatesFile.Close();
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
                 Close();
@@ -70,7 +76,9 @@ namespace WpfPrototype
             String filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\data\\DocumentManagementApp\\folderPath.txt";
             if (File.Exists(filePath))
             {
-                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+                var file = File.Create(filePath);
+                file.Close();
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Write))
                 {
                     byte[] info = new UTF8Encoding(true).GetBytes(UserSettings.directoryPath);
                     fs.Write(info, 0, info.Length);

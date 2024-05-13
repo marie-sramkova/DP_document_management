@@ -68,6 +68,14 @@ namespace WpfPrototype
             WriteSettingsEntityToFile();
         }
 
+        public void RemoveFileFromDocs(DocFile file)
+        {
+            if (SettingsEntity.DocFiles.Any( x => x.FilePath.Equals(file.FilePath)))
+            {
+                SettingsEntity.DocFiles.Remove(SettingsEntity.DocFiles.First(x => x.FilePath.Equals(file.FilePath)));
+            }
+        }
+
         private void ReadFileToSettingsEntity()
         {
             CreateEmptySettingsEntity();
@@ -132,16 +140,28 @@ namespace WpfPrototype
 
         public void AddFileToTemplate(string templateName, DocFile file)
         {
-            Template savedTemplate = SettingsEntity.Templates.SingleOrDefault(x => x.Name == templateName);
-            if (!savedTemplate.DocFiles.Any(x => x.FilePath == file.FilePath)) { 
+            foreach (var template in SettingsEntity.Templates)
+            {
+                if (template.DocFiles.Any(x => x.FilePath.Equals(file.FilePath)))
+                {
+                    template.DocFiles.Remove(template.DocFiles.SingleOrDefault(x => x.FilePath.Equals(file.FilePath)));
+                }
+            }
+            Template savedTemplate = SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(templateName));
+            if (!savedTemplate.DocFiles.Any(x => x.FilePath.Equals(file.FilePath))) { 
                 savedTemplate.DocFiles.Add(file);
                 WriteSettingsEntityToFile();
             }
         }
 
+        public void RemoveAttributeFromFile(string filename, DocAttribute docAttribute)
+        {
+            SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath.Equals(filename)).DocAttributes.Remove(SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath.Equals(filename)).DocAttributes.SingleOrDefault(y => y.Name.Equals(docAttribute)));
+        }
+
         public void AddAttributeToTemplate(Template template, DocAttribute docAttribute) 
         {
-            if (!template.AllDocAttributes.Any(x => x.Name == docAttribute.Name))
+            if (!template.AllDocAttributes.Any(x => x.Name.Equals(docAttribute.Name)))
             {
                 template.AllDocAttributes.Add(docAttribute);
             }
@@ -157,7 +177,7 @@ namespace WpfPrototype
 
         public void AddAttributesToFileAndTemplate(string fileName, BindingList<DocAttribute> docAttributes)
         {
-            Template template = SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == fileName) != null);
+            Template template = SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath.Equals(fileName)) != null);
             if (template != null) {
                 DocFile docFile = SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName);
                 if (docFile != null)
