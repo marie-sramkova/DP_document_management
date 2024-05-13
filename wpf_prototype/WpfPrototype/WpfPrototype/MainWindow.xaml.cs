@@ -41,6 +41,10 @@ namespace WpfPrototype
 
         public MainWindow()
         {
+            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp"))
+            {
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp");
+            }
             String filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/folderPath.txt";
             String dirPath = "";
             if (File.Exists(filePath))
