@@ -499,3 +499,4 @@ D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Release\net8.0-windows\win-x86\zh-Hant\WindowsFormsIntegration.resources.dll
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Release\net8.0-windows\win-x86\SettingsWindow.g.cs
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Release\net8.0-windows\win-x86\SettingsWindow.baml
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Release\net8.0-windows\win-x86\tessdata\ces.traineddata

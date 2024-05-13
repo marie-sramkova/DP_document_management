@@ -1,4 +1,5 @@
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Release\net8.0-windows\publish\win-x86\WpfPrototype.pdb
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Release\net8.0-windows\publish\win-x86\tessdata\ces.traineddata
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Release\net8.0-windows\publish\win-x86\x86\leptonica-1.82.0.dll
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Release\net8.0-windows\publish\win-x86\x86\tesseract50.dll
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Release\net8.0-windows\publish\win-x86\x64\leptonica-1.82.0.dll

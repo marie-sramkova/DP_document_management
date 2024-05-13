@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,7 +42,23 @@ namespace WpfPrototype
 
 
         public MainWindow()
-        {
+        //{
+        //    //System.Diagnostics.Debugger.Launch();
+        //    //var path = Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(System.AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString() + "/tessdata";
+
+        //    var path = AppDomain.CurrentDomain.BaseDirectory;
+        //    //var path = Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(System.AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString();
+        //    //String path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
+        //    path = System.IO.Path.Combine(path, "tessdata");
+        //    Debug.WriteLine(path);
+        //    var file = File.Create("C:\\ProgramData\\data\\info.txt");
+        //    file.Close();
+        //    using (FileStream fs = new FileStream("C:\\ProgramData\\data\\info.txt", FileMode.Open, FileAccess.Write))
+        //    {
+        //        byte[] info = new UTF8Encoding(true).GetBytes(path);
+        //        fs.Write(info, 0, info.Length);
+        //    }
+
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp"))
             {
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp");

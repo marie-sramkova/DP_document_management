@@ -39,7 +39,6 @@ namespace WpfPrototype
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Debugger.Launch();
             if (textBoxFolderPath.Text != "" && Directory.Exists(textBoxFolderPath.Text))
             {
                 UserSettings.directoryPath = textBoxFolderPath.Text;

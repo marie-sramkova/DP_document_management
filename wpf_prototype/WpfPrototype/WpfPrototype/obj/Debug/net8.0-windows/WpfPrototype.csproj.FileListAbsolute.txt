@@ -55,3 +55,4 @@ D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\Window1.baml
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\SettingsWindow.g.cs
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\obj\Debug\net8.0-windows\SettingsWindow.baml
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\WpfPrototype\bin\Debug\net8.0-windows\tessdata\ces.traineddata
