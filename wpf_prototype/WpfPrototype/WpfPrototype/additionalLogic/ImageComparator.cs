@@ -33,8 +33,23 @@ namespace WpfPrototype.additionalLogic
 
         private static void MakeImagesTheSameSize(Image firstImage, Image secondImage)
         {
-            firstImage = ResizeImage(firstImage, new Size(100, 160));
-            secondImage = ResizeImage(secondImage, new Size(100, 160));
+            int minX = firstImage.Width;
+            int minY = firstImage.Height;
+            if (minX > secondImage.Width) { minX = secondImage.Width; }
+            if (minY > secondImage.Height) { minY = secondImage.Height; }
+            if (minX < minY)
+            {
+                if (minX > 100) { minX = 100; }
+                if (minY > 160) { minY = 160; }
+                firstImage = ResizeImage(firstImage, new Size(minX, minY));
+                secondImage = ResizeImage(secondImage, new Size(minX, minY));
+            }else
+            {
+                if (minX > 160) { minX = 160; }
+                if (minY > 100) { minY = 100; }
+                firstImage = ResizeImage(firstImage, new Size(minY, minX));
+                secondImage = ResizeImage(secondImage, new Size(minY, minX));
+            }
         }
 
         private unsafe static double CompareTwoImagesAndReturnSimilarityPercentage(Image firstImage, Image secondImage)

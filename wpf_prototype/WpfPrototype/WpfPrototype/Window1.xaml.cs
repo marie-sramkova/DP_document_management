@@ -62,15 +62,15 @@ namespace WpfPrototype
 
         public class TemplateWithPercentage : Template
         {
-            private double _SimilarityPercentage;
-            public double SimilarityPercentage { get { return _SimilarityPercentage; } set { _SimilarityPercentage = value; RaisePropertyChanged(nameof(SimilarityPercentage)); } }
+            private String _SimilarityPercentage;
+            public String SimilarityPercentage { get { return _SimilarityPercentage; } set { _SimilarityPercentage = value; RaisePropertyChanged(nameof(SimilarityPercentage)); } }
 
             public TemplateWithPercentage(string text) : base(text)
             {
                 Name = text;
                 AllDocAttributes = new BindingList<DocAttribute>();
                 DocFiles = new BindingList<DocFile>();
-                SimilarityPercentage = 0.0;
+                SimilarityPercentage = "(" + 0.0 + "% similarity)";
             }
         }
 
@@ -110,7 +110,7 @@ namespace WpfPrototype
             foreach (var template in this.model.BindingTemplates)
             {
                 double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
-                template.SimilarityPercentage = finalPercentage;
+                template.SimilarityPercentage = "(" + finalPercentage + "% similarity)";
             }
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
         }
@@ -520,7 +520,7 @@ namespace WpfPrototype
             foreach (var template in this.model.BindingTemplates)
             {
                 double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
-                template.SimilarityPercentage = finalPercentage;
+                template.SimilarityPercentage = "(" + finalPercentage + "% similarity)";
             }
 
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
@@ -559,7 +559,7 @@ namespace WpfPrototype
             foreach (var template in this.model.BindingTemplates)
             {
                 double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
-                template.SimilarityPercentage = finalPercentage;
+                template.SimilarityPercentage = "(" + finalPercentage + "% similarity)";
             }
 
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
