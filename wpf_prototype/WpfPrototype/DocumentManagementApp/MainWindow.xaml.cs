@@ -148,15 +148,16 @@ namespace DocumentManagementApp
                         if ((newFiles.Any(x => x.Equals(docFileInSettingsFile.FilePath)) && docFileInSettingsFile.DocAttributes.Count != 0)
                             || (newFiles.Any(x => x.Equals(docFileInSettingsFile.FilePath)) && !docFileInSettingsFile.FilePath.Contains(UserSettings.directoryPath)))
                         {
-                            newFiles.Remove(docFileInSettingsFile.FilePath);
+                            newFiles.Remove(newFiles.First(x => x == docFileInSettingsFile.FilePath));
                             //documentsCount = documentsCount - 1;
                         }
                     }
+                    documentsCount = newFiles.Count;
                     foreach (var file in newFiles)
                     {
                         if (!file.EndsWith("pdf") && !file.EndsWith("jpg") && !file.EndsWith("png") && !file.EndsWith("jpeg"))
                         {
-                            documentsCount = newFiles.Count - 1;
+                            documentsCount = documentsCount - 1;
                         }
                     }
                 }
