@@ -35,6 +35,8 @@ using DocumentManagementApp.additionalLogic.entities;
 using DocumentManagementApp.additionalLogic.ocr;
 using DocumentManagementApp.Properties;
 using static System.Net.Mime.MediaTypeNames;
+using Org.BouncyCastle.Asn1.Cms;
+using System.Runtime.InteropServices;
 
 namespace DocumentManagementApp
 {
@@ -51,6 +53,7 @@ namespace DocumentManagementApp
         BtnSaveState btnSaveState = BtnSaveState.CREATE_TEMPLATE;
         bool changeValueOfTextBoxAvailable = false;
         bool updateAttributeFromTemplate = true;
+        public DocFile fileToEdit;
 
         public class Model : NotifyPropertyChangedBase
         {
@@ -84,33 +87,54 @@ namespace DocumentManagementApp
             model.BindingTemplates = new BindingList<TemplateWithPercentage>();
             this.DataContext = model;
             InitializeComponent();
-
             tesseractOCR = new TesseractOCR();
-            ControleIfFileIsActual();
-
-            foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
+            fileToEdit = WindowForOldDocPathInput.oldDocPath;
+            if (fileToEdit != null)
             {
-                if (docFile.DocAttributes.Count == 0 && (docFile.FilePath != UserSettings.settingsDocumentsFilePath && docFile.FilePath != UserSettings.settingsTemplatesFilePath) && docFile.FilePath.Contains(UserSettings.directoryPath))
+                analyzedFiles.Add(fileToEdit);
+                pointerToActualAnalyzedFile = 0;
+                buttonLeft.IsEnabled = false;
+                buttonRight.Content = "Delete";
+                SelectActualAnalyzedFile();
+                ShowImage();
+                CreateAttributeListView(FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath.Equals(fileToEdit.FilePath)) != null));
+                foreach (var atr in analyzedFiles[pointerToActualAnalyzedFile].DocAttributes)
                 {
-                    analyzedFiles.Add(docFile);
+                    string oldValue = atr.Value;
+                    AddAttributeBoundariesToBitmap(atr);
+                    atr.Value = oldValue;
                 }
+
+                model.BindingAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
             }
-
-            if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
+            else
             {
-                buttonRight.IsEnabled = false;
-            }
-            buttonLeft.IsEnabled = false;
+                ControleIfFileIsActual();
+
+                foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
+                {
+                    if (docFile.DocAttributes.Count == 0 && (docFile.FilePath != UserSettings.settingsDocumentsFilePath && docFile.FilePath != UserSettings.settingsTemplatesFilePath) && docFile.FilePath.Contains(UserSettings.directoryPath))
+                    {
+                        analyzedFiles.Add(docFile);
+                    }
+                }
+
+                if (pointerToActualAnalyzedFile == analyzedFiles.Count - 1)
+                {
+                    buttonRight.IsEnabled = false;
+                }
+                buttonLeft.IsEnabled = false;
 
 
-            CreateTemplateButtons();
-            SelectActualAnalyzedFile();
-            ShowImage();
+                CreateTemplateButtons();
+                SelectActualAnalyzedFile();
+                ShowImage();
 
-            foreach (var template in this.model.BindingTemplates)
-            {
-                double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
-                template.SimilarityPercentage = "(" + finalPercentage + "% similarity)";
+                foreach (var template in this.model.BindingTemplates)
+                {
+                    double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
+                    template.SimilarityPercentage = "(" + finalPercentage + "% similarity)";
+                }
             }
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
         }
@@ -130,7 +154,6 @@ namespace DocumentManagementApp
             {
                 FileEditor.Instance.RemoveFileFromDocs(doc);
             }
-            FileEditor.Instance.WriteSettingsEntityToFile();
         }
 
         private double CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(Template template)
@@ -226,12 +249,16 @@ namespace DocumentManagementApp
 
         private void SelectActualAnalyzedFile()
         {
+            if (analyzedFiles.Count == 0)
+            {
+                ButtonBack_Click(null, null);
+            }
             if (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("pdf") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath))
             {
                 ConvertPdfToImage(analyzedFiles[pointerToActualAnalyzedFile].FilePath, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/out.jpg");
             }
-            else if ((analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath)) 
-                || (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("jpg") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath)) 
+            else if ((analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("png") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath))
+                || (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("jpg") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath))
                 || (analyzedFiles[pointerToActualAnalyzedFile].FilePath.EndsWith("jpeg") && File.Exists(analyzedFiles[pointerToActualAnalyzedFile].FilePath)))
             {
                 System.Drawing.Image img = null;
@@ -302,6 +329,13 @@ namespace DocumentManagementApp
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
+            if (fileToEdit != null)
+            {
+                FileEditor.Instance.EditDocument(fileToEdit);
+
+                ButtonBack_Click(null, null);
+                return;
+            }
             updateAttributeFromTemplate = true;
             if (btnSaveState == BtnSaveState.CREATE_TEMPLATE)
             {
@@ -391,7 +425,10 @@ namespace DocumentManagementApp
             templateAndAttributeStackPanel.Children.Clear();
 
             Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
-            ShowImageWithAllAttributeBoundaries();
+            if (fileToEdit == null)
+            {
+                ShowImageWithAllAttributeBoundaries();
+            }
 
             Button buttonNewAttribute = new Button();
             buttonNewAttribute.Content = "Add new attribute";
@@ -448,7 +485,7 @@ namespace DocumentManagementApp
                 }
             }
 
-                model.BindingAttributes = allAttributes;
+            model.BindingAttributes = allAttributes;
         }
 
         private void ButtonNewAttribute_Click(Template template)
@@ -496,6 +533,20 @@ namespace DocumentManagementApp
 
         private void ButtonRight_Click(object sender, RoutedEventArgs e)
         {
+            if (fileToEdit != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete file settings?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    FileEditor.Instance.RemoveFileFromDocs(FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath.Equals(fileToEdit.FilePath)));
+                    ButtonBack_Click(null, null);
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
             updateAttributeFromTemplate = true;
             buttonSave.Visibility = Visibility.Visible;
             btnSaveState = BtnSaveState.CREATE_TEMPLATE;

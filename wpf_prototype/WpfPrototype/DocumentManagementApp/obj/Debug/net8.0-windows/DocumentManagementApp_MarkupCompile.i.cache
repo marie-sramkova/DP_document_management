@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\DocumentManagementApp\App.xaml
-3-1588105478
+4-1678182429
 
-18-319247416
-208-379242559
-MainWindow.xaml;SettingsWindow.xaml;Window1.xaml;
+191251065839
+208-2043803865
+MainWindow.xaml;SettingsWindow.xaml;Window1.xaml;WindowForOldDocPathInput.xaml;
 
-False
+True
 

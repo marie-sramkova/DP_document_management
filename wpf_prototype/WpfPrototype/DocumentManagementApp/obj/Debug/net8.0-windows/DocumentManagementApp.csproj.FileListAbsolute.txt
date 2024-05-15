@@ -56,3 +56,5 @@ D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\DocumentManagementApp\obj\Debug\net8.0-windows\DocumentManagementApp.pdb
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\DocumentManagementApp\obj\Debug\net8.0-windows\DocumentManagementApp.genruntimeconfig.cache
 D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\DocumentManagementApp\obj\Debug\net8.0-windows\ref\DocumentManagementApp.dll
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\DocumentManagementApp\obj\Debug\net8.0-windows\WindowForOldDocPathInput.g.cs
+D:\sramk\Documents\vysoka_skola\diplomka\git_official\DP_document_management\wpf_prototype\WpfPrototype\DocumentManagementApp\obj\Debug\net8.0-windows\WindowForOldDocPathInput.baml

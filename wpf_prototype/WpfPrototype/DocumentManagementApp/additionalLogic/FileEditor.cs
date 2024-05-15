@@ -73,6 +73,7 @@ namespace DocumentManagementApp
             if (SettingsEntity.DocFiles.Any( x => x.FilePath.Equals(file.FilePath)))
             {
                 SettingsEntity.DocFiles.Remove(SettingsEntity.DocFiles.First(x => x.FilePath.Equals(file.FilePath)));
+                WriteSettingsEntityToFile();
             }
         }
 
@@ -152,6 +153,14 @@ namespace DocumentManagementApp
                 savedTemplate.DocFiles.Add(file);
                 WriteSettingsEntityToFile();
             }
+        }
+
+        public void EditDocument(DocFile file)
+        {
+            RemoveFileFromDocs(file);
+            AddNewFilesWithoutAttributes(new List<String> { file.FilePath });
+            AddAttributesToFileAndTemplate(file.FilePath, file.DocAttributes);
+            WriteSettingsEntityToFile();
         }
 
         public void RemoveAttributeFromFile(string filename, DocAttribute docAttribute)
