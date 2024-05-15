@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using Tesseract;
 using DocumentManagementApp.additionalLogic;
 using DocumentManagementApp.additionalLogic.entities;
+using System.Printing;
 
 namespace DocumentManagementApp
 {
@@ -43,6 +44,7 @@ namespace DocumentManagementApp
 
         public MainWindow()
         {
+
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp"))
             {
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp");
@@ -67,7 +69,7 @@ namespace DocumentManagementApp
                 {
                     ButtonSettings_Click(null, null);
                 }
-            } 
+            }
             else
             {
                 ButtonSettings_Click(null, null);
@@ -143,7 +145,7 @@ namespace DocumentManagementApp
                     docFilesInSettingsFile = FileEditor.Instance.SettingsEntity.DocFiles;
                     foreach (DocFile docFileInSettingsFile in docFilesInSettingsFile)
                     {
-                        if ((newFiles.Any(x => x.Equals(docFileInSettingsFile.FilePath)) && docFileInSettingsFile.DocAttributes.Count != 0) 
+                        if ((newFiles.Any(x => x.Equals(docFileInSettingsFile.FilePath)) && docFileInSettingsFile.DocAttributes.Count != 0)
                             || (newFiles.Any(x => x.Equals(docFileInSettingsFile.FilePath)) && !docFileInSettingsFile.FilePath.Contains(UserSettings.directoryPath)))
                         {
                             newFiles.Remove(docFileInSettingsFile.FilePath);
@@ -196,7 +198,7 @@ namespace DocumentManagementApp
 
             foreach (string newFile in newFiles)
             {
-                if ((!docFilesInSettingsFile.Any(x => x.FilePath == newFile)) 
+                if ((!docFilesInSettingsFile.Any(x => x.FilePath == newFile))
                     && (newFile.EndsWith("pdf") || newFile.EndsWith("jpg") || newFile.EndsWith("png") || newFile.EndsWith("jpeg")))
                 {
                     filesToStore.Add(newFile);
@@ -213,6 +215,13 @@ namespace DocumentManagementApp
         {
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.Show();
+            Close();
+        }
+
+        private void ButtonAnalyzeOldDocument_Click(object sender, RoutedEventArgs e)
+        {
+            WindowForOldDocPathInput windowForOldDocPathInput = new WindowForOldDocPathInput();
+            windowForOldDocPathInput.Show();
             Close();
         }
     }
