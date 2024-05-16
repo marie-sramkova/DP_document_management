@@ -77,6 +77,15 @@ namespace DocumentManagementApp
             }
         }
 
+        public void RemoveFileFromTemplate(DocFile file, Template template)
+        {
+            if (SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(template.Name)).DocFiles.Any(y => y.FilePath.Equals(file.FilePath)))
+            {
+                SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(template.Name)).DocFiles.Remove(SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(template.Name)).DocFiles.SingleOrDefault(y => y.FilePath.Equals(file.FilePath)));
+                WriteSettingsEntityToFile();
+            }
+        }
+
         private void ReadFileToSettingsEntity()
         {
             CreateEmptySettingsEntity();
