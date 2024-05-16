@@ -32,7 +32,7 @@
                             <RowDefinition Height="0*" x:Name="panel"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Margin="20">
-                            <ListView ItemsSource="{Binding BindingTemplates}" x:Name="listViewTemplates" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
+                            <ListView ItemsSource="{Binding BindingTemplates}" x:Name="listViewTemplates" Background="Transparent" BorderThickness="0" ScrollViewer.CanContentScroll="False" MouseDoubleClick="ListViewTemplatesAndAttributes_MouseDoubleClick">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <WrapPanel>
@@ -44,12 +44,12 @@
                             </ListView>
                         </Grid>
                         <Grid VerticalAlignment="Stretch" Grid.Row="1" Margin="20">
-                            <ListView ItemsSource="{Binding BindingAttributes}" Name="listViewAttributes" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" MouseLeftButtonDown="listViewAttributes_MouseLeftButtonDown"  SelectionChanged="listViewAttributes_SelectionChanged" >
+                            <ListView ItemsSource="{Binding BindingAttributes}" Name="listViewAttributes" Background="Transparent" BorderThickness="0" ScrollViewer.CanContentScroll="False" MouseLeftButtonDown="listViewAttributes_MouseLeftButtonDown"  SelectionChanged="listViewAttributes_SelectionChanged" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <WrapPanel>
                                             <Label Content="{Binding Name}" Width="100" HorizontalAlignment="Left" VerticalContentAlignment="center"/>
-                                            <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Delay=2000}" x:Name="txtBox" MinWidth="200" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
+                                            <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Delay=2000}" x:Name="txtBox" Width="300" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" MouseDown="txtBox_MouseDown"/>
                                             <Label Content="{Binding Type}" Padding="10, 0, 10, 0" Width="70" VerticalContentAlignment="center"/>
                                             <Button Content="Delete" FontWeight="Bold" Height="30" Width="70" HorizontalAlignment="Right" Click="ButtonDelete_Click"></Button>
                                         </WrapPanel>

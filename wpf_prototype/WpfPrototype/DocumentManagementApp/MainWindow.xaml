@@ -152,13 +152,14 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
+        
         <Grid Grid.Row="7">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30*"></ColumnDefinition>
                 <ColumnDefinition Width="40*"></ColumnDefinition>
                 <ColumnDefinition Width="30*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button x:Name="buttonAnalyzeOldDocument" Grid.Column="1" Click="ButtonAnalyzeOldDocument_Click" Content="Analyze old document"/>
+            <Button x:Name="buttonAnalyzeNewDocuments" Grid.Column="1" Click="ButtonAnalyzeNewDocuments_Click"/>
         </Grid>
         <Grid Grid.Row="9">
             <Grid.ColumnDefinitions>
@@ -166,7 +167,7 @@
                 <ColumnDefinition Width="40*"></ColumnDefinition>
                 <ColumnDefinition Width="30*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button x:Name="buttonAnalyzeNewDocuments" Grid.Column="1" Click="ButtonAnalyzeNewDocuments_Click"/>
+            <Button x:Name="buttonAnalyzeOldDocument" Grid.Column="1" Click="ButtonAnalyzeOldDocument_Click" Content="Analyze old document"/>
         </Grid>
         <Grid Grid.Row="11">
             <Grid.ColumnDefinitions>

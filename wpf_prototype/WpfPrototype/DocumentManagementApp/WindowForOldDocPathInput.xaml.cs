@@ -46,7 +46,7 @@ namespace DocumentManagementApp
             }
             else
             {
-                MessageBox.Show("Incorrect file path!");
+                MessageBox.Show("Incorrect file path or file has not been analyzed yet. Please write different path.");
                 return;
             }
         }

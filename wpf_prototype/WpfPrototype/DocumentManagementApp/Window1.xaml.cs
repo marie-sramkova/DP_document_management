@@ -111,6 +111,11 @@ namespace DocumentManagementApp
             {
                 ControleIfFileIsActual();
 
+                List<DocFile> docsToDelete = FileEditor.Instance.SettingsEntity.DocFiles.Where(x => !File.Exists(x.FilePath)).ToList();
+                foreach (var docFile in docsToDelete)
+                {
+                    FileEditor.Instance.RemoveFileFromDocs(FileEditor.Instance.SettingsEntity.DocFiles.First(x => x.FilePath == docFile.FilePath));
+                }
                 foreach (var docFile in FileEditor.Instance.SettingsEntity.DocFiles)
                 {
                     if (docFile.DocAttributes.Count == 0 && (docFile.FilePath != UserSettings.settingsDocumentsFilePath && docFile.FilePath != UserSettings.settingsTemplatesFilePath) && docFile.FilePath.Contains(UserSettings.directoryPath))
@@ -133,7 +138,7 @@ namespace DocumentManagementApp
                 foreach (var template in this.model.BindingTemplates)
                 {
                     double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
-                    template.SimilarityPercentage = "(" + finalPercentage + "% similarity)";
+                    template.SimilarityPercentage = "(" + Math.Round(finalPercentage,2) + "% similarity)";
                 }
             }
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
@@ -334,6 +339,7 @@ namespace DocumentManagementApp
                 FileEditor.Instance.EditDocument(fileToEdit);
 
                 ButtonBack_Click(null, null);
+                WindowForOldDocPathInput.oldDocPath = null;
                 return;
             }
             updateAttributeFromTemplate = true;
@@ -403,6 +409,11 @@ namespace DocumentManagementApp
                 if (txtBoxTemplateName.Text == "")
                 {
                     return;
+                }
+                Template templateWithFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.Any(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath));
+                if (templateWithFile != null)
+                {
+                    FileEditor.Instance.RemoveFileFromTemplate(analyzedFiles[pointerToActualAnalyzedFile], templateWithFile);
                 }
                 Template template = new Template(txtBoxTemplateName.Text);
                 template.DocFiles.Add(new DocFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>()));
@@ -540,6 +551,7 @@ namespace DocumentManagementApp
                 {
                     FileEditor.Instance.RemoveFileFromDocs(FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath.Equals(fileToEdit.FilePath)));
                     ButtonBack_Click(null, null);
+                    WindowForOldDocPathInput.oldDocPath = null;
                     return;
                 }
                 else
@@ -575,7 +587,7 @@ namespace DocumentManagementApp
             foreach (var template in this.model.BindingTemplates)
             {
                 double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
-                template.SimilarityPercentage = "(" + finalPercentage + "% similarity)";
+                template.SimilarityPercentage = "(" + Math.Round(finalPercentage, 2) + "% similarity)";
             }
 
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
@@ -614,7 +626,7 @@ namespace DocumentManagementApp
             foreach (var template in this.model.BindingTemplates)
             {
                 double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
-                template.SimilarityPercentage = "(" + finalPercentage + "% similarity)";
+                template.SimilarityPercentage = "(" + Math.Round(finalPercentage, 2) + "% similarity)";
             }
 
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
