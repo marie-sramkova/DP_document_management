@@ -47,12 +47,13 @@ namespace DocumentManagementApp
     {
         private List<DocFile> analyzedFiles = new List<DocFile>();
         private int pointerToActualAnalyzedFile = 0;
+        private Template selectedTemplate;
         private DocAttribute lastSelectedDocAttribute;
         private BitmapImage bitmap;
-        TesseractOCR tesseractOCR;
-        BtnSaveState btnSaveState = BtnSaveState.CREATE_TEMPLATE;
-        bool changeValueOfTextBoxAvailable = false;
-        bool updateAttributeFromTemplate = true;
+        private TesseractOCR tesseractOCR;
+        private BtnSaveState btnSaveState = BtnSaveState.CREATE_TEMPLATE;
+        private bool changeValueOfTextBoxAvailable = false;
+        private bool updateAttributeFromTemplate = true;
         public DocFile fileToEdit;
 
         public class Model : NotifyPropertyChangedBase
@@ -138,7 +139,7 @@ namespace DocumentManagementApp
                 foreach (var template in this.model.BindingTemplates)
                 {
                     double finalPercentage = CompareAllImagesFromTemplateWithCurrentImageAndReturnSimilarityPercentage(template);
-                    template.SimilarityPercentage = "(" + Math.Round(finalPercentage,2) + "% similarity)";
+                    template.SimilarityPercentage = "(" + Math.Round(finalPercentage, 2) + "% similarity)";
                 }
             }
             labelSelectedFile.Content = analyzedFiles[pointerToActualAnalyzedFile].FilePath;
@@ -342,41 +343,44 @@ namespace DocumentManagementApp
                 WindowForOldDocPathInput.oldDocPath = null;
                 return;
             }
-            updateAttributeFromTemplate = true;
-            if (btnSaveState == BtnSaveState.CREATE_TEMPLATE)
+            else
             {
-                ButtonNewTemplate_Click(sender, e);
-            }
-            else if (btnSaveState == BtnSaveState.SAVE_ANALYZED_FILE)
-            {
-                BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
-                if (docsAttrs == null || docsAttrs.Any(x => x.Value == ""))
+                updateAttributeFromTemplate = true;
+                if (btnSaveState == BtnSaveState.CREATE_TEMPLATE)
                 {
-                    return;
+                    ButtonNewTemplate_Click(sender, e);
                 }
-                else
+                else if (btnSaveState == BtnSaveState.SAVE_ANALYZED_FILE)
                 {
-                    FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
-                    if (analyzedFiles.Count == 0)
+                    BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
+                    if (docsAttrs == null || docsAttrs.Any(x => x.Value == ""))
                     {
-                        templateAndAttributeStackPanel.Children.Clear();
-                        ButtonBack_Click(sender, e);
+                        return;
                     }
                     else
-                    {
-                        if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                    { 
+                        FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
+                        if (analyzedFiles.Count == 0)
                         {
                             templateAndAttributeStackPanel.Children.Clear();
-                            analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
-                            pointerToActualAnalyzedFile = pointerToActualAnalyzedFile - 1;
-                            ButtonRight_Click(sender, e);
+                            ButtonBack_Click(sender, e);
                         }
                         else
                         {
-                            templateAndAttributeStackPanel.Children.Clear();
-                            analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
-                            pointerToActualAnalyzedFile = analyzedFiles.Count;
-                            ButtonLeft_Click(sender, e);
+                            if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                            {
+                                templateAndAttributeStackPanel.Children.Clear();
+                                analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
+                                pointerToActualAnalyzedFile = pointerToActualAnalyzedFile - 1;
+                                ButtonRight_Click(sender, e);
+                            }
+                            else
+                            {
+                                templateAndAttributeStackPanel.Children.Clear();
+                                analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
+                                pointerToActualAnalyzedFile = analyzedFiles.Count;
+                                ButtonLeft_Click(sender, e);
+                            }
                         }
                     }
                 }
@@ -410,14 +414,15 @@ namespace DocumentManagementApp
                 {
                     return;
                 }
-                Template templateWithFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.Any(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath));
-                if (templateWithFile != null)
-                {
-                    FileEditor.Instance.RemoveFileFromTemplate(analyzedFiles[pointerToActualAnalyzedFile], templateWithFile);
-                }
+                //Template templateWithFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.Any(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath));
+                //if (templateWithFile != null)
+                //{
+                //    FileEditor.Instance.RemoveFileFromTemplate(analyzedFiles[pointerToActualAnalyzedFile], templateWithFile);
+                //}
                 Template template = new Template(txtBoxTemplateName.Text);
                 template.DocFiles.Add(new DocFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>()));
                 FileEditor.Instance.AddNewTemplate(template);
+                selectedTemplate = template;
 
                 panel.Height = new GridLength(0, GridUnitType.Star);
                 CreateAttributeListView(template);
@@ -435,7 +440,7 @@ namespace DocumentManagementApp
             panel.Height = new GridLength(10, GridUnitType.Star);
             templateAndAttributeStackPanel.Children.Clear();
 
-            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
+            //Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
             if (fileToEdit == null)
             {
                 ShowImageWithAllAttributeBoundaries();
@@ -453,12 +458,12 @@ namespace DocumentManagementApp
         private void ShowImageWithAllAttributeBoundaries()
         {
             List<DocAttribute> docAttributes = new List<DocAttribute>();
-            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
+            Template selectedTemplateFromFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
             BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
             allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;
-            if (selectedTemplate != null && updateAttributeFromTemplate == true)
+            if (selectedTemplateFromFile != null && updateAttributeFromTemplate == true)
             {
-                foreach (var attr in selectedTemplate.AllDocAttributes)
+                foreach (var attr in selectedTemplateFromFile.AllDocAttributes)
                 {
                     if (!allAttributes.Any(x => x.Name == attr.Name))
                     {
@@ -467,7 +472,7 @@ namespace DocumentManagementApp
                 }
             }
 
-            if (selectedTemplate != null && allAttributes.Count > 0)
+            if (selectedTemplateFromFile != null && allAttributes.Count > 0)
             {
                 foreach (DocAttribute attribute in allAttributes)
                 {
@@ -495,7 +500,7 @@ namespace DocumentManagementApp
                     }
                 }
             }
-
+            selectedTemplate = selectedTemplateFromFile;
             model.BindingAttributes = allAttributes;
         }
 
@@ -544,6 +549,7 @@ namespace DocumentManagementApp
 
         private void ButtonRight_Click(object sender, RoutedEventArgs e)
         {
+            selectedTemplate = null;
             if (fileToEdit != null)
             {
                 MessageBoxResult result = MessageBox.Show("Are you sure you want to delete file settings?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -595,6 +601,7 @@ namespace DocumentManagementApp
 
         private void ButtonLeft_Click(object sender, RoutedEventArgs e)
         {
+            selectedTemplate = null;
             updateAttributeFromTemplate = true;
             buttonSave.Visibility = Visibility.Visible;
             btnSaveState = BtnSaveState.CREATE_TEMPLATE;
@@ -638,8 +645,9 @@ namespace DocumentManagementApp
             buttonSave.Content = "Save";
             buttonSave.Visibility = Visibility.Visible;
             btnSaveState = BtnSaveState.SAVE_ANALYZED_FILE;
-            Template selectedTemplate = (Template)listViewTemplates.SelectedItems[0];
-            FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
+            selectedTemplate = (Template)listViewTemplates.SelectedItems[0];
+            selectedTemplate.DocFiles.Add(analyzedFiles[pointerToActualAnalyzedFile]);
+            //FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
             CreateAttributeListView(selectedTemplate);
 
             foreach (var attr in model.BindingAttributes)
@@ -773,8 +781,8 @@ namespace DocumentManagementApp
             int sumOfStartingYLocation = 0;
             int sumOfEndingXLocation = 0;
             int sumOfEndingYLocation = 0;
-            Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
-            foreach (DocFile docFileFromTemplate in selectedTemplate.DocFiles)
+            Template selectedTemplateFromFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
+            foreach (DocFile docFileFromTemplate in selectedTemplateFromFile.DocFiles)
             {
                 DocFile docFile = FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == docFileFromTemplate.FilePath);
                 DocAttribute docAttr = docFile.DocAttributes.SingleOrDefault(x => x.Name == attr.Name);
@@ -920,22 +928,26 @@ namespace DocumentManagementApp
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ListView lv = (sender as ListView);
-            if (lv != null)
+            //Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
+            if (selectedTemplate != null)
             {
-                return;
+                ListView lv = (sender as ListView);
+                if (lv != null)
+                {
+                    return;
+                }
+                TextBox textBox = (sender as TextBox);
+                if (textBox != null)
+                {
+                    return;
+                }
+                if (imgAnalyzedDocument.IsMouseOver)
+                {
+                    return;
+                }
+                listViewAttributes.SelectedIndex = -1;
+                TextBox_LostFocus(sender, e);
             }
-            TextBox textBox = (sender as TextBox);
-            if (textBox != null)
-            {
-                return;
-            }
-            if (imgAnalyzedDocument.IsMouseOver)
-            {
-                return;
-            }
-            listViewAttributes.SelectedIndex = -1;
-            TextBox_LostFocus(sender, e);
         }
 
 
