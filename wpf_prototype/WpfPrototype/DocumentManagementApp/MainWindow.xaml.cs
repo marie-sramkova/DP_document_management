@@ -20,6 +20,7 @@ using Tesseract;
 using DocumentManagementApp.additionalLogic;
 using DocumentManagementApp.additionalLogic.entities;
 using System.Printing;
+using DocumentManagementApp.additionalLogic.filterSettings;
 
 namespace DocumentManagementApp
 {
@@ -36,15 +37,14 @@ namespace DocumentManagementApp
         {
             private SettingsEntity _SettingsEntity;
             public SettingsEntity SettingsEntity { get { return _SettingsEntity; } set { _SettingsEntity = value; RaisePropertyChanged(nameof(SettingsEntity)); } }
-
-        }
+            private BindingList<Filter> _Filters;
+            public BindingList<Filter> Filters { get { return _Filters; } set { _Filters = value; RaisePropertyChanged(nameof(Filters)); } }        }
 
         public Model model;
 
 
         public MainWindow()
         {
-
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp"))
             {
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp");
@@ -61,9 +61,17 @@ namespace DocumentManagementApp
                 {
                     UserSettings.directoryPath = dirPath;
                     this.model = new Model();
+                    model.Filters = new BindingList<Filter>();
+                    //model.Filters.Add(new Filter(additionalLogic.filterSettings.FilterTitle.ITEM.ToString(), additionalLogic.filterSettings.FilterType.RGX, "*"));
+                    //model.Filters.Add(new Filter(additionalLogic.filterSettings.FilterTitle.ITEM.ToString(), additionalLogic.filterSettings.FilterType.RGX, "*"));
+
+                    model.Filters.Add(new Filter());
+
+
                     InitializeComponent();
                     ShowListViewWithTemplatesFilesAndAttributes();
                     CalculateAndShowNewDocsToAnalyze();
+                    this.DataContext = model;
                 }
                 else
                 {
@@ -175,8 +183,8 @@ namespace DocumentManagementApp
             if (expanded == false)
             {
                 expanded = true;
-                collapsedForm.Height = new GridLength(17, GridUnitType.Star);
-                blankAfterCollapsedForm.Height = new GridLength(63, GridUnitType.Star);
+                collapsedForm.Height = new GridLength(63, GridUnitType.Star);
+                blankAfterCollapsedForm.Height = new GridLength(17, GridUnitType.Star);
                 listView.Height = new GridLength(0, GridUnitType.Star);
             }
             else

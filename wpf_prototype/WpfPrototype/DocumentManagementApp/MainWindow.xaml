@@ -38,48 +38,31 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="32*"></RowDefinition>
+                    <RowDefinition Height="79*"></RowDefinition>
                     <RowDefinition Height="1*"></RowDefinition>
-                    <RowDefinition Height="32*"></RowDefinition>
-                    <RowDefinition Height="1*"></RowDefinition>
-                    <RowDefinition Height="32*"></RowDefinition>
+                    <RowDefinition Height="20*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                        <ColumnDefinition Width="10*"></ColumnDefinition>
-                        <ColumnDefinition Width="10*"></ColumnDefinition>
-                        <ColumnDefinition Width="78*"></ColumnDefinition>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center">
-                        <Span BaselineAlignment="Baseline" Name="labelSelectFolder">Search:</Span>
-                    </TextBlock>
-                    <TextBox x:Name="textBoxFolderPath" Grid.Column="3"></TextBox>
+                    <DockPanel VerticalAlignment="Stretch" Margin="20" HorizontalAlignment="Center">
+                        <ListView ItemsSource="{Binding Filters}" Name="listOfFilters" Background="Transparent" BorderThickness="0" ScrollViewer.CanContentScroll="False" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <WrapPanel>
+                                        <ComboBox Width="90" Margin="10,0,0,0" ItemsSource="{Binding FiltersTitle}" SelectedItem="{Binding FiltersTitle[0]}"/>
+                                        <ComboBox Width="50" Margin="10,0,0,0" ItemsSource="{Binding FiltersType}" SelectedItem="{Binding FiltersType[0]}"/>
+                                        <TextBox x:Name="txtBoxFilterValue" Text="{Binding Value}" Width="90" Margin="10,0,0,0"></TextBox>
+                                        <Button Content="Delete" FontWeight="Bold" Height="30" Width="70" HorizontalAlignment="Right" Margin="10,0,0,0" ></Button>
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </DockPanel>
                 </Grid>
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                        <ColumnDefinition Width="10*"></ColumnDefinition>
-                        <ColumnDefinition Width="10*"></ColumnDefinition>
-                        <ColumnDefinition Width="78*"></ColumnDefinition>
-                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center">
-                    <Span BaselineAlignment="Baseline" Name="labelSelectFolder2">Search:</Span>
-                    </TextBlock>
-                    <TextBox x:Name="textBoxFolderPath2" Grid.Column="3"></TextBox>
-                </Grid>
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30*"></ColumnDefinition>
-                        <ColumnDefinition Width="40*"></ColumnDefinition>
-                        <ColumnDefinition Width="30*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="buttonApplyFilters" Content="Apply filters" Grid.Column="1"></Button>
-                </Grid>
+                <DockPanel Grid.Row="2">
+                    <Button x:Name="buttonAddNewFilter" Content="Add filter" DockPanel.Dock="Top" Height="30" Width="70"></Button>
+                    <Button x:Name="buttonApplyFilters" Content="Apply filters" DockPanel.Dock="Bottom" Height="30" Width="70"></Button>
+                </DockPanel>
             </Grid>
-
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -152,7 +135,6 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
-        
         <Grid Grid.Row="7">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30*"></ColumnDefinition>
