@@ -1,4 +1,4 @@
-﻿using DocumentManagementApp.additionalLogic.filterSettings;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -32,6 +32,7 @@ namespace DocumentManagementApp.additionalLogic.entities
         //    Value = newValue;
         //}
 
+        [JsonConstructor]
         public Filter()
         {
             FiltersTitle = new BindingList<String> { "Item", "Amount" };

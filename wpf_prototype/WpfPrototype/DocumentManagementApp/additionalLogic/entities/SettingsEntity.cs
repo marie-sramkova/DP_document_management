@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,12 +16,26 @@ namespace DocumentManagementApp.additionalLogic.entities
 
         public BindingList<DocFile> DocFiles { get { return _docFiles; } set { _docFiles = value; RaisePropertyChanged(nameof(DocFiles)); } }
 
+        [JsonConstructor]
         public SettingsEntity() 
         {
             Templates = new BindingList<Template>();
             DocFiles = new BindingList<DocFile>();
         }
 
+        public SettingsEntity(SettingsEntity settingsEntity)
+        {
+            Templates = new BindingList<Template>();
+            foreach (var template in settingsEntity.Templates)
+            {
+                Templates.Add(new Template(template));
+            }
+            DocFiles = new BindingList<DocFile>();
+            foreach (var file in settingsEntity.DocFiles)
+            {
+                DocFiles.Add(new DocFile(file));
+            }
+        }
 
         public void AddDoc(DocFile docFile)
         {

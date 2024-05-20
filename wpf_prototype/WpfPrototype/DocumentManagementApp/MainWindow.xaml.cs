@@ -20,7 +20,8 @@ using Tesseract;
 using DocumentManagementApp.additionalLogic;
 using DocumentManagementApp.additionalLogic.entities;
 using System.Printing;
-using DocumentManagementApp.additionalLogic.filterSettings;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace DocumentManagementApp
 {
@@ -38,7 +39,8 @@ namespace DocumentManagementApp
             private SettingsEntity _SettingsEntity;
             public SettingsEntity SettingsEntity { get { return _SettingsEntity; } set { _SettingsEntity = value; RaisePropertyChanged(nameof(SettingsEntity)); } }
             private BindingList<Filter> _Filters;
-            public BindingList<Filter> Filters { get { return _Filters; } set { _Filters = value; RaisePropertyChanged(nameof(Filters)); } }        }
+            public BindingList<Filter> Filters { get { return _Filters; } set { _Filters = value; RaisePropertyChanged(nameof(Filters)); } }
+        }
 
         public Model model;
 
@@ -194,7 +196,6 @@ namespace DocumentManagementApp
                 blankAfterCollapsedForm.Height = new GridLength(0, GridUnitType.Star);
                 listView.Height = new GridLength(80, GridUnitType.Star);
             }
-
         }
 
         private void ButtonAnalyzeNewDocuments_Click(object sender, RoutedEventArgs e)
@@ -232,6 +233,130 @@ namespace DocumentManagementApp
             WindowForOldDocPathInput windowForOldDocPathInput = new WindowForOldDocPathInput();
             windowForOldDocPathInput.Show();
             Close();
+        }
+
+        private void ApplyFilters()
+        {
+            SettingsEntity settingsEntityToShow = new SettingsEntity();
+            ApplyOnDocuments(settingsEntityToShow);
+            ApplyOnTemplates(settingsEntityToShow);
+            model.SettingsEntity = settingsEntityToShow;
+        }
+
+        private void ApplyOnDocuments(SettingsEntity settingsEntityToShow)
+        {
+            List<DocFile> docFilesToRemove = new List<DocFile>();
+            foreach (Filter filter in model.Filters)
+            {
+                if (filter.Title == "Item" && filter.Type == "rgx")
+                {
+                    String pattern = filter.Value.ToString();
+                    try
+                    {
+                        Regex r = new Regex(pattern, RegexOptions.IgnoreCase);
+
+                        foreach (Template template in model.SettingsEntity.Templates)
+                        {
+                            foreach (DocFile docFile in template.DocFiles)
+                            {
+                                String text = ConvertDocFiletToString(docFile);
+                                Match m = r.Match(text);
+                                if (!m.Success)
+                                {
+                                    if (!docFilesToRemove.Contains(docFile))
+                                    {
+                                        docFilesToRemove.Add(docFile);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        settingsEntityToShow = new SettingsEntity();
+                        return;
+                    }
+                }
+            }
+            foreach (Template template in model.SettingsEntity.Templates)
+            {
+                foreach (DocFile docFile in template.DocFiles)
+                {
+                    if (!docFilesToRemove.Any(x => x.FilePath.Equals(docFile.FilePath)))
+                    {
+                        if (!settingsEntityToShow.Templates.Any(x => x.Name.Equals(template.Name)))
+                        {
+                            Template newTemplate = new Template(template);
+                            newTemplate.DocFiles = new BindingList<DocFile>();
+                            settingsEntityToShow.Templates.Add(newTemplate);
+                            settingsEntityToShow.Templates.SingleOrDefault(x => x.Name.Equals(template.Name)).DocFiles.Add(new DocFile(docFile));
+                        }
+                        else
+                        {
+                            settingsEntityToShow.Templates.SingleOrDefault(x => x.Name.Equals(template.Name)).DocFiles.Add(new DocFile(docFile));
+                        }
+                    }
+                }
+            }
+        }
+
+        private string ConvertDocFiletToString(DocFile docFile)
+        {
+            StringBuilder text = new StringBuilder();
+            text.Append(docFile.FilePath).Append("\n");
+            foreach (DocAttribute attribute in docFile.DocAttributes)
+            {
+                text.Append(attribute.Name).Append(" ").Append(attribute.Type).Append(" ").Append(attribute.Value).Append("\n");
+            }
+            return text.ToString();
+        }
+
+        private void ApplyOnTemplates(SettingsEntity settingsEntityToShow)
+        {
+            List<Template> templatesToRemove = new List<Template>();
+            foreach (Filter filter in model.Filters)
+            {
+                if (filter.Title == "Item" && filter.Type == "rgx")
+                {
+                    String pattern = filter.Value.ToString();
+                    try
+                    {
+                        Regex r = new Regex(pattern, RegexOptions.IgnoreCase);
+                        foreach (Template template in model.SettingsEntity.Templates)
+                        {
+                            Match m = r.Match(template.Name);
+                            if (!m.Success)
+                            {
+                                templatesToRemove.Add(new Template(template));
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        settingsEntityToShow = new SettingsEntity();
+                        return;
+                    }
+                }
+            }
+            foreach (var template in model.SettingsEntity.Templates)
+            {
+                if (!templatesToRemove.Any(x => x.Name.Equals(template.Name)))
+                {
+                    settingsEntityToShow.Templates.Add(template);
+                }
+            }
+        }
+
+        private void buttonApplyFilters_Click(object sender, RoutedEventArgs e)
+        {
+            if (model.Filters.Count > 0)
+            {
+                ApplyFilters();
+                expanded = false;
+                collapsedForm.Height = new GridLength(0, GridUnitType.Star);
+                blankAfterCollapsedForm.Height = new GridLength(0, GridUnitType.Star);
+                listView.Height = new GridLength(80, GridUnitType.Star);
+            }
         }
     }
 }
