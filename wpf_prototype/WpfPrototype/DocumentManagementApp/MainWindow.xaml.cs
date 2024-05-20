@@ -20,7 +20,6 @@ using Tesseract;
 using DocumentManagementApp.additionalLogic;
 using DocumentManagementApp.additionalLogic.entities;
 using System.Printing;
-using DocumentManagementApp.additionalLogic.filterSettings;
 
 namespace DocumentManagementApp
 {

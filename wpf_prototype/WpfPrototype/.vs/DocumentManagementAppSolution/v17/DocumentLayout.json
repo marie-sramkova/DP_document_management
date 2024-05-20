@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\documentmanagementapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|solutionrelative:documentmanagementapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\documentmanagementapp\\additionallogic\\entities\\filter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|solutionrelative:documentmanagementapp\\additionallogic\\entities\\filter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\documentmanagementapp\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|solutionrelative:documentmanagementapp\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\documentmanagementapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|solutionrelative:documentmanagementapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D8A58F23-B58F-4B2D-9CAE-848A07136B73}|DocumentManagementApp\\DocumentManagementApp.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\wpf_prototype\\wpfprototype\\documentmanagementapp\\window1.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,37 +38,37 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\MainWindow.xaml",
               "RelativeDocumentMoniker": "DocumentManagementApp\\MainWindow.xaml",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\MainWindow.xaml",
               "RelativeToolTip": "DocumentManagementApp\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-05-16T10:42:59.732Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-16T10:42:59.732Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "DocumentManagementApp\\MainWindow.xaml.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\MainWindow.xaml.cs",
               "RelativeToolTip": "DocumentManagementApp\\MainWindow.xaml.cs",
-              "ViewState": "AQIAAC4AAAAAAAAAAAD4vzgAAAAAAAAA",
+              "ViewState": "AQIAACUAAAAAAAAAAAAQwBUAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-19T06:50:46.31Z"
+              "WhenOpened": "2024-05-19T06:50:46.31Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Filter.cs",
               "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\additionalLogic\\entities\\Filter.cs",
               "RelativeDocumentMoniker": "DocumentManagementApp\\additionalLogic\\entities\\Filter.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\additionalLogic\\entities\\Filter.cs",
               "RelativeToolTip": "DocumentManagementApp\\additionalLogic\\entities\\Filter.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAuwCgAAAAVAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-20T12:10:44.323Z",
               "EditorCaption": ""
