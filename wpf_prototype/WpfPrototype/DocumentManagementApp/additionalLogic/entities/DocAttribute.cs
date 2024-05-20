@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -25,6 +27,7 @@ namespace DocumentManagementApp.additionalLogic.entities
         private int _EndingYLocation;
         public int EndingYLocation { get { return _EndingYLocation; } set { _EndingYLocation = value; RaisePropertyChanged(nameof(EndingYLocation)); } }
 
+        [JsonConstructor]
         public DocAttribute(string name, string value, string type, int startingXLocation, int startingYLocation, int endingXLocation, int endingYLocation)
         {
             Name = name;
@@ -35,5 +38,23 @@ namespace DocumentManagementApp.additionalLogic.entities
             EndingXLocation = endingXLocation;
             EndingYLocation = endingYLocation;
         }
+
+        public DocAttribute(DocAttribute docAttribute)
+        {
+            Name = docAttribute.Name;
+            Value = docAttribute.Value;
+            Type = docAttribute.Type;
+            StartingXLocation = docAttribute.StartingXLocation;
+            StartingYLocation = docAttribute.StartingYLocation;
+            EndingXLocation = docAttribute.EndingXLocation;
+            EndingYLocation = docAttribute.EndingYLocation;
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
+
+
 }
