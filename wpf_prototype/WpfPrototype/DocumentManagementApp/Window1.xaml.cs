@@ -459,7 +459,8 @@ namespace DocumentManagementApp
 
         private void ShowImageWithAllAttributeBoundaries()
         {
-            List<DocAttribute> docAttributes = new List<DocAttribute>();
+            List<DocAttribute> docAttributes = new List<DocAttribute>(); 
+            if (selectedTemplate == null) { selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.Any(y => y.FilePath.Equals(analyzedFiles[pointerToActualAnalyzedFile].FilePath))); }
             Template selectedTemplateFromFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
             BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
             allAttributes = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes;

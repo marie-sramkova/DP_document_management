@@ -446,7 +446,7 @@ namespace DocumentManagementApp
             }
             if (model.Filters.Count == 0)
             {
-                model.Filters.Add(new Filter("Item", "rgx", "*"));
+                model.Filters.Add(new Filter("Item", "rgx", ""));
                 ShowListViewWithTemplatesFilesAndAttributes();
                 expanded = false;
                 collapsedForm.Height = new GridLength(0, GridUnitType.Star);
