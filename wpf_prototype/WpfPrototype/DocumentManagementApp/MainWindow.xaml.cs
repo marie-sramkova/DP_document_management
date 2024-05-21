@@ -22,6 +22,7 @@ using DocumentManagementApp.additionalLogic.entities;
 using System.Printing;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 
 namespace DocumentManagementApp
 {
@@ -317,30 +318,31 @@ namespace DocumentManagementApp
                     foreach (DocFile docFile in template.DocFiles)
                     {
                         bool matchesFilter = false;
-                        String text = ConvertDocFiletToString(docFile);
-                        String[] wordsFromDoc = text.Split(' ');
-                        foreach (var word in wordsFromDoc)
+                        foreach (DocAttribute attr in docFile.DocAttributes)
                         {
-                            double value;
-                            if (word.Contains(","))
+                            if (attr.Type.Equals("Number"))
                             {
-                                word.Replace(",", ".");
-                            }
-                            try
-                            {
-                                value = Double.Parse(word);
-                            }
-                            catch (Exception ex)
-                            {
-                                continue;
-                            }
-                            if (filter.Type == ">" && value > outValue)
-                            {
-                                matchesFilter = true;
-                            }
-                            else if (filter.Type == "<" && value < outValue)
-                            {
-                                matchesFilter = true;
+                                double value;
+                                if (attr.Value.Contains(","))
+                                {
+                                    attr.Value.Replace(",", ".");
+                                }
+                                try
+                                {
+                                    value = Double.Parse(attr.Value);
+                                }
+                                catch (Exception ex)
+                                {
+                                    continue;
+                                }
+                                if (filter.Type == ">" && value > outValue)
+                                {
+                                    matchesFilter = true;
+                                }
+                                else if (filter.Type == "<" && value < outValue)
+                                {
+                                    matchesFilter = true;
+                                }
                             }
                         }
                         if (matchesFilter == false)
