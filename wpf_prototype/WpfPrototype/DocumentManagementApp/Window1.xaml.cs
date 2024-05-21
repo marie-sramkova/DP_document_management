@@ -866,7 +866,18 @@ namespace DocumentManagementApp
                 {
                     lastSelectedDocAttribute = new DocAttribute(lastSelectedDocAttribute.Name, "", lastSelectedDocAttribute.Type, 0, 0, 0, 0);
                     CalculateAverageAttributeLocation(lastSelectedDocAttribute);
-                    analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(lastSelectedDocAttribute);
+                    if (analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Any(x => x.Name.Equals(lastSelectedDocAttribute.Name)))
+                    {
+                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(lastSelectedDocAttribute.Name)).StartingXLocation = 0;
+                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(lastSelectedDocAttribute.Name)).StartingYLocation = 0;
+                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(lastSelectedDocAttribute.Name)).EndingXLocation = 0;
+                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(lastSelectedDocAttribute.Name)).EndingYLocation = 0;
+                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name.Equals(lastSelectedDocAttribute.Name)).Value = "";
+                    }
+                    else
+                    {
+                        analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.Add(lastSelectedDocAttribute);
+                    }
                     TextBox_GotFocus(lastSelectedDocAttribute, e);
                 }
             }
