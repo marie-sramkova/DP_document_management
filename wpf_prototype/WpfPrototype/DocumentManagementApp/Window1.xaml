@@ -22,7 +22,7 @@
                     </Button>
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Bottom" Height="30">
-                    <Button x:Name="buttonSave" Content="Confirm" Click="ButtonSave_Click"></Button>
+                    <Button x:Name="buttonSave" Content="Save" Click="ButtonSave_Click"></Button>
                 </DockPanel>
                 <DockPanel HorizontalAlignment="Center" LastChildFill="False">
                     <Grid>

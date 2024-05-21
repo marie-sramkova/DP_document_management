@@ -238,6 +238,7 @@ namespace DocumentManagementApp
         private void ApplyFilters()
         {
             SettingsEntity settingsEntityToShow = new SettingsEntity();
+            ShowListViewWithTemplatesFilesAndAttributes();
             ApplyOnDocuments(settingsEntityToShow);
             ApplyOnTemplates(settingsEntityToShow);
             model.SettingsEntity = settingsEntityToShow;
@@ -277,7 +278,13 @@ namespace DocumentManagementApp
                         return;
                     }
                 }
+                AddDocsToListToRemoveIfNotMatchesAmountFilter(docFilesToRemove, filter);
             }
+            AddDocsWhichMatchesFilters(settingsEntityToShow, docFilesToRemove);
+        }
+
+        private void AddDocsWhichMatchesFilters(SettingsEntity settingsEntityToShow, List<DocFile> docFilesToRemove)
+        {
             foreach (Template template in model.SettingsEntity.Templates)
             {
                 foreach (DocFile docFile in template.DocFiles)
@@ -300,6 +307,54 @@ namespace DocumentManagementApp
             }
         }
 
+        private void AddDocsToListToRemoveIfNotMatchesAmountFilter(List<DocFile> docFilesToRemove, Filter filter)
+        {
+            double outValue;
+            if (filter.Title == "Amount" && (filter.Type == ">" || filter.Type == "<") && filter.Value != "" && Double.TryParse(filter.Value, out outValue))
+            {
+                foreach (Template template in model.SettingsEntity.Templates)
+                {
+                    foreach (DocFile docFile in template.DocFiles)
+                    {
+                        bool matchesFilter = false;
+                        String text = ConvertDocFiletToString(docFile);
+                        String[] wordsFromDoc = text.Split(' ');
+                        foreach (var word in wordsFromDoc)
+                        {
+                            double value;
+                            if (word.Contains(","))
+                            {
+                                word.Replace(",", ".");
+                            }
+                            try
+                            {
+                                value = Double.Parse(word);
+                            }
+                            catch (Exception ex)
+                            {
+                                continue;
+                            }
+                            if (filter.Type == ">" && value > outValue)
+                            {
+                                matchesFilter = true;
+                            }
+                            else if (filter.Type == "<" && value < outValue)
+                            {
+                                matchesFilter = true;
+                            }
+                        }
+                        if (matchesFilter == false)
+                        {
+                            if (!docFilesToRemove.Contains(docFile))
+                            {
+                                docFilesToRemove.Add(docFile);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private string ConvertDocFiletToString(DocFile docFile)
         {
             StringBuilder text = new StringBuilder();
@@ -313,36 +368,44 @@ namespace DocumentManagementApp
 
         private void ApplyOnTemplates(SettingsEntity settingsEntityToShow)
         {
-            List<Template> templatesToRemove = new List<Template>();
-            foreach (Filter filter in model.Filters)
+            if (!model.Filters.Any(x => x.Title.Equals("Amount")))
             {
-                if (filter.Title == "Item" && filter.Type == "rgx")
+                List<Template> templatesToRemove = new List<Template>();
+                foreach (Filter filter in model.Filters)
                 {
-                    String pattern = filter.Value.ToString();
-                    try
+                    if (filter.Title == "Item" && filter.Type == "rgx")
                     {
-                        Regex r = new Regex(pattern, RegexOptions.IgnoreCase);
-                        foreach (Template template in model.SettingsEntity.Templates)
+                        String pattern = filter.Value.ToString();
+                        try
                         {
-                            Match m = r.Match(template.Name);
-                            if (!m.Success)
+                            Regex r = new Regex(pattern, RegexOptions.IgnoreCase);
+                            foreach (Template template in model.SettingsEntity.Templates)
                             {
-                                templatesToRemove.Add(new Template(template));
+                                Match m = r.Match(template.Name);
+                                if (!m.Success)
+                                {
+                                    templatesToRemove.Add(new Template(template));
+                                }
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        settingsEntityToShow = new SettingsEntity();
-                        return;
+                        catch (Exception ex)
+                        {
+                            settingsEntityToShow = new SettingsEntity();
+                            return;
+                        }
                     }
                 }
-            }
-            foreach (var template in model.SettingsEntity.Templates)
-            {
-                if (!templatesToRemove.Any(x => x.Name.Equals(template.Name)))
+                foreach (var template in model.SettingsEntity.Templates)
                 {
-                    settingsEntityToShow.Templates.Add(template);
+                    if (!templatesToRemove.Any(x => x.Name.Equals(template.Name)) && !settingsEntityToShow.Templates.Any(x => x.Name.Equals(template.Name)))
+                    {
+                        settingsEntityToShow.Templates.Add(template);
+                    }
+                    else if (!templatesToRemove.Any(x => x.Name.Equals(template.Name)) && settingsEntityToShow.Templates.Any(x => x.Name.Equals(template.Name)))
+                    {
+                        settingsEntityToShow.Templates.Remove(settingsEntityToShow.Templates.SingleOrDefault(x => x.Name.Equals(template.Name)));
+                        settingsEntityToShow.Templates.Add(template);
+                    }
                 }
             }
         }
@@ -377,7 +440,16 @@ namespace DocumentManagementApp
             }
             if (filterToDelete != null)
             {
-                model.Filters.Remove(model.Filters.SingleOrDefault(x => x.Title.Equals(filterToDelete.Title)));
+                model.Filters.Remove(filterToDelete);
+            }
+            if (model.Filters.Count == 0)
+            {
+                model.Filters.Add(new Filter("Item", "rgx", "*"));
+                ShowListViewWithTemplatesFilesAndAttributes();
+                expanded = false;
+                collapsedForm.Height = new GridLength(0, GridUnitType.Star);
+                blankAfterCollapsedForm.Height = new GridLength(0, GridUnitType.Star);
+                listView.Height = new GridLength(80, GridUnitType.Star);
             }
         }
     }

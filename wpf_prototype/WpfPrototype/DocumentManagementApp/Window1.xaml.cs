@@ -358,8 +358,9 @@ namespace DocumentManagementApp
                         return;
                     }
                     else
-                    { 
-                        FileEditor.Instance.AddAttributesToFileAndTemplate(analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
+                    {
+                        FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
+                        FileEditor.Instance.AddAttributesToFileAndTemplate(selectedTemplate, analyzedFiles[pointerToActualAnalyzedFile].FilePath, docsAttrs);
                         if (analyzedFiles.Count == 0)
                         {
                             templateAndAttributeStackPanel.Children.Clear();
@@ -450,6 +451,7 @@ namespace DocumentManagementApp
             buttonNewAttribute.Content = "Add new attribute";
             buttonNewAttribute.Click += (s, e) =>
             {
+                if (selectedTemplate == null) { selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.Any(y => y.FilePath.Equals(analyzedFiles[pointerToActualAnalyzedFile].FilePath))); }
                 ButtonNewAttribute_Click(selectedTemplate);
             };
             templateAndAttributeStackPanel.Children.Add(buttonNewAttribute);
