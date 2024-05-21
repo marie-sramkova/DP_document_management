@@ -168,7 +168,8 @@ namespace DocumentManagementApp
         {
             RemoveFileFromDocs(file);
             AddNewFilesWithoutAttributes(new List<String> { file.FilePath });
-            AddAttributesToFileAndTemplate(file.FilePath, file.DocAttributes);
+            Template selectedTemplate = FileEditor.instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.Any(y => y.FilePath.Equals(file.FilePath)));
+            AddAttributesToFileAndTemplate(selectedTemplate, file.FilePath, file.DocAttributes);
             WriteSettingsEntityToFile();
         }
 
@@ -193,25 +194,25 @@ namespace DocumentManagementApp
             }
         }
 
-        public void AddAttributesToFileAndTemplate(string fileName, BindingList<DocAttribute> docAttributes)
+        public void AddAttributesToFileAndTemplate(Template selectedTemplate, string fileName, BindingList<DocAttribute> docAttributes)
         {
-            Template template = SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath.Equals(fileName)) != null);
+            Template template = SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
             if (template != null) {
                 DocFile docFile = SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName);
                 if (docFile != null)
                 {
                     foreach (DocAttribute attribute in docAttributes)
                     {
-                        AddAttributeToFileAndTemplate(fileName, attribute);
+                        AddAttributeToFileAndTemplate(template, fileName, attribute);
                     }
                     WriteSettingsEntityToFile();
                 }
             }
         }
 
-        public void AddAttributeToFileAndTemplate(string fileName, DocAttribute docAttribute)
+        public void AddAttributeToFileAndTemplate(Template selectedTemplate, string fileName, DocAttribute docAttribute)
         {
-            Template template = SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == fileName) != null);
+            Template template = SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
             if (template != null)
             {
                 DocFile docFile = SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName);
