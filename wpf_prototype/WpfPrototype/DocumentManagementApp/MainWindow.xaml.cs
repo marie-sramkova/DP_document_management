@@ -85,6 +85,14 @@ namespace DocumentManagementApp
             {
                 ButtonSettings_Click(null, null);
             }
+            if (model == null || model.SettingsEntity == null || model.SettingsEntity.Templates == null || model.SettingsEntity.Templates.Count == 0)
+            {
+                buttonAnalyzeOldDocument.IsEnabled = false;
+            }
+            else
+            {
+                buttonAnalyzeOldDocument.IsEnabled = true;
+            }
         }
 
         private void ShowListViewWithTemplatesFilesAndAttributes()
@@ -179,6 +187,14 @@ namespace DocumentManagementApp
                 buttonAnalyzeNewDocuments.FontWeight = FontWeights.Bold;
             }
             buttonAnalyzeNewDocuments.Content = "Analyze new files (" + documentsCount + ")";
+            if (documentsCount == 0)
+            {
+                buttonAnalyzeNewDocuments.IsEnabled = false;
+            }
+            else
+            {
+                buttonAnalyzeNewDocuments.IsEnabled = true;
+            }
         }
 
         private void ButtonFilter_Click(object sender, RoutedEventArgs e)
