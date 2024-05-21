@@ -358,5 +358,27 @@ namespace DocumentManagementApp
                 listView.Height = new GridLength(80, GridUnitType.Star);
             }
         }
+
+        private void buttonAddNewFilter_Click(object sender, RoutedEventArgs e)
+        {
+            model.Filters.Add(new Filter());
+        }
+
+        private void btnDeleteFilter_Click(object sender, RoutedEventArgs e)
+        {
+            Filter filterToDelete;
+            try
+            {
+                filterToDelete = (sender as FrameworkElement).DataContext as Filter;
+            }
+            catch (NullReferenceException ex)
+            {
+                filterToDelete = sender as Filter;
+            }
+            if (filterToDelete != null)
+            {
+                model.Filters.Remove(model.Filters.SingleOrDefault(x => x.Title.Equals(filterToDelete.Title)));
+            }
+        }
     }
 }
