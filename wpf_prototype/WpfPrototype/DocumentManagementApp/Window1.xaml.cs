@@ -94,7 +94,7 @@ namespace DocumentManagementApp
             {
                 analyzedFiles.Add(fileToEdit);
                 pointerToActualAnalyzedFile = 0;
-                buttonLeft.IsEnabled = false;
+                buttonLeft.Visibility = Visibility.Hidden;
                 buttonRight.Content = "Delete";
                 SelectActualAnalyzedFile();
                 ShowImage();
@@ -327,6 +327,7 @@ namespace DocumentManagementApp
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
+            WindowForOldDocPathInput.oldDocPath = null;
             imgAnalyzedDocument.Source = null;
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
