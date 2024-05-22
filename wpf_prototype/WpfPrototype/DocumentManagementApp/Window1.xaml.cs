@@ -798,14 +798,17 @@ namespace DocumentManagementApp
             foreach (DocFile docFileFromTemplate in selectedTemplateFromFile.DocFiles)
             {
                 DocFile docFile = FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == docFileFromTemplate.FilePath);
-                DocAttribute docAttr = docFile.DocAttributes.SingleOrDefault(x => x.Name == attr.Name);
-                if (docAttr != null && docAttr.EndingYLocation != 0 && docAttr.StartingXLocation != docAttr.EndingXLocation && docAttr.StartingYLocation != docAttr.EndingYLocation)
+                if (docFile != null)
                 {
-                    sumOfStartingXLocation += docAttr.StartingXLocation;
-                    sumOfStartingYLocation += docAttr.StartingYLocation;
-                    sumOfEndingXLocation += docAttr.EndingXLocation;
-                    sumOfEndingYLocation += docAttr.EndingYLocation;
-                    count = count + 1;
+                    DocAttribute docAttr = docFile.DocAttributes.SingleOrDefault(x => x.Name == attr.Name);
+                    if (docAttr != null && docAttr.EndingYLocation != 0 && docAttr.StartingXLocation != docAttr.EndingXLocation && docAttr.StartingYLocation != docAttr.EndingYLocation)
+                    {
+                        sumOfStartingXLocation += docAttr.StartingXLocation;
+                        sumOfStartingYLocation += docAttr.StartingYLocation;
+                        sumOfEndingXLocation += docAttr.EndingXLocation;
+                        sumOfEndingYLocation += docAttr.EndingYLocation;
+                        count = count + 1;
+                    }
                 }
             }
             if (count > 0)

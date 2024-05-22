@@ -34,11 +34,23 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WindowForOldDocPathInput.xaml.cs",
+              "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\WindowForOldDocPathInput.xaml.cs",
+              "RelativeDocumentMoniker": "DocumentManagementApp\\WindowForOldDocPathInput.xaml.cs",
+              "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\WindowForOldDocPathInput.xaml.cs",
+              "RelativeToolTip": "DocumentManagementApp\\WindowForOldDocPathInput.xaml.cs",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAAADMAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-22T06:54:36.229Z"
             },
             {
               "$type": "Document",
@@ -48,7 +60,7 @@
               "RelativeDocumentMoniker": "DocumentManagementApp\\Window1.xaml.cs",
               "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\Window1.xaml.cs",
               "RelativeToolTip": "DocumentManagementApp\\Window1.xaml.cs",
-              "ViewState": "AQIAAGQCAAAAAAAAAAAuwGwCAAAMAAAA",
+              "ViewState": "AQIAAJcCAAAAAAAAAAAuwKUCAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-22T07:15:24.596Z",
               "EditorCaption": ""
@@ -76,19 +88,6 @@
               "ViewState": "AQIAANIAAAAAAAAAAAAQwO4AAAAwAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-19T06:50:46.31Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "WindowForOldDocPathInput.xaml.cs",
-              "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\WindowForOldDocPathInput.xaml.cs",
-              "RelativeDocumentMoniker": "DocumentManagementApp\\WindowForOldDocPathInput.xaml.cs",
-              "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\WindowForOldDocPathInput.xaml.cs",
-              "RelativeToolTip": "DocumentManagementApp\\WindowForOldDocPathInput.xaml.cs",
-              "ViewState": "AQIAAC8AAAAAAAAAAAAuwD0AAAAQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-22T06:54:36.229Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
