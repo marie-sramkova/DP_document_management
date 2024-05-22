@@ -20,6 +20,7 @@ namespace DocumentManagementApp
     /// </summary>
     public partial class SettingsWindow : Window
     {
+        public MainWindow mainWindow;
         public SettingsWindow()
         {
             InitializeComponent();
@@ -32,9 +33,10 @@ namespace DocumentManagementApp
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            Close();
+            //MainWindow mainWindow = new MainWindow();
+            //mainWindow.Show();
+            //Close();
+            Window_Closed(sender, e);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
@@ -65,9 +67,10 @@ namespace DocumentManagementApp
                 settingsDocumentsFile.Close();
                 var settingsTemplatesFile = File.Create(UserSettings.settingsTemplatesFilePath);
                 settingsTemplatesFile.Close();
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Show();
-                Close();
+                //MainWindow mainWindow = new MainWindow();
+                //mainWindow.Show();
+                //Close();
+                Window_Closed(sender, e);
             }
         }
 
@@ -107,6 +110,16 @@ namespace DocumentManagementApp
                 newText = textBoxFolderPath.Text.Replace("\\", "/");
             }
             return newText;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            try
+            {
+                mainWindow.Visibility = Visibility.Visible;
+                mainWindow.UpdateWindow();
+            }catch(Exception ex) { }
+            Close();
         }
     }
 }

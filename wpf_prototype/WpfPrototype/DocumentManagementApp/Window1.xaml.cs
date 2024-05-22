@@ -55,6 +55,7 @@ namespace DocumentManagementApp
         private bool changeValueOfTextBoxAvailable = false;
         private bool updateAttributeFromTemplate = true;
         public DocFile fileToEdit;
+        public MainWindow mainWindow;
 
         public class Model : NotifyPropertyChangedBase
         {
@@ -329,9 +330,11 @@ namespace DocumentManagementApp
         {
             WindowForOldDocPathInput.oldDocPath = null;
             imgAnalyzedDocument.Source = null;
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            Close();
+            //MainWindow mainWindow = new MainWindow();
+            //mainWindow.Show();
+            //Close();
+
+            Window_Closed(sender, e);
         }
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
@@ -369,7 +372,13 @@ namespace DocumentManagementApp
                         }
                         else
                         {
-                            if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                            if(analyzedFiles.Count-1 == 0)
+                            {
+                                templateAndAttributeStackPanel.Children.Clear();
+                                analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
+                                pointerToActualAnalyzedFile = 0;
+                                ButtonBack_Click(sender, e);
+                            } else if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
                             {
                                 templateAndAttributeStackPanel.Children.Clear();
                                 analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
@@ -1008,6 +1017,17 @@ namespace DocumentManagementApp
                     TextBox_LostFocus(sender, e);
                 }
             }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            try
+            {
+                mainWindow.Visibility = Visibility.Visible;
+                mainWindow.UpdateWindow();
+            }
+            catch (Exception ex) { }
+            Close();
         }
     }
 }

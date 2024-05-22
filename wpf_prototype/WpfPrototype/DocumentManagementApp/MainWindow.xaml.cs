@@ -48,6 +48,7 @@ namespace DocumentManagementApp
 
         public MainWindow()
         {
+            InitializeComponent();
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp"))
             {
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp");
@@ -71,7 +72,6 @@ namespace DocumentManagementApp
                     model.Filters.Add(new Filter());
 
 
-                    InitializeComponent();
                     ShowListViewWithTemplatesFilesAndAttributes();
                     CalculateAndShowNewDocsToAnalyze();
                     this.DataContext = model;
@@ -234,22 +234,28 @@ namespace DocumentManagementApp
             FileEditor.Instance.AddNewFilesWithoutAttributes(filesToStore);
 
             Window1 window1 = new Window1();
+            window1.mainWindow = this;
             window1.Show();
-            Close();
+            this.Visibility = Visibility.Hidden;
+            //Close();
         }
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.mainWindow = this;
             settingsWindow.Show();
-            Close();
+            this.Visibility = Visibility.Hidden;
+            //Close();
         }
 
         private void ButtonAnalyzeOldDocument_Click(object sender, RoutedEventArgs e)
         {
             WindowForOldDocPathInput windowForOldDocPathInput = new WindowForOldDocPathInput();
+            windowForOldDocPathInput.mainWindow = this;
             windowForOldDocPathInput.Show();
-            Close();
+            this.Visibility = Visibility.Hidden;
+            //Close();
         }
 
         private void ApplyFilters()
@@ -468,6 +474,33 @@ namespace DocumentManagementApp
                 collapsedForm.Height = new GridLength(0, GridUnitType.Star);
                 blankAfterCollapsedForm.Height = new GridLength(0, GridUnitType.Star);
                 listView.Height = new GridLength(80, GridUnitType.Star);
+            }
+        }
+        
+        public void UpdateWindow()
+        {
+            String filePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "/data/DocumentManagementApp/folderPath.txt";
+            String dirPath = "";
+            if (File.Exists(filePath))
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    dirPath = reader.ReadToEnd();
+                }
+                if (dirPath == "" || !Directory.Exists(dirPath))
+                {
+                    Close();
+                }
+                else
+                {
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    Close();
+                }
+            }
+            else
+            {
+                Close();
             }
         }
     }
