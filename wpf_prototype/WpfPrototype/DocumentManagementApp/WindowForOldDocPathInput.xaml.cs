@@ -22,6 +22,7 @@ namespace DocumentManagementApp
     public partial class WindowForOldDocPathInput : Window
     {
         public static DocFile oldDocPath;
+        public MainWindow mainWindow;
         public WindowForOldDocPathInput()
         {
             InitializeComponent();
@@ -29,9 +30,11 @@ namespace DocumentManagementApp
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            Close();
+            //MainWindow mainWindow = new MainWindow();
+            //mainWindow.Show();
+            //Close();
+
+            Window_Closed(sender, e);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
@@ -41,7 +44,9 @@ namespace DocumentManagementApp
             {
                 oldDocPath = savedFile;
                 Window1 window1 = new Window1();
+                window1.mainWindow = mainWindow;
                 window1.Show();
+                this.mainWindow = null;
                 Close();
             }
             else
@@ -49,6 +54,16 @@ namespace DocumentManagementApp
                 MessageBox.Show("Incorrect file path or file has not been analyzed yet. Please write different path.");
                 return;
             }
+        }
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            try
+            {
+                mainWindow.Visibility = Visibility.Visible;
+                mainWindow.UpdateWindow();
+            }
+            catch (Exception ex) { }
+            Close();
         }
     }
 }

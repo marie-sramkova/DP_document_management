@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DocumentManagementApp"
         mc:Ignorable="d"
         Title="Analyze dokument"
-        WindowState = "Maximized" MouseDown="Window_MouseDown">
+        WindowState = "Maximized" MouseDown="Window_MouseDown" Closed="Window_Closed">
     <Border Padding="5">
         <Grid>
             <Grid.ColumnDefinitions>
