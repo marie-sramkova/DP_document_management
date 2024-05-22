@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DocumentManagementApp"
         mc:Ignorable="d"
-        Title="Window1"
+        Title="Analyze dokument"
         WindowState = "Maximized" MouseDown="Window_MouseDown">
     <Border Padding="5">
         <Grid>

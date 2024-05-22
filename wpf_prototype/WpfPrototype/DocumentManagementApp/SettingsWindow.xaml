@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DocumentManagementApp"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="300" Width="400">
+        Title="Select default folder" Height="300" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"></RowDefinition>
@@ -20,7 +20,7 @@
         <DockPanel Grid.Row="2" Height="50">
             <TextBox x:Name="textBoxFolderPath" Margin="10,10,10,10"></TextBox>
         </DockPanel>
-        <DockPanel Grid.Row="3" HorizontalAlignment="Center" Height="50">
+        <DockPanel Grid.Row="3" HorizontalAlignment="Center" Height="35">
             <Button x:Name="btnOK" Content="OK" DockPanel.Dock="Left" Margin="0,0,10,0" Click="btnOK_Click" Width="50"></Button>
             <Button x:Name="btnClose" Content="Close" DockPanel.Dock="Right" Margin="10,0,0,0" Click="btnClose_Click" Width="50"></Button>
         </DockPanel>
