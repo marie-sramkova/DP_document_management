@@ -41,9 +41,22 @@ namespace DocumentManagementApp
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
+            if (textBoxFolderPath.Text == "" || !Directory.Exists(textBoxFolderPath.Text))
+            {
+                MessageBox.Show("Incorrect directory!");
+                return;
+            }
             if (textBoxFolderPath.Text != "" && Directory.Exists(textBoxFolderPath.Text))
             {
-                UserSettings.directoryPath = textBoxFolderPath.Text;
+                var dialogResult = MessageBox.Show("By changing the folder, you will lost all your saved analyzes. Are you sure you want to change it?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (dialogResult == MessageBoxResult.Yes)
+                {
+                    UserSettings.directoryPath = textBoxFolderPath.Text;
+                }
+                else
+                {
+                    return;
+                }
             }
             else
             {
@@ -51,7 +64,15 @@ namespace DocumentManagementApp
                 newText = TryToChangePathSlashes(newText);
                 if (newText != "" && Directory.Exists(newText))
                 {
-                    UserSettings.directoryPath = newText;
+                    var dialogResult = MessageBox.Show("By changing the folder, you will lost all your saved analyzes. Are you sure you want to change it?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (dialogResult == MessageBoxResult.Yes)
+                    {
+                        UserSettings.directoryPath = newText;
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
             if (UserSettings.directoryPath == "" && !Directory.Exists(UserSettings.directoryPath))
