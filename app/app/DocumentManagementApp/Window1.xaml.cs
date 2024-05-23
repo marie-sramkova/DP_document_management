@@ -372,13 +372,14 @@ namespace DocumentManagementApp
                         }
                         else
                         {
-                            if(analyzedFiles.Count-1 == 0)
+                            if (analyzedFiles.Count - 1 == 0)
                             {
                                 templateAndAttributeStackPanel.Children.Clear();
                                 analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
                                 pointerToActualAnalyzedFile = 0;
                                 ButtonBack_Click(sender, e);
-                            } else if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
+                            }
+                            else if (pointerToActualAnalyzedFile < analyzedFiles.Count - 1)
                             {
                                 templateAndAttributeStackPanel.Children.Clear();
                                 analyzedFiles.RemoveAt(pointerToActualAnalyzedFile);
@@ -469,7 +470,7 @@ namespace DocumentManagementApp
 
         private void ShowImageWithAllAttributeBoundaries()
         {
-            List<DocAttribute> docAttributes = new List<DocAttribute>(); 
+            List<DocAttribute> docAttributes = new List<DocAttribute>();
             if (selectedTemplate == null) { selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.Any(y => y.FilePath.Equals(analyzedFiles[pointerToActualAnalyzedFile].FilePath))); }
             Template selectedTemplateFromFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
             BindingList<DocAttribute> allAttributes = new BindingList<DocAttribute>();
@@ -850,13 +851,18 @@ namespace DocumentManagementApp
                 recalculateNewLocationsFromPixels(e);
                 if (lastSelectedDocAttribute != null)
                 {
-                    string value = GetAttributeValue(lastSelectedDocAttribute);
+                    String value = "";
+                    if (bitmap.PixelHeight > lastSelectedDocAttribute.EndingYLocation && bitmap.PixelWidth > lastSelectedDocAttribute.EndingXLocation)
+                    {
+                        value = GetAttributeValue(lastSelectedDocAttribute);
+                    }
                     BindingList<DocAttribute> docsAttrs = model.BindingAttributes as BindingList<DocAttribute>;
                     docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).Value = value;
                     docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingXLocation;
                     docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).StartingYLocation;
                     docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingXLocation;
                     docsAttrs.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation = analyzedFiles[pointerToActualAnalyzedFile].DocAttributes.SingleOrDefault(x => x.Name == lastSelectedDocAttribute.Name).EndingYLocation;
+
                     Debug.WriteLine(value);
                     model.BindingAttributes = docsAttrs;
                     listViewAttributes.SelectedItem = lastSelectedDocAttribute;

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\DocumentManagementApp.csproj": {}
+    "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\DocumentManagementApp\\DocumentManagementApp.csproj": {}
   },
   "projects": {
-    "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\DocumentManagementApp.csproj": {
+    "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\DocumentManagementApp\\DocumentManagementApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\DocumentManagementApp.csproj",
+        "projectUniqueName": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\DocumentManagementApp\\DocumentManagementApp.csproj",
         "projectName": "DocumentManagementApp",
-        "projectPath": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\DocumentManagementApp.csproj",
+        "projectPath": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\DocumentManagementApp\\DocumentManagementApp.csproj",
         "packagesPath": "C:\\Users\\sramk\\.nuget\\packages\\",
-        "outputPath": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\obj\\publish\\win-x86\\",
+        "outputPath": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\DocumentManagementApp\\obj\\publish\\win-x86\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\sramk\\AppData\\Roaming\\NuGet\\NuGet.Config",
