@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pwlXd2LE56Ti/KnmmVmscjGvwOQlnm++bwR0tM3RCdUXY4sFx88FyyasmRrgt3Xj3bN+LDZ30nIDOumWXpo7Sg==",
+  "dgSpecHash": "1f0nzosyAe1HkWinT4UhkEh6BXtfN/6MsPGjEwBPKHkmwH5N4DWe10ldyFUh1n3kAiGDkTibiadb5fs9W7eZSw==",
   "success": true,
-  "projectFilePath": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\wpf_prototype\\WpfPrototype\\DocumentManagementApp\\DocumentManagementApp.csproj",
+  "projectFilePath": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\DocumentManagementApp\\DocumentManagementApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sramk\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\sramk\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\3.1.5\\microsoft.extensions.dependencyinjection.3.1.5.nupkg.sha512",

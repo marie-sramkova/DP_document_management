@@ -1,7 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{56090129-AD08-4745-9816-A3B73EB644A9}|DocumentManagementApp\\DocumentManagementApp.csproj|d:\\sramk\\documents\\vysoka_skola\\diplomka\\git_official\\dp_document_management\\app\\app\\documentmanagementapp\\window1.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{56090129-AD08-4745-9816-A3B73EB644A9}|DocumentManagementApp\\DocumentManagementApp.csproj|solutionrelative:documentmanagementapp\\window1.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +14,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Window1.xaml.cs",
+              "DocumentMoniker": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\DocumentManagementApp\\Window1.xaml.cs",
+              "RelativeDocumentMoniker": "DocumentManagementApp\\Window1.xaml.cs",
+              "ToolTip": "D:\\sramk\\Documents\\vysoka_skola\\diplomka\\git_official\\DP_document_management\\app\\app\\DocumentManagementApp\\Window1.xaml.cs",
+              "RelativeToolTip": "DocumentManagementApp\\Window1.xaml.cs",
+              "ViewState": "AQIAAE8DAAAAAAAAAAAAAFkDAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-23T18:11:50.114Z",
+              "EditorCaption": ""
             }
           ]
         }
