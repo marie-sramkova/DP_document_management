@@ -86,7 +86,7 @@ namespace DocumentManagementApp
             }
         }
 
-        private void ReadFileToSettingsEntity()
+        public void ReadFileToSettingsEntity()
         {
             CreateEmptySettingsEntity();
             String fileTextDocuments = "";
