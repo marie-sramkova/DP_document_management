@@ -66,9 +66,6 @@ namespace DocumentManagementApp
                     UserSettings.directoryPath = dirPath;
                     this.model = new Model();
                     model.Filters = new BindingList<Filter>();
-                    //model.Filters.Add(new Filter(additionalLogic.filterSettings.FilterTitle.ITEM.ToString(), additionalLogic.filterSettings.FilterType.RGX, "*"));
-                    //model.Filters.Add(new Filter(additionalLogic.filterSettings.FilterTitle.ITEM.ToString(), additionalLogic.filterSettings.FilterType.RGX, "*"));
-
                     model.Filters.Add(new Filter());
 
 
@@ -168,7 +165,6 @@ namespace DocumentManagementApp
                             || (newFiles.Any(x => x.Equals(docFileInSettingsFile.FilePath)) && !docFileInSettingsFile.FilePath.Contains(UserSettings.directoryPath)))
                         {
                             newFiles.Remove(newFiles.First(x => x == docFileInSettingsFile.FilePath));
-                            //documentsCount = documentsCount - 1;
                         }
                     }
                     documentsCount = newFiles.Count;
@@ -237,7 +233,6 @@ namespace DocumentManagementApp
             window1.mainWindow = this;
             window1.Show();
             this.Visibility = Visibility.Hidden;
-            //Close();
         }
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
@@ -246,7 +241,6 @@ namespace DocumentManagementApp
             settingsWindow.mainWindow = this;
             settingsWindow.Show();
             this.Visibility = Visibility.Hidden;
-            //Close();
         }
 
         private void ButtonAnalyzeOldDocument_Click(object sender, RoutedEventArgs e)
@@ -255,7 +249,6 @@ namespace DocumentManagementApp
             windowForOldDocPathInput.mainWindow = this;
             windowForOldDocPathInput.Show();
             this.Visibility = Visibility.Hidden;
-            //Close();
         }
 
         private void ApplyFilters()

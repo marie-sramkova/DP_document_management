@@ -27,15 +27,11 @@ namespace DocumentManagementApp
             if (UserSettings.directoryPath == "" && !Directory.Exists(UserSettings.directoryPath)) 
             {
                 btnClose.IsEnabled = false;
-                //btnClose.Visibility = Visibility.Hidden;
             }
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            //MainWindow mainWindow = new MainWindow();
-            //mainWindow.Show();
-            //Close();
             Window_Closed(sender, e);
         }
 
@@ -78,7 +74,6 @@ namespace DocumentManagementApp
             if (UserSettings.directoryPath == "" && !Directory.Exists(UserSettings.directoryPath))
             {
                 btnClose.IsEnabled = false;
-                //btnClose.Visibility = Visibility.Hidden;
                 MessageBox.Show("Incorrect directory!");
             }
             else
@@ -88,9 +83,6 @@ namespace DocumentManagementApp
                 settingsDocumentsFile.Close();
                 var settingsTemplatesFile = File.Create(UserSettings.settingsTemplatesFilePath);
                 settingsTemplatesFile.Close();
-                //MainWindow mainWindow = new MainWindow();
-                //mainWindow.Show();
-                //Close();
                 Window_Closed(sender, e);
             }
         }
@@ -139,7 +131,7 @@ namespace DocumentManagementApp
             {
                 mainWindow.Visibility = Visibility.Visible;
                 mainWindow.UpdateWindow();
-            }catch(Exception ex) { }
+            }catch (Exception ex) { }
             Close();
         }
     }
