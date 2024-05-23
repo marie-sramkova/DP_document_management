@@ -84,6 +84,7 @@ namespace DocumentManagementApp
 
         public Window1()
         {
+            FileEditor.Instance.ReadFileToSettingsEntity();
             this.model = new Model();
             model.BindingAttributes = new BindingList<DocAttribute>();
             model.BindingTemplates = new BindingList<TemplateWithPercentage>();
@@ -570,6 +571,7 @@ namespace DocumentManagementApp
                 if (result == MessageBoxResult.Yes)
                 {
                     FileEditor.Instance.RemoveFileFromDocs(FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath.Equals(fileToEdit.FilePath)));
+                    FileEditor.Instance.RemoveFileFromTemplate(FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath.Equals(fileToEdit.FilePath)) != null).DocFiles.SingleOrDefault(y => y.FilePath.Equals(fileToEdit.FilePath)), FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath.Equals(fileToEdit.FilePath)) != null));
                     ButtonBack_Click(null, null);
                     WindowForOldDocPathInput.oldDocPath = null;
                     return;
@@ -756,7 +758,12 @@ namespace DocumentManagementApp
             }
             if (changeValueOfTextBoxAvailable == true && attr != null && attr.StartingXLocation != 0 && attr.StartingYLocation != 0 && attr.EndingXLocation != attr.StartingXLocation && attr.EndingYLocation != attr.StartingYLocation)
             {
-                string value = GetAttributeValue(attr);
+                String value = "";
+                if (bitmap.PixelHeight > attr.EndingYLocation && bitmap.PixelWidth > attr.EndingXLocation)
+                {
+                    organizeLocations(attr);
+                    value = GetAttributeValue(attr);
+                }
                 attr.Value = value;
                 imgAnalyzedDocument.Source = bitmap;
             }
@@ -795,20 +802,31 @@ namespace DocumentManagementApp
             int sumOfStartingYLocation = 0;
             int sumOfEndingXLocation = 0;
             int sumOfEndingYLocation = 0;
-            Template selectedTemplateFromFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
-            foreach (DocFile docFileFromTemplate in selectedTemplateFromFile.DocFiles)
+            Template selectedTemplateFromFile;
+            if (selectedTemplate != null)
             {
-                DocFile docFile = FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == docFileFromTemplate.FilePath);
-                if (docFile != null)
+                selectedTemplateFromFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
+            }
+            else
+            {
+                selectedTemplateFromFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath.Equals(analyzedFiles[pointerToActualAnalyzedFile].FilePath)) != null);
+            }
+            if (selectedTemplateFromFile != null)
+            {
+                foreach (DocFile docFileFromTemplate in selectedTemplateFromFile.DocFiles)
                 {
-                    DocAttribute docAttr = docFile.DocAttributes.SingleOrDefault(x => x.Name == attr.Name);
-                    if (docAttr != null && docAttr.EndingYLocation != 0 && docAttr.StartingXLocation != docAttr.EndingXLocation && docAttr.StartingYLocation != docAttr.EndingYLocation)
+                    DocFile docFile = FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == docFileFromTemplate.FilePath);
+                    if (docFile != null)
                     {
-                        sumOfStartingXLocation += docAttr.StartingXLocation;
-                        sumOfStartingYLocation += docAttr.StartingYLocation;
-                        sumOfEndingXLocation += docAttr.EndingXLocation;
-                        sumOfEndingYLocation += docAttr.EndingYLocation;
-                        count = count + 1;
+                        DocAttribute docAttr = docFile.DocAttributes.SingleOrDefault(x => x.Name == attr.Name);
+                        if (docAttr != null && docAttr.EndingYLocation != 0 && docAttr.StartingXLocation != docAttr.EndingXLocation && docAttr.StartingYLocation != docAttr.EndingYLocation)
+                        {
+                            sumOfStartingXLocation += docAttr.StartingXLocation;
+                            sumOfStartingYLocation += docAttr.StartingYLocation;
+                            sumOfEndingXLocation += docAttr.EndingXLocation;
+                            sumOfEndingYLocation += docAttr.EndingYLocation;
+                            count = count + 1;
+                        }
                     }
                 }
             }
@@ -846,7 +864,7 @@ namespace DocumentManagementApp
                 System.Windows.Point p = e.GetPosition(imgAnalyzedDocument);
                 lastSelectedDocAttribute.EndingXLocation = (int)p.X;
                 lastSelectedDocAttribute.EndingYLocation = (int)p.Y;
-                organizeLocations();
+                organizeLocations(lastSelectedDocAttribute);
 
                 recalculateNewLocationsFromPixels(e);
                 if (lastSelectedDocAttribute != null)
@@ -926,19 +944,19 @@ namespace DocumentManagementApp
             }
         }
 
-        private void organizeLocations()
+        private void organizeLocations(DocAttribute atr)
         {
-            if (lastSelectedDocAttribute.StartingXLocation > lastSelectedDocAttribute.EndingXLocation)
+            if (atr.StartingXLocation > atr.EndingXLocation)
             {
-                int tmp = lastSelectedDocAttribute.StartingXLocation;
-                lastSelectedDocAttribute.StartingXLocation = lastSelectedDocAttribute.EndingXLocation;
-                lastSelectedDocAttribute.EndingXLocation = tmp;
+                int tmp = atr.StartingXLocation;
+                atr.StartingXLocation = atr.EndingXLocation;
+                atr.EndingXLocation = tmp;
             }
-            if (lastSelectedDocAttribute.StartingYLocation > lastSelectedDocAttribute.EndingYLocation)
+            if (atr.StartingYLocation > atr.EndingYLocation)
             {
-                int tmp = lastSelectedDocAttribute.StartingYLocation;
-                lastSelectedDocAttribute.StartingYLocation = lastSelectedDocAttribute.EndingYLocation;
-                lastSelectedDocAttribute.EndingYLocation = tmp;
+                int tmp = atr.StartingYLocation;
+                atr.StartingYLocation = atr.EndingYLocation;
+                atr.EndingYLocation = tmp;
             }
         }
 
@@ -961,6 +979,10 @@ namespace DocumentManagementApp
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (selectedTemplate == null) 
+            {
+                selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
+            }
             //Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
             if (selectedTemplate != null)
             {
