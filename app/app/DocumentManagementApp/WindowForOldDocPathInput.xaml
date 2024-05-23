@@ -1,0 +1,33 @@
+﻿<Window x:Class="DocumentManagementApp.WindowForOldDocPathInput"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DocumentManagementApp"
+        mc:Ignorable="d"
+        Title="Select old document to analyze" Height="300" Width="600" Closed="Window_Closed">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="389*"/>
+            <ColumnDefinition Width="64*"/>
+            <ColumnDefinition Width="147*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="1" Height="50" Grid.ColumnSpan="3" Margin="0,3,0,4">
+            <Label  Margin="10,0,10,0" Content="File path:"></Label>
+        </DockPanel>
+        <DockPanel Grid.Row="2" Height="50" Grid.ColumnSpan="3" Margin="0,3,0,3">
+            <TextBox x:Name="textBoxFilePath" Margin="10,10,10,10"></TextBox>
+        </DockPanel>
+        <DockPanel Grid.Row="3" HorizontalAlignment="Left" Height="30" Margin="240,11,0,11">
+            <Button x:Name="btnOK" Content="OK" DockPanel.Dock="Left" Margin="0,0,10,0" Click="btnOK_Click" Width="50"></Button>
+            <Button x:Name="btnClose" Content="Close" DockPanel.Dock="Right" Margin="10,0,0,0" Click="btnClose_Click" Width="50"></Button>
+        </DockPanel>
+    </Grid>
+</Window>
