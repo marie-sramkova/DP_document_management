@@ -25,12 +25,6 @@ namespace DocumentManagementApp.additionalLogic.entities
 
         private BindingList<String> _FiltersType;
         public BindingList<String> FiltersType { get { return _FiltersType; } set { _FiltersType = value; RaisePropertyChanged(nameof(FiltersType)); } }
-        //public Filter(String newTitle, FilterType newType, String newValue)
-        //{
-        //    Title = newTitle;
-        //    Type = newType;
-        //    Value = newValue;
-        //}
 
         [JsonConstructor]
         public Filter()

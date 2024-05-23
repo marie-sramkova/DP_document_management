@@ -202,7 +202,7 @@ namespace DocumentManagementApp
                     }
                     catch (Exception ex)
                     {
-                        //todo: another file formats to show as png
+                        Debug.WriteLine("File is not png, pdf, jpg or jpeg." + ex.Message);
                     }
                 }
                 try
@@ -228,7 +228,7 @@ namespace DocumentManagementApp
                 }
                 catch (Exception e)
                 {
-                    //todo: cant compare these to images
+                    Debug.WriteLine("Cant compare these two images." + e.Message);
                 }
             }
             if (countOfPercentage != 0)
@@ -289,13 +289,12 @@ namespace DocumentManagementApp
                 }
                 catch (Exception ex)
                 {
-                    //todo: cannot convert file to out.png to show image view
+                    Debug.WriteLine("Cant convert file to out.png to show image view." + ex.Message);
                     FileEditor.Instance.SettingsEntity.DocFiles.Remove(FileEditor.Instance.SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath));
                     FileEditor.Instance.WriteSettingsEntityToFile();
                     analyzedFiles.Remove(analyzedFiles[pointerToActualAnalyzedFile]);
                     SelectActualAnalyzedFile();
                 }
-                //todo: another file formats to show as png
             }
         }
 
@@ -331,9 +330,6 @@ namespace DocumentManagementApp
         {
             WindowForOldDocPathInput.oldDocPath = null;
             imgAnalyzedDocument.Source = null;
-            //MainWindow mainWindow = new MainWindow();
-            //mainWindow.Show();
-            //Close();
 
             Window_Closed(sender, e);
         }
@@ -398,7 +394,6 @@ namespace DocumentManagementApp
                     }
                 }
             }
-            //todo: save template or analyzed document
         }
 
         private void ButtonNewTemplate_Click(object sender, RoutedEventArgs e)
@@ -406,7 +401,6 @@ namespace DocumentManagementApp
             model.BindingTemplates = new BindingList<TemplateWithPercentage>();
             buttonSave.Visibility = Visibility.Hidden;
 
-            //todo: new template form
             panel.Height = new GridLength(91, GridUnitType.Star);
             listView.Height = new GridLength(0, GridUnitType.Star);
             templateAndAttributeStackPanel.VerticalAlignment = VerticalAlignment.Center;
@@ -427,11 +421,6 @@ namespace DocumentManagementApp
                 {
                     return;
                 }
-                //Template templateWithFile = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.Any(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath));
-                //if (templateWithFile != null)
-                //{
-                //    FileEditor.Instance.RemoveFileFromTemplate(analyzedFiles[pointerToActualAnalyzedFile], templateWithFile);
-                //}
                 Template template = new Template(txtBoxTemplateName.Text);
                 template.DocFiles.Add(new DocFile(analyzedFiles[pointerToActualAnalyzedFile].FilePath, new BindingList<DocAttribute>()));
                 FileEditor.Instance.AddNewTemplate(template);
@@ -453,7 +442,6 @@ namespace DocumentManagementApp
             panel.Height = new GridLength(10, GridUnitType.Star);
             templateAndAttributeStackPanel.Children.Clear();
 
-            //Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.Name == selectedTemplateName.Name);
             if (fileToEdit == null)
             {
                 ShowImageWithAllAttributeBoundaries();
@@ -663,7 +651,6 @@ namespace DocumentManagementApp
             btnSaveState = BtnSaveState.SAVE_ANALYZED_FILE;
             selectedTemplate = (Template)listViewTemplates.SelectedItems[0];
             selectedTemplate.DocFiles.Add(analyzedFiles[pointerToActualAnalyzedFile]);
-            //FileEditor.Instance.AddFileToTemplate(selectedTemplate.Name, analyzedFiles[pointerToActualAnalyzedFile]);
             CreateAttributeListView(selectedTemplate);
 
             foreach (var attr in model.BindingAttributes)
@@ -983,7 +970,6 @@ namespace DocumentManagementApp
             {
                 selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
             }
-            //Template selectedTemplate = FileEditor.Instance.SettingsEntity.Templates.SingleOrDefault(x => x.DocFiles.SingleOrDefault(y => y.FilePath == analyzedFiles[pointerToActualAnalyzedFile].FilePath) != null);
             if (selectedTemplate != null)
             {
                 ListView lv = (sender as ListView);
@@ -1056,8 +1042,7 @@ namespace DocumentManagementApp
             {
                 mainWindow.Visibility = Visibility.Visible;
                 mainWindow.UpdateWindow();
-            }
-            catch (Exception ex) { }
+            } catch (Exception ex) { }
             Close();
         }
     }

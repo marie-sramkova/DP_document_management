@@ -17,7 +17,7 @@ namespace DocumentManagementApp
 {
     public class FileEditor
     {
-        public SettingsEntity SettingsEntity {get; set;}
+        public SettingsEntity SettingsEntity { get; set; }
 
         private FileEditor()
         {
@@ -40,16 +40,12 @@ namespace DocumentManagementApp
             }
         }
 
-        public void AddNewTemplate(Template template) 
+        public void AddNewTemplate(Template template)
         {
             if (!SettingsEntity.Templates.Any(x => x.Name == template.Name))
             {
                 SettingsEntity.Templates.Add(template);
                 WriteSettingsEntityToFile();
-            }
-            else 
-            {
-                //todo: tell user that the template already exists
             }
         }
 
@@ -70,7 +66,7 @@ namespace DocumentManagementApp
 
         public void RemoveFileFromDocs(DocFile file)
         {
-            if (SettingsEntity.DocFiles.Any( x => x.FilePath.Equals(file.FilePath)))
+            if (SettingsEntity.DocFiles.Any(x => x.FilePath.Equals(file.FilePath)))
             {
                 SettingsEntity.DocFiles.Remove(SettingsEntity.DocFiles.First(x => x.FilePath.Equals(file.FilePath)));
                 WriteSettingsEntityToFile();
@@ -94,19 +90,32 @@ namespace DocumentManagementApp
             if (!File.Exists(UserSettings.settingsDocumentsFilePath))
             {
                 using (File.Create(UserSettings.settingsDocumentsFilePath)) { }
-                
+
             }
             if (!File.Exists(UserSettings.settingsTemplatesFilePath))
             {
                 using (File.Create(UserSettings.settingsTemplatesFilePath)) { }
 
             }
-            //add try-catch - reading from file!!!
-            fileTextDocuments = File.ReadAllText(UserSettings.settingsDocumentsFilePath);
-            fileTextTemplates = File.ReadAllText(UserSettings.settingsTemplatesFilePath);
+            try
+            {
+                fileTextDocuments = File.ReadAllText(UserSettings.settingsDocumentsFilePath);
+                fileTextTemplates = File.ReadAllText(UserSettings.settingsTemplatesFilePath);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Cant read from file: UserSettings" + ex.Message);
+            }
             if (fileTextDocuments.Length > 0)
             {
-                SettingsEntity.DocFiles = JsonConvert.DeserializeObject<BindingList<DocFile>>(fileTextDocuments);
+                try
+                {
+                    SettingsEntity.DocFiles = JsonConvert.DeserializeObject<BindingList<DocFile>>(fileTextDocuments);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Cant deserialize documents." + ex.Message);
+                }
                 if (SettingsEntity.DocFiles == null)
                 {
                     SettingsEntity.DocFiles = new BindingList<DocFile>();
@@ -114,7 +123,14 @@ namespace DocumentManagementApp
             }
             if (fileTextTemplates.Length > 0)
             {
-                SettingsEntity.Templates = JsonConvert.DeserializeObject<BindingList<Template>>(fileTextTemplates);
+                try
+                {
+                    SettingsEntity.Templates = JsonConvert.DeserializeObject<BindingList<Template>>(fileTextTemplates);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Cant deserialize templates." + ex.Message);
+                }
                 if (SettingsEntity.Templates == null)
                 {
                     SettingsEntity.Templates = new BindingList<Template>();
@@ -134,11 +150,24 @@ namespace DocumentManagementApp
             {
                 File.Create(UserSettings.settingsTemplatesFilePath);
             }
-            fileTextDocuments = Newtonsoft.Json.JsonConvert.SerializeObject(SettingsEntity.DocFiles, Formatting.Indented);
-            fileTextTemplates = Newtonsoft.Json.JsonConvert.SerializeObject(SettingsEntity.Templates, Formatting.Indented);
-            //add try-catch - writing to file!!!
-            File.WriteAllText(UserSettings.settingsDocumentsFilePath, fileTextDocuments);
-            File.WriteAllText(UserSettings.settingsTemplatesFilePath, fileTextTemplates);
+            try
+            {
+                fileTextDocuments = Newtonsoft.Json.JsonConvert.SerializeObject(SettingsEntity.DocFiles, Formatting.Indented);
+                fileTextTemplates = Newtonsoft.Json.JsonConvert.SerializeObject(SettingsEntity.Templates, Formatting.Indented);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Cant serialize SettingsEntity object." + ex.Message);
+            }
+            try
+            {
+                File.WriteAllText(UserSettings.settingsDocumentsFilePath, fileTextDocuments);
+                File.WriteAllText(UserSettings.settingsTemplatesFilePath, fileTextTemplates);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Cant write to file: UserSettings" + ex.Message);
+            }
         }
 
         private void CreateEmptySettingsEntity()
@@ -158,7 +187,8 @@ namespace DocumentManagementApp
                 }
             }
             Template savedTemplate = SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(templateName));
-            if (!savedTemplate.DocFiles.Any(x => x.FilePath.Equals(file.FilePath))) { 
+            if (!savedTemplate.DocFiles.Any(x => x.FilePath.Equals(file.FilePath)))
+            {
                 savedTemplate.DocFiles.Add(file);
                 WriteSettingsEntityToFile();
             }
@@ -178,7 +208,7 @@ namespace DocumentManagementApp
             SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath.Equals(filename)).DocAttributes.Remove(SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath.Equals(filename)).DocAttributes.SingleOrDefault(y => y.Name.Equals(docAttribute)));
         }
 
-        public void AddAttributeToTemplate(Template template, DocAttribute docAttribute) 
+        public void AddAttributeToTemplate(Template template, DocAttribute docAttribute)
         {
             if (!template.AllDocAttributes.Any(x => x.Name.Equals(docAttribute.Name)))
             {
@@ -197,7 +227,8 @@ namespace DocumentManagementApp
         public void AddAttributesToFileAndTemplate(Template selectedTemplate, string fileName, BindingList<DocAttribute> docAttributes)
         {
             Template template = SettingsEntity.Templates.SingleOrDefault(x => x.Name.Equals(selectedTemplate.Name));
-            if (template != null) {
+            if (template != null)
+            {
                 DocFile docFile = SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName);
                 if (docFile != null)
                 {
@@ -223,7 +254,7 @@ namespace DocumentManagementApp
                     {
                         SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName).DocAttributes[index] = docAttribute;
                     }
-                    else 
+                    else
                     {
                         SettingsEntity.DocFiles.SingleOrDefault(x => x.FilePath == fileName).DocAttributes.Add(docAttribute);
                     }

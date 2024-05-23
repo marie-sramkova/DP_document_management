@@ -79,7 +79,6 @@
                         <TextBlock>&lt;&lt;</TextBlock>
                     </Button>
                     <Button x:Name="buttonRight" Width="50" Click="ButtonRight_Click" DockPanel.Dock="Right" Content=">>">
-                        <!--<TextBlock>&gt;&gt;</TextBlock>-->
                     </Button>
 
                     <Label Name="labelSelectedFile" Content="filename.docx"></Label>

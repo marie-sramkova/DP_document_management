@@ -30,10 +30,6 @@ namespace DocumentManagementApp
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            //MainWindow mainWindow = new MainWindow();
-            //mainWindow.Show();
-            //Close();
-
             Window_Closed(sender, e);
         }
 
@@ -61,8 +57,7 @@ namespace DocumentManagementApp
             {
                 mainWindow.Visibility = Visibility.Visible;
                 mainWindow.UpdateWindow();
-            }
-            catch (Exception ex) { }
+            }catch(Exception ex) { }
             Close();
         }
     }
