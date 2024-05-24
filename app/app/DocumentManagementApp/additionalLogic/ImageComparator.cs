@@ -20,7 +20,9 @@ namespace DocumentManagementApp.additionalLogic
                 Image newFirstImage = new Bitmap(firstImage);
                 Image newSecondImage = new Bitmap(secondImage);
             
-                MakeImagesTheSameSize(newFirstImage, newSecondImage);
+                Image[] images = MakeImagesTheSameSize(newFirstImage, newSecondImage);
+                newFirstImage = images[0];
+                newSecondImage = images[1];
 
                 firstImage = MakeImageBlackAndWhite(newFirstImage);
                 secondImage = MakeImageBlackAndWhite(newSecondImage);
@@ -31,7 +33,7 @@ namespace DocumentManagementApp.additionalLogic
             return similarityPercentage;
         }
 
-        private static void MakeImagesTheSameSize(Image firstImage, Image secondImage)
+        private static Image[] MakeImagesTheSameSize(Image firstImage, Image secondImage)
         {
             int minX = firstImage.Width;
             int minY = firstImage.Height;
@@ -47,9 +49,11 @@ namespace DocumentManagementApp.additionalLogic
             {
                 if (minX > 160) { minX = 160; }
                 if (minY > 100) { minY = 100; }
-                firstImage = ResizeImage(firstImage, new Size(minY, minX));
-                secondImage = ResizeImage(secondImage, new Size(minY, minX));
+                firstImage = ResizeImage(firstImage, new Size(minX, minY));
+                secondImage = ResizeImage(secondImage, new Size(minX, minY));
             }
+            Image[] images = { firstImage, secondImage };
+            return images;
         }
 
         private unsafe static double CompareTwoImagesAndReturnSimilarityPercentage(Image firstImage, Image secondImage)
